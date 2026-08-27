@@ -18,7 +18,7 @@ export const kingsIndianDefence: Opening = {
           idea: 'Control e4 with a piece rather than a pawn. This is the Indian move order, keeping every option open.',
           hint: 'Fight for e4 with a piece, not a pawn.',
           mistakes: [
-            { san: 'd5', why: 'A good move, but that heads for the Queen’s Gambit family, not the King’s Indian.' },
+            { san: 'd5', deliberate: true, why: 'A good move, but that heads for the Queen’s Gambit family, not the King’s Indian.' },
             { san: 'g6', why: 'Playable, but it allows White the strong option of e4 immediately with a huge centre. ...Nf6 first keeps that pawn under control.' },
           ],
           children: [
@@ -32,7 +32,7 @@ export const kingsIndianDefence: Opening = {
                   idea: 'Prepare the fianchetto. The bishop on g7 will be the most important piece in the game, pointed at White’s centre and queenside.',
                   hint: 'Prepare to fianchetto the dark-squared bishop.',
                   mistakes: [
-                    { san: 'e6', why: 'That heads for the Nimzo-Indian or Queen’s Indian - fine openings, but a different repertoire.' },
+                    { san: 'e6', deliberate: true, why: 'That heads for the Nimzo-Indian or Queen’s Indian - fine openings, but a different repertoire.' },
                     { san: 'c5', why: 'That is the Benoni. Playable, but the King’s Indian fianchettoes first.' },
                     { san: 'd5', why: 'That transposes to a Grünfeld-style position without the useful ...g6 - White gets a comfortable edge with cxd5.' },
                   ],
@@ -47,8 +47,8 @@ export const kingsIndianDefence: Opening = {
                           idea: 'Complete the fianchetto. The bishop now eyes d4 and the long diagonal through to a1.',
                           hint: 'Put the bishop on the long diagonal.',
                           mistakes: [
-                            { san: 'd5', why: 'That is the Grünfeld - an excellent opening, but a different one. The King’s Indian develops the bishop and plays ...d6 and ...e5.' },
-                            { san: 'c5', why: 'That heads for a Benoni. Playable, but the King’s Indian completes the fianchetto first and hits the centre with ...e5.' },
+                            { san: 'd5', deliberate: true, why: 'That is the Grünfeld - an excellent opening, but a different one. The King’s Indian develops the bishop and plays ...d6 and ...e5.' },
+                            { san: 'c5', deliberate: true, why: 'That heads for a Benoni. Playable, but the King’s Indian completes the fianchetto first and hits the centre with ...e5.' },
                           ],
                           children: [
                             {
@@ -106,7 +106,7 @@ export const kingsIndianDefence: Opening = {
                                                           hint: 'Attack the centre with a piece and invite White to close it.',
                                                           mistakes: [
                                                             { san: 'exd4', why: 'Releasing the tension helps White: after Nxd4 the position opens and your bishop on g7 bites on granite.' },
-                                                            { san: 'Nbd7', why: 'A perfectly good alternative system, but the main line provokes d4-d5 with ...Nc6 and gets the attack going faster.' },
+                                                            { san: 'Nbd7', deliberate: true, why: 'A perfectly good alternative system, but the main line provokes d4-d5 with ...Nc6 and gets the attack going faster.' },
                                                             { san: 'c6', why: 'Too slow. It does nothing about the centre and White simply consolidates with d5 on the best terms.' },
                                                           ],
                                                           end: {
@@ -176,7 +176,7 @@ export const kingsIndianDefence: Opening = {
                                                           hint: 'The bishop just stepped onto a square where a knight can hit it. Do it now, before White plays h3.',
                                                           mistakes: [
                                                             { san: 'Nbd7', why: 'Playable, but you miss the chance to hit the bishop on e3 with tempo before White plays h3 or d5.' },
-                                                            { san: 'exd4', why: 'Opening the position helps White, whose pieces are better placed for an open game.' },
+                                                            { san: 'exd4', deliberate: true, why: 'Objectively fine, and engines slightly prefer it. But it trades away the closed centre the whole King’s Indian attacking plan depends on, so this repertoire keeps the tension and hits the bishop instead.' },
                                                           ],
                                                           end: {
                                                             name: "King’s Indian, Gligoric Variation",
@@ -406,7 +406,7 @@ export const kingsIndianDefence: Opening = {
                   hint: 'The pinned knight is not really pinned - there is no king behind it. Jump forward and hit the bishop.',
                   mistakes: [
                     { san: 'g6', why: 'Playable, but White takes with Bxf6 and after ...exf6 your structure is damaged for nothing.' },
-                    { san: 'd5', why: 'Solid but passive; ...Ne4 hits the bishop and is the main line.' },
+                    { san: 'd5', deliberate: true, why: 'A good move, and engines are happy with it. This repertoire plays the principled ...Ne4 instead, hitting the bishop and making White declare intentions at once.' },
                   ],
                   end: {
                     name: 'Trompowsky Attack',

@@ -35,7 +35,9 @@ interface TrainerProps {
 export function Trainer({ opening, progress, onRunComplete, onMistake, onBack }: TrainerProps) {
   const [state, setState] = useState<SessionState>(newSession)
   const [mode, setMode] = useState<OpponentMode>('main-line')
-  const [errorSquare, setErrorSquare] = useState<string | null>(null)
+  const [errorSquare, setErrorSquare] = useState<
+    { square: string; tone: 'wrong' | 'off-line' } | null
+  >(null)
   const recorded = useRef(false)
 
   // Switching opening remounts this component (App keys it by opening id), so
@@ -92,7 +94,11 @@ export function Trainer({ opening, progress, onRunComplete, onMistake, onBack }:
       const next = applyUserMove(opening, state, move.san)
       const accepted = next.path.length > state.path.length
       commit(next)
-      setErrorSquare(accepted ? null : move.to)
+      setErrorSquare(
+        accepted
+          ? null
+          : { square: move.to, tone: next.error?.deliberate ? 'off-line' : 'wrong' },
+      )
       return accepted
     },
     [commit, opening, state],

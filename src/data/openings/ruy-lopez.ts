@@ -13,7 +13,7 @@ export const ruyLopez: Opening = {
       idea: 'Claim the centre and open lines for the bishop and queen.',
       hint: 'Open the game with the most direct central pawn move.',
       mistakes: [
-        { san: 'd4', why: 'A fine first move, but this repertoire is a king-pawn one. Everything that follows assumes the e-pawn has gone to e4.' },
+        { san: 'd4', deliberate: true, why: 'A fine first move, but this repertoire is a king-pawn one. Everything that follows assumes the e-pawn has gone to e4.' },
         { san: 'Nf3', why: 'Playable, but it lets Black choose the opening. Take the centre first and steer the game where you know it.' },
       ],
       children: [
@@ -37,9 +37,9 @@ export const ruyLopez: Opening = {
                       idea: 'The Spanish bishop. It pins nothing yet, but it attacks the defender of e5 and asks Black an immediate question.',
                       hint: 'Attack the piece that is holding e5 together.',
                       mistakes: [
-                        { san: 'Bc4', why: 'A good move, but that is the Italian Game. This repertoire is the Ruy Lopez.' },
+                        { san: 'Bc4', deliberate: true, why: 'A good move, but that is the Italian Game. This repertoire is the Ruy Lopez.' },
                         { san: 'Nxe5', why: "Loses a pawn back after ...Nxe5, and worse, ...Qe7 or ...Nxe5 followed by ...Qe7 leaves you with nothing. The knight on e5 is not supported." },
-                        { san: 'd4', why: 'The Scotch. Playable, but it trades off the central tension the Ruy Lopez wants to keep.' },
+                        { san: 'd4', deliberate: true, why: 'The Scotch. Playable, but it trades off the central tension the Ruy Lopez wants to keep.' },
                       ],
                       children: [
                         {
@@ -108,7 +108,7 @@ export const ruyLopez: Opening = {
                                                               hint: 'Prepare the central break and give the bishop an escape square in one move.',
                                                               mistakes: [
                                                                 { san: 'd4', why: "Without c3 first, ...Bg4 and the pressure on d4 give Black an easy game. Prepare the break." },
-                                                                { san: 'a4', why: 'A real sideline, but the main plan is c3 and d4. Playing a4 too early lets Black consolidate with ...b4.' },
+                                                                { san: 'a4', deliberate: true, why: 'A real sideline, but the main plan is c3 and d4. Playing a4 too early lets Black consolidate with ...b4.' },
                                                                 { san: 'Nc3', why: 'The c-pawn, not the knight, belongs on c3 here. The knight is heading for d2, f1 and g3.' },
                                                               ],
                                                               end: {
@@ -294,7 +294,7 @@ export const ruyLopez: Opening = {
                               idea: 'The Anti-Berlin. Quietly defending e4 sidesteps the Berlin endgame entirely and keeps queens on for a normal Spanish middlegame.',
                               hint: 'Defend the e-pawn with a modest pawn move and keep queens on the board.',
                               mistakes: [
-                                { san: 'O-O', why: 'This is the main line, but it invites the Berlin endgame after ...Nxe4 5.d4 Nd6 - a drawish position that is hard to play for a win. The repertoire keeps queens on.' },
+                                { san: 'O-O', deliberate: true, why: 'This is the main line, but it invites the Berlin endgame after ...Nxe4 5.d4 Nd6 - a drawish position that is hard to play for a win. The repertoire keeps queens on.' },
                                 { san: 'Nc3', why: 'Solid but it blocks the c-pawn, and after ...Bb4 the game becomes a Four Knights.' },
                               ],
                               end: {

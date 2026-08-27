@@ -18,7 +18,7 @@ export const caroKann: Opening = {
           idea: 'The Caro-Kann. It prepares ...d5 with pawn support while leaving the c8-h3 diagonal open for the bishop.',
           hint: 'Prepare ...d5 with a pawn move that does not shut in your light-squared bishop.',
           mistakes: [
-            { san: 'e6', why: 'That is the French Defence - solid, but it locks in the c8-bishop, which is exactly what the Caro-Kann avoids.' },
+            { san: 'e6', deliberate: true, why: 'That is the French Defence - solid, but it locks in the c8-bishop, which is exactly what the Caro-Kann avoids.' },
             { san: 'd5', why: 'That is the Scandinavian: after exd5 Qxd5 Nc3 your queen loses time. The Caro-Kann supports d5 first.' },
           ],
           children: [
@@ -61,8 +61,8 @@ export const caroKann: Opening = {
                                   idea: 'The Classical Caro-Kann. The bishop comes out with tempo, hitting the knight on e4, and only then will ...e6 close the chain.',
                                   hint: 'Develop the bishop outside the pawn chain, with tempo against the knight.',
                                   mistakes: [
-                                    { san: 'Nf6', why: 'That is the Bronstein-Larsen or the Tartakower, where White takes on f6 and wrecks your structure. The Classical develops the bishop first.' },
-                                    { san: 'Nd7', why: 'The Karpov Variation - completely sound, but slower. The whole point of the Caro-Kann is to get the bishop out first.' },
+                                    { san: 'Nf6', deliberate: true, why: 'That is the Bronstein-Larsen or the Tartakower, where White takes on f6 and wrecks your structure. The Classical develops the bishop first.' },
+                                    { san: 'Nd7', deliberate: true, why: 'The Karpov Variation - completely sound, but slower. The whole point of the Caro-Kann is to get the bishop out first.' },
                                     { san: 'e6', why: 'This wastes the one advantage the Caro-Kann has over the French. Bring the bishop out first.' },
                                     { san: 'Bg4', why: 'The bishop has no target there and White plays f3 or h3 gaining time.' },
                                   ],

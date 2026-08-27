@@ -269,3 +269,32 @@ describe('accuracy', () => {
     expect(accuracy(0, 0)).toBe(0)
   })
 })
+
+describe('sound moves outside the repertoire', () => {
+  const nodes: MoveNode[] = [
+    {
+      san: 'e4',
+      hint: 'Take the centre.',
+      mistakes: [
+        { san: 'd4', deliberate: true, why: 'A fine move, but this repertoire is a king-pawn one.' },
+        { san: 'f3', why: 'It weakens the king and does nothing for the centre.' },
+      ],
+    },
+  ]
+
+  it('marks a deliberate alternative as sound rather than an error', () => {
+    const verdict = judgeUserMove(nodes, 'd4')
+    expect(verdict.status).toBe('wrong')
+    if (verdict.status === 'wrong') expect(verdict.deliberate).toBe(true)
+  })
+
+  it('does not soften a move that is genuinely bad', () => {
+    const verdict = judgeUserMove(nodes, 'f3')
+    if (verdict.status === 'wrong') expect(verdict.deliberate).toBe(false)
+  })
+
+  it('does not soften an unlisted wrong move', () => {
+    const verdict = judgeUserMove(nodes, 'a3')
+    if (verdict.status === 'wrong') expect(verdict.deliberate).toBe(false)
+  })
+})

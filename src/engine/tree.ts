@@ -49,7 +49,13 @@ export function isLineComplete(opening: Opening, path: MoveNode[]): boolean {
 
 export type Judgement =
   | { status: 'correct'; node: MoveNode }
-  | { status: 'wrong'; expected: MoveNode; reason: string }
+  | {
+      status: 'wrong'
+      expected: MoveNode
+      reason: string
+      /** The move is sound but outside this repertoire - see `Mistake`. */
+      deliberate: boolean
+    }
 
 const GENERIC_WRONG =
   'That is not the repertoire move here. Look again at what the position needs before anything else.'
@@ -70,6 +76,7 @@ export function judgeUserMove(candidates: MoveNode[], san: string): Judgement {
     status: 'wrong',
     expected,
     reason: named?.why ?? expected?.hint ?? GENERIC_WRONG,
+    deliberate: named?.deliberate === true,
   }
 }
 

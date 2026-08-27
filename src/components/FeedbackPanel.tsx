@@ -5,7 +5,7 @@ import { moveLabel, normalizeSan } from '../engine/tree'
 interface FeedbackPanelProps {
   side: Side
   phase: Phase
-  error: { played: string; reason: string } | null
+  error: { played: string; reason: string; deliberate: boolean } | null
   revealed: boolean
   /** Every move played so far, so both halves of the last pair stay readable. */
   path: MoveNode[]
@@ -43,13 +43,22 @@ export function FeedbackPanel({
   const opponentIsLatest = opponentPly > userPly
 
   if (error) {
+    // A sound move played outside the repertoire is not an error, and saying
+    // so keeps the trainer honest: the user has not blundered, they have
+    // wandered off the line they are learning.
     return (
       <div className="feedback">
-        <Status tone="bad" icon="✕" text="That is not the move" />
+        {error.deliberate ? (
+          <Status tone="warn" icon="~" text="Sound move, not this repertoire" />
+        ) : (
+          <Status tone="bad" icon="✕" text="That is not the move" />
+        )}
         <div>
           <div className="feedback__move">
             {moveLabel(path.length, error.played)}
-            <span className="feedback__label"> is not in the repertoire here</span>
+            <span className="feedback__label">
+              {error.deliberate ? ' is playable, but off the line' : ' is not in the repertoire here'}
+            </span>
           </div>
           <p className="feedback__text">{error.reason}</p>
         </div>

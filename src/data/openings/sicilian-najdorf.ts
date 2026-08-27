@@ -18,8 +18,8 @@ export const sicilianNajdorf: Opening = {
           idea: 'The Sicilian. Black declines the symmetrical ...e5 and fights for the centre from the side, gaining the half-open c-file after the coming trade.',
           hint: 'Meet the king pawn asymmetrically, with a wing pawn that hits d4.',
           mistakes: [
-            { san: 'e5', why: 'A perfectly good move, but that is the Open Game, not the Sicilian. This repertoire fights for an imbalance from move one.' },
-            { san: 'e6', why: 'That is the French Defence. Also fine, but a different repertoire.' },
+            { san: 'e5', deliberate: true, why: 'A perfectly good move, but that is the Open Game, not the Sicilian. This repertoire fights for an imbalance from move one.' },
+            { san: 'e6', deliberate: true, why: 'That is the French Defence. Also fine, but a different repertoire.' },
           ],
           children: [
             {
@@ -33,7 +33,7 @@ export const sicilianNajdorf: Opening = {
                   hint: 'Prepare ...Nf6 by covering the e5 square first.',
                   mistakes: [
                     { san: 'Nf6', why: 'White simply plays e5 and the knight has to move again while White gains time and space.' },
-                    { san: 'Nc6', why: 'A good move, but it leads to the Sveshnikov, Classical or Accelerated Dragon rather than the Najdorf.' },
+                    { san: 'Nc6', deliberate: true, why: 'A good move, but it leads to the Sveshnikov, Classical or Accelerated Dragon rather than the Najdorf.' },
                     { san: 'e6', why: 'Playable, and it can transpose, but it commits the pawn early and shuts in the c8-bishop. The Najdorf keeps that option open.' },
                   ],
                   children: [
@@ -62,7 +62,7 @@ export const sicilianNajdorf: Opening = {
                                   hint: 'Develop a piece so that it attacks the e-pawn.',
                                   mistakes: [
                                     { san: 'a6', why: 'The right idea but the wrong order. Play ...Nf6 first so White has to spend a move defending e4 with Nc3.' },
-                                    { san: 'Nc6', why: 'Playable, but it leads to the Classical Sicilian. The Najdorf develops the king’s knight first.' },
+                                    { san: 'Nc6', deliberate: true, why: 'Playable, but it leads to the Classical Sicilian. The Najdorf develops the king’s knight first.' },
                                   ],
                                   children: [
                                     {
@@ -76,7 +76,7 @@ export const sicilianNajdorf: Opening = {
                                           hint: 'Play the quiet pawn move that permanently denies White the b5 square.',
                                           mistakes: [
                                             { san: 'e5', why: 'Too soon. Without ...a6 White plays Bb5+ and you are already in trouble on the light squares.' },
-                                            { san: 'g6', why: 'That is the Dragon - a fine opening, but a completely different one with far sharper theory.' },
+                                            { san: 'g6', deliberate: true, why: 'That is the Dragon - a fine opening, but a completely different one with far sharper theory.' },
                                             { san: 'Nc6', why: 'That transposes to the Classical Sicilian. The Najdorf plays ...a6 to keep b5 covered.' },
                                             { san: 'e6', why: 'That is the Scheveningen, and it allows the dangerous Keres Attack with g2-g4. The ...a6 move order avoids it.' },
                                           ],
@@ -91,7 +91,7 @@ export const sicilianNajdorf: Opening = {
                                                   idea: 'The critical reply. It hits the knight and takes the centre; the hole on d5 is acceptable because White cannot easily occupy it.',
                                                   hint: 'The bishop on e3 no longer covers the centre. Kick the knight and take space.',
                                                   mistakes: [
-                                                    { san: 'e6', why: 'Solid and playable, but it invites the full English Attack pawn storm with f3, g4 and h4. The repertoire hits back in the centre.' },
+                                                    { san: 'e6', deliberate: true, why: 'Solid and playable, but it invites the full English Attack pawn storm with f3, g4 and h4. The repertoire hits back in the centre.' },
                                                     { san: 'Ng4', why: 'White answers Bg5 and after ...h6 Bh4 the knight on g4 has no good square, so you lose time.' },
                                                   ],
                                                   children: [
@@ -105,7 +105,7 @@ export const sicilianNajdorf: Opening = {
                                                           idea: 'Develop and prepare to castle. The bishop is modest on e7 but it covers d8 and supports the ...d5 break.',
                                                           hint: 'Develop the last kingside piece so you can castle next move.',
                                                           mistakes: [
-                                                            { san: 'Be6', why: 'A main line in its own right, but with White playing f3 and g4 the bishop on e6 can come under fire. ...Be7 first is the flexible move order.' },
+                                                            { san: 'Be6', deliberate: true, why: 'A main line in its own right, but with White playing f3 and g4 the bishop on e6 can come under fire. ...Be7 first is the flexible move order.' },
                                                             { san: 'b5', why: 'Natural, but premature: White plays a4 and after ...b4 Nd5 the hole on d5 becomes real.' },
                                                           ],
                                                           end: {
@@ -155,7 +155,7 @@ export const sicilianNajdorf: Opening = {
                                                   idea: 'Grab the centre with tempo. Against the modest Be2, this is the most testing move.',
                                                   hint: 'White has developed quietly. Hit the knight and take the centre.',
                                                   mistakes: [
-                                                    { san: 'e6', why: 'Perfectly sound, but it gives White the comfortable Scheveningen. With the bishop on e2 rather than e3, ...e5 is even better here.' },
+                                                    { san: 'e6', deliberate: true, why: 'Perfectly sound, but it gives White the comfortable Scheveningen. With the bishop on e2 rather than e3, ...e5 is even better here.' },
                                                   ],
                                                   children: [
                                                     {
@@ -270,7 +270,7 @@ export const sicilianNajdorf: Opening = {
                                   idea: 'Develop with tempo - the knight attacks the queen and White must move it again.',
                                   hint: 'The white queen is on an open square. Develop a piece that attacks it.',
                                   mistakes: [
-                                    { san: 'Nf6', why: 'Playable, but ...Nc6 comes with tempo against the queen and is clearly better.' },
+                                    { san: 'Nf6', deliberate: true, why: 'A perfectly good move - the two are about equal. This repertoire prefers ...Nc6 because it develops with tempo against the queen, which is easier to play.' },
                                   ],
                                   end: {
                                     name: 'Sicilian, 4.Qxd4',
@@ -345,7 +345,7 @@ export const sicilianNajdorf: Opening = {
                   idea: 'Attack e4 at once. White must push to e5, after which the pawn becomes a target for ...d6 and ...Nc6.',
                   hint: 'The c3-pawn takes away the knight’s defending square. Attack the e-pawn.',
                   mistakes: [
-                    { san: 'd5', why: 'Also a main line and perfectly good, but ...Nf6 is the sharper try and it forces White to commit at once.' },
+                    { san: 'd5', deliberate: true, why: 'Also a main line and perfectly good, but ...Nf6 is the sharper try and it forces White to commit at once.' },
                     { san: 'e5', why: 'This gives up on the Sicilian structure and leaves a hole on d5 while White develops freely.' },
                   ],
                   end: {

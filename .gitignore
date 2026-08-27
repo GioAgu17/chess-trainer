@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Engine verification output (regenerate with npm run verify:theory)
+theory-report.json

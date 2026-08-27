@@ -15,8 +15,8 @@ interface BoardProps {
   /** False while the computer is replying or the line is over. */
   interactive: boolean
   lastMove: { from: string; to: string } | null
-  /** Square the last rejected move came from, flashed in red. */
-  errorSquare: string | null
+  /** Square a rejected move landed on, and how firmly to say no. */
+  errorSquare: { square: string; tone: 'wrong' | 'off-line' } | null
   /** Return true if the move was accepted, so the piece stays where it landed. */
   onMove: (move: BoardMove) => boolean
 }
@@ -24,6 +24,8 @@ interface BoardProps {
 const LAST_MOVE: CSSProperties = { backgroundColor: 'rgba(255, 211, 60, 0.42)' }
 const SELECTED: CSSProperties = { backgroundColor: 'rgba(104, 166, 255, 0.48)' }
 const WRONG: CSSProperties = { backgroundColor: 'rgba(232, 96, 84, 0.55)' }
+/** A sound move played off the line is not an error, so it is not red. */
+const OFF_LINE: CSSProperties = { backgroundColor: 'rgba(224, 170, 62, 0.55)' }
 const QUIET_TARGET: CSSProperties = {
   background: 'radial-gradient(circle, rgba(15, 20, 15, 0.22) 19%, transparent 20%)',
 }
@@ -68,7 +70,12 @@ export function Board({
     for (const [square, isCapture] of legalTargets) {
       styles[square] = { ...styles[square], ...(isCapture ? CAPTURE_TARGET : QUIET_TARGET) }
     }
-    if (errorSquare) styles[errorSquare] = { ...styles[errorSquare], ...WRONG }
+    if (errorSquare) {
+      styles[errorSquare.square] = {
+        ...styles[errorSquare.square],
+        ...(errorSquare.tone === 'off-line' ? OFF_LINE : WRONG),
+      }
+    }
     return styles
   }, [errorSquare, lastMove, legalTargets, selected])
 

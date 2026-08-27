@@ -27,6 +27,7 @@ There is no backend and no network access at runtime, so it works offline.
 | `npm test` | Run the vitest suite once |
 | `npm run test:watch` | Run vitest in watch mode |
 | `npm run lint` | Run oxlint |
+| `npm run verify:theory` | Engine-check the repertoire (needs Stockfish, see below) |
 
 ## What is in the repertoire
 
@@ -123,7 +124,11 @@ The real logic lives in `src/engine`, and it is all pure functions over plain da
      idea: 'Why this move is played. Shown once it is on the board.',
      hint: 'A nudge for a wrong move that does not give the answer away.',
      mistakes: [                    // optional, user nodes only
-       { san: 'd4', why: 'Why this particular wrong move is wrong.' },
+       { san: 'd4', why: 'Why this particular move is not played here.' },
+       // `deliberate` means the move is objectively sound and is declined on
+       // repertoire grounds, not because it is bad. The trainer then says
+       // "sound move, not this repertoire" instead of calling it an error.
+       { san: 'Bb5', deliberate: true, why: 'A perfectly good move, but that is the Ruy Lopez.' },
      ],
      children: [ /* replies */ ],
      end: { name: '...', plans: ['...'] },  // on the last node of a path
@@ -156,6 +161,29 @@ The real logic lives in `src/engine`, and it is all pure functions over plain da
    `src/engine/session.test.ts` then plays every line of every opening through the training loop and checks that a wrong move is rejected with an explanation at every single user turn.
 
    This is deliberately strict. A trainer that teaches a wrong move is worse than no trainer.
+
+## Checking the theory with an engine
+
+`npm test` proves every line is *legal* and spelled the way chess.js spells it.
+It cannot tell you whether a move is *good*.
+For that there is a separate, optional dev tool that puts the whole repertoire through Stockfish:
+
+```sh
+npm install --no-save stockfish     # ~240 MB of WASM, so it is not a dependency
+npm run verify:theory               # add --depth 28 for a slower, stricter pass
+```
+
+It walks every position in the tree where the repertoire makes a claim and asks the engine three questions:
+
+1. **Is the move we teach sound?** It compares the taught move with the engine's own choice and reports any real gap. A move 20 to 40 centipawns off the engine's pick is normal opening theory; a large gap is a bug in the data.
+2. **Is each named mistake actually worse than the move we teach?** If a move listed under `mistakes` evaluates *better* than the repertoire move, either the move or the explanation is wrong. Entries marked `deliberate` are exempt, because those are sound moves declined on repertoire grounds rather than errors - and the app tells the user exactly that.
+3. **Are the opponent deviations worth drilling?** A branch the engine says loses outright is not a move anyone will play against you.
+
+The run takes about twenty minutes at depth 24 and writes a full per-position report to `theory-report.json`, so the numbers behind any claim can be checked rather than taken on trust.
+
+The repertoire has been through this. At depth 24 across 183 positions, no move it teaches is more than 56 centipawns behind the engine's choice and the median gap is 2, and every move it calls a mistake is either genuinely worse or marked `deliberate`. The largest gaps are all the engine preferring a different opening entirely - it would rather play the Grünfeld than the King's Indian, and 1.c4 than the London - which is a repertoire choice, not an error.
+
+The engine is a dev tool only. The app ships without it, makes no network calls, and works offline.
 
 ## Notes on the theory
 

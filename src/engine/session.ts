@@ -24,7 +24,7 @@ export interface SessionState {
   /** Moves played so far, as nodes of the repertoire tree. */
   path: MoveNode[]
   /** Set while the user's last attempt was wrong and not yet corrected. */
-  error: { played: string; reason: string } | null
+  error: { played: string; reason: string; deliberate: boolean } | null
   /** True when the user asked to be shown the move rather than finding it. */
   revealed: boolean
   /** Decision points the user has reached, i.e. their own moves. */
@@ -120,7 +120,11 @@ export function applyUserMove(
     return {
       ...state,
       ...logMistake(opening, state, verdict.expected, san),
-      error: { played: normalizeSan(san), reason: verdict.reason },
+      error: {
+        played: normalizeSan(san),
+        reason: verdict.reason,
+        deliberate: verdict.deliberate,
+      },
       revealed: false,
     }
   }

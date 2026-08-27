@@ -10,7 +10,9 @@ A Vite + React + TypeScript single-page app for drilling chess openings. No back
 
 **A trainer that teaches a wrong move is worse than no trainer.** Every line in `src/data/openings/` is replayed through `chess.js` by `src/data/openings.test.ts`, which fails on an illegal move, on SAN that is not spelled exactly as `chess.js` writes it (disambiguation included: `Nfd7` vs `Nbd7`), on a named "mistake" that is not actually legal, and on a path with no end summary. Never weaken those assertions to make a line pass - fix the line.
 
-When writing opening prose, state plans and structures. Do not assert a concrete tactical evaluation you cannot verify; there is no engine here to check it.
+`npm run verify:theory` is the second half of that guard: it puts every position through Stockfish and reports any move we teach that the engine disputes, and any move we call a mistake that is not actually worse. It needs `npm install --no-save stockfish` (~240 MB, deliberately not a dependency) and takes about twenty minutes. Run it after changing any line.
+
+A `Mistake` marked `deliberate` means the move is objectively sound and declined on repertoire grounds. It changes what the user is told, so never set it on a move that loses material - there is a test guarding exactly that.
 
 ## Where the logic lives
 

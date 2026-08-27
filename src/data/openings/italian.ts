@@ -13,7 +13,7 @@ export const italianGame: Opening = {
       idea: 'Claim the centre and open lines for the bishop and queen.',
       hint: 'Open the game with the most direct central pawn move.',
       mistakes: [
-        { san: 'd4', why: 'A fine first move, but this repertoire is a king-pawn one. Everything that follows assumes the e-pawn has gone to e4.' },
+        { san: 'd4', deliberate: true, why: 'A fine first move, but this repertoire is a king-pawn one. Everything that follows assumes the e-pawn has gone to e4.' },
         { san: 'Nf3', why: 'Playable, but it lets Black choose the opening. Take the centre first and steer the game where you know it.' },
       ],
       children: [
@@ -27,7 +27,7 @@ export const italianGame: Opening = {
               idea: 'Develop with tempo: the knight hits e5 straight away.',
               hint: 'Develop a piece and attack the pawn Black just played.',
               mistakes: [
-                { san: 'Bc4', why: 'Not wrong, but it lets Black play ...Nf6 and ...d5 for free. The Italian is built on hitting e5 first so Black has to answer.' },
+                { san: 'Bc4', deliberate: true, why: 'Not wrong, but it lets Black play ...Nf6 and ...d5 for free. The Italian is built on hitting e5 first so Black has to answer.' },
                 { san: 'f4', why: "That is the King’s Gambit - a different opening with very different theory. The Italian keeps the centre solid." },
               ],
               children: [
@@ -41,8 +41,8 @@ export const italianGame: Opening = {
                       idea: 'The Italian bishop: it eyes f7, the one square only the black king defends.',
                       hint: 'Put your light-squared bishop on its most active diagonal.',
                       mistakes: [
-                        { san: 'Bb5', why: 'A perfectly good move, but that is the Ruy Lopez. This repertoire aims for the Italian.' },
-                        { san: 'd4', why: 'The Scotch. Playable, but it releases the central tension immediately instead of building up behind it.' },
+                        { san: 'Bb5', deliberate: true, why: 'A perfectly good move, but that is the Ruy Lopez. This repertoire aims for the Italian.' },
+                        { san: 'd4', deliberate: true, why: 'The Scotch. Playable, but it releases the central tension immediately instead of building up behind it.' },
                       ],
                       children: [
                         {

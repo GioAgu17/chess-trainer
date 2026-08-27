@@ -189,3 +189,46 @@ describe.each(OPENINGS.map((o): [string, Opening] => [o.name, o]))('%s', (_name,
     }
   })
 })
+
+describe('sound alternatives', () => {
+  it('never calls a move that loses material a sound alternative', () => {
+    // `deliberate` tells the user the move is fine. Setting it on a move the
+    // explanation says drops material would be the worst thing this trainer
+    // could do, so guard that directly rather than pattern-matching praise.
+    const LOSES_MATERIAL =
+      /loses? (a |the )?(piece|pawn|bishop|knight|rook|queen|material)|wins the (bishop|knight|rook|queen|piece)|a whole piece down|hangs|dropped|blunder|is trapped|has nowhere to go/i
+    for (const opening of OPENINGS) {
+      walk(opening.tree, (node) => {
+        for (const mistake of node.mistakes ?? []) {
+          if (!mistake.deliberate) continue
+          expect(
+            mistake.why,
+            `${opening.name} marks ${mistake.san} as sound but the reason describes material loss`,
+          ).not.toMatch(LOSES_MATERIAL)
+        }
+      })
+    }
+  })
+
+  it('gives every sound alternative a reason that explains the choice', () => {
+    for (const opening of OPENINGS) {
+      walk(opening.tree, (node) => {
+        for (const mistake of node.mistakes ?? []) {
+          if (!mistake.deliberate) continue
+          expect(mistake.why.split(' ').length).toBeGreaterThan(6)
+        }
+      })
+    }
+  })
+
+  it('has at least one sound alternative in every opening that declines one', () => {
+    const flagged = OPENINGS.filter((opening) => {
+      let found = false
+      walk(opening.tree, (node) => {
+        if ((node.mistakes ?? []).some((m) => m.deliberate)) found = true
+      })
+      return found
+    })
+    expect(flagged.length).toBeGreaterThanOrEqual(6)
+  })
+})

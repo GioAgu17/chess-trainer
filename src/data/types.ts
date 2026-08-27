@@ -9,7 +9,15 @@ export type Side = 'white' | 'black'
 export interface Mistake {
   /** SAN of the wrong move, e.g. `Nxe4`. Decorations (+, #, !, ?) are ignored. */
   san: string
-  /** Why this particular move is wrong. Should not reveal the correct move. */
+  /**
+   * True when the move is objectively sound and is declined on repertoire
+   * grounds rather than because it is bad - 1...e5 against a Sicilian player,
+   * say. The trainer says so instead of calling it an error, and
+   * `scripts/verify-theory.mjs` allows it to evaluate as well as the move we
+   * teach. Leave it off for moves that are genuinely worse.
+   */
+  deliberate?: boolean
+  /** Why this particular move is not played here. Should not reveal the correct move. */
   why: string
 }
 

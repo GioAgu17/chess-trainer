@@ -18,9 +18,9 @@ export const frenchDefence: Opening = {
           idea: 'The French move order. It prepares ...d5 with pawn support, so that White cannot simply trade and simplify.',
           hint: 'Prepare ...d5 with a modest pawn move first.',
           mistakes: [
-            { san: 'd5', why: 'That is the Scandinavian: after exd5 Qxd5 Nc3 your queen is chased around. The French supports d5 with a pawn first.' },
-            { san: 'e5', why: 'A good move, but that is the Open Game, not the French.' },
-            { san: 'c6', why: 'That is the Caro-Kann - the French’s cousin, but a different repertoire.' },
+            { san: 'd5', deliberate: true, why: 'That is the Scandinavian: after exd5 Qxd5 Nc3 your queen is chased around. The French supports d5 with a pawn first.' },
+            { san: 'e5', deliberate: true, why: 'A good move, but that is the Open Game, not the French.' },
+            { san: 'c6', deliberate: true, why: 'A perfectly good move - the engine even likes it slightly better - but that is the Caro-Kann, the French’s cousin and a different repertoire.' },
           ],
           children: [
             {
@@ -48,7 +48,7 @@ export const frenchDefence: Opening = {
                           hint: 'Attack the e-pawn and force White to commit.',
                           mistakes: [
                             { san: 'Bb4', why: 'That is the Winawer - a great opening, but far sharper and this repertoire chooses the Classical.' },
-                            { san: 'dxe4', why: 'The Rubinstein. It is solid but very passive: you hand White the centre and free development for nothing.' },
+                            { san: 'dxe4', deliberate: true, why: 'The Rubinstein. It is solid but very passive: you hand White the centre and free development for nothing.' },
                             { san: 'c5', why: 'Premature. White has not committed in the centre yet, and exd5 followed by dxc5 gives White the better structure.' },
                           ],
                           children: [
@@ -93,7 +93,7 @@ export const frenchDefence: Opening = {
                                                   hint: 'Add another attacker to the pawn White is holding together with everything.',
                                                   mistakes: [
                                                     { san: 'cxd4', why: 'Releasing the tension too early: after Nxd4 White is comfortable and you have given up your main source of pressure.' },
-                                                    { san: 'Qb6', why: 'A good move in many French positions, but the knight should come to c6 first so that ...Qb6 hits a properly overloaded d4.' },
+                                                    { san: 'Qb6', deliberate: true, why: 'A good move in many French positions, but the knight should come to c6 first so that ...Qb6 hits a properly overloaded d4.' },
                                                   ],
                                                   end: {
                                                     name: 'French Defence, Steinitz Variation main line',
@@ -190,7 +190,7 @@ export const frenchDefence: Opening = {
                                   idea: 'Break the pin. Now e4-e5 can be met by ...Nfd7 with the bishop already developed, and Bxf6 costs White the bishop pair.',
                                   hint: 'The knight is pinned. Unpin it with a developing move.',
                                   mistakes: [
-                                    { san: 'dxe4', why: 'The Burn Variation - playable, but it hands White the centre. The repertoire keeps the tension.' },
+                                    { san: 'dxe4', deliberate: true, why: 'The Burn Variation - playable, but it hands White the centre. The repertoire keeps the tension.' },
                                     { san: 'h6', why: 'It invites Bxf6, and after ...Qxf6 or ...gxf6 you either lose time or wreck your structure.' },
                                     { san: 'Bb4', why: 'The bishop is not doing anything on b4 with the knight on c3 already defended, and it walks into e5 hitting your knight.' },
                                   ],
@@ -239,7 +239,7 @@ export const frenchDefence: Opening = {
                           idea: 'The knight on d2 blocks White’s own bishop and does not control d4 well, so hit the centre immediately.',
                           hint: 'The knight on d2 is passive. Punish it by striking at the centre at once.',
                           mistakes: [
-                            { san: 'Nf6', why: 'Perfectly playable, but the knight on d2 is passive right now and the immediate ...c5 is the sharpest way to exploit it.' },
+                            { san: 'Nf6', deliberate: true, why: 'Perfectly playable, but the knight on d2 is passive right now and the immediate ...c5 is the sharpest way to exploit it.' },
                             { san: 'dxe4', why: 'It frees White’s pieces for nothing. Keep the tension and hit d4.' },
                           ],
                           end: {

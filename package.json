@@ -10,7 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "typecheck": "tsc -b --noEmit"
+    "typecheck": "tsc -b --noEmit",
+    "verify:theory": "node scripts/verify-theory.mjs"
   },
   "dependencies": {
     "chess.js": "^1.4.0",

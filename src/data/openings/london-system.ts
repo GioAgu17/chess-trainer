@@ -24,8 +24,8 @@ export const londonSystem: Opening = {
               hint: 'Develop the bishop before you shut it in with a pawn.',
               mistakes: [
                 { san: 'e3', why: 'This is the one move order error that ruins the London: the c1-bishop is now trapped behind its own pawns. Always develop it first.' },
-                { san: 'c4', why: "That is the Queen’s Gambit - a fine opening, but a different repertoire with far more theory." },
-                { san: 'Nf3', why: 'Playable, but it lets Black play ...Bf5 or ...c5 first. In this repertoire the bishop comes out immediately.' },
+                { san: 'c4', deliberate: true, why: "A good move - engines rate it above the London. But that is the Queen’s Gambit: a different repertoire, and one with far more theory to carry." },
+                { san: 'Nf3', deliberate: true, why: 'A perfectly good move, and no worse than the text. It is a move-order preference: developing the knight first lets Black answer ...Bf5 or ...c5, and this repertoire gets the bishop outside the pawn chain before anything else.' },
               ],
               children: [
                 {
@@ -53,7 +53,7 @@ export const londonSystem: Opening = {
                               hint: 'Develop the kingside knight to its natural square.',
                               mistakes: [
                                 { san: 'Bd3', why: 'Playable, but the knight should come first: after Bd3 Black may hit it with ...c5 and ...Nc6 before you are ready.' },
-                                { san: 'c4', why: 'This transposes to a Queen’s Gambit but with the bishop already committed to f4, which is not what this repertoire wants.' },
+                                { san: 'c4', deliberate: true, why: 'This transposes to a Queen’s Gambit but with the bishop already committed to f4, which is not what this repertoire wants.' },
                               ],
                               children: [
                                 {

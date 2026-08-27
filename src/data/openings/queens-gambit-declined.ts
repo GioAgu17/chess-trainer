@@ -23,8 +23,8 @@ export const queensGambitDeclined: Opening = {
               idea: "The Queen’s Gambit. It is not a real gambit: the pawn can always be regained, and the point is to deflect the d5-pawn so White owns the centre.",
               hint: 'Challenge the d5-pawn from the side.',
               mistakes: [
-                { san: 'Nf3', why: 'A fine move, but this repertoire plays c4 first so Black cannot answer with a comfortable ...Bf5 set-up.' },
-                { san: 'Bf4', why: 'That is the London System - a different repertoire. Here we play the Queen’s Gambit.' },
+                { san: 'Nf3', deliberate: true, why: 'A fine move, but this repertoire plays c4 first so Black cannot answer with a comfortable ...Bf5 set-up.' },
+                { san: 'Bf4', deliberate: true, why: 'That is the London System - a different repertoire. Here we play the Queen’s Gambit.' },
                 { san: 'e3', why: 'Too modest. It shuts in the c1-bishop before challenging the centre.' },
               ],
               children: [
@@ -52,7 +52,7 @@ export const queensGambitDeclined: Opening = {
                               idea: 'The Exchange Variation. Now is the moment: with the knight on f6, Black must recapture with the e-pawn, so the c8-bishop stays passive and the structure is fixed.',
                               hint: 'One capture now fixes the structure in your favour, because Black cannot recapture with a piece.',
                               mistakes: [
-                                { san: 'Bg5', why: 'A great move and the Orthodox main line, but this repertoire commits to the Exchange Variation, where the plan is much easier to remember.' },
+                                { san: 'Bg5', deliberate: true, why: 'A great move and the Orthodox main line, but this repertoire commits to the Exchange Variation, where the plan is much easier to remember.' },
                                 { san: 'Nf3', why: 'Playable, but it lets Black free the position with ...dxc4 or ...c5. Take on d5 while it costs Black the bishop’s diagonal.' },
                               ],
                               children: [
@@ -184,7 +184,7 @@ export const queensGambitDeclined: Opening = {
                                               idea: 'Keep the pin. Trading on f6 would hand Black the bishop pair and repair the structure.',
                                               hint: 'Keep the pin on the f6-knight rather than trading it off.',
                                               mistakes: [
-                                                { san: 'Bxf6', why: 'Playable in some structures, but here it gives away the bishop pair and lets Black recapture with the queen, gaining time.' },
+                                                { san: 'Bxf6', deliberate: true, why: 'A genuine alternative, and engines rate it a shade higher. It is not this repertoire’s choice though: it hands over the bishop pair and lets Black develop the queen to f6 with time, and the minority-attack plan works best with the pin intact.' },
                                                 { san: 'Bf4', why: 'This retreat gives up the pin for nothing; the bishop has no future on f4 once Black plays ...Bd6.' },
                                               ],
                                               end: {
