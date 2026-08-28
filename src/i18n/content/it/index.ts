@@ -12,6 +12,7 @@ import { caroKannTree } from './caro-kann'
 import { kingsIndianTree } from './kings-indian'
 import { vsCatalanTrees } from './vs-catalan'
 import { vsLondonTrompTrees } from './vs-london-tromp'
+import { vsColleBdgTrees } from './vs-colle-bdg'
 
 /**
  * The repertoire in Italian.
@@ -34,4 +35,5 @@ export const itContent: ContentDictionary = {
   ...kingsIndianTree,
   ...vsCatalanTrees,
   ...vsLondonTrompTrees,
+  ...vsColleBdgTrees,
 }
