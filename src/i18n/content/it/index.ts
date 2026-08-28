@@ -1,4 +1,7 @@
 import type { ContentDictionary } from '../../keys'
+import { openingMeta } from './openings'
+import { defenceMeta } from './defences-meta'
+import { defenceMeta2 } from './defences-meta-2'
 
 /**
  * The repertoire in Italian.
@@ -7,4 +10,8 @@ import type { ContentDictionary } from '../../keys'
  * `src/i18n/keys.ts`, and `src/i18n/parity.test.ts` fails if this dictionary
  * is missing a string the data has, or carries one the data no longer has.
  */
-export const itContent: ContentDictionary = {}
+export const itContent: ContentDictionary = {
+  ...openingMeta,
+  ...defenceMeta,
+  ...defenceMeta2,
+}
