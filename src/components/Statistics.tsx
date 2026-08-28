@@ -15,7 +15,7 @@ import {
   type RankedMove,
 } from '../engine/stats'
 import { describeLine } from '../engine/puzzles'
-import { useI18n } from '../i18n'
+import { formatDate, formatShortDate, useI18n } from '../i18n'
 import { MiniBoard } from './MiniBoard'
 import { Empty, Meter, Stat } from './ui'
 
@@ -35,7 +35,7 @@ interface StatisticsProps {
  * would make the accuracy figure meaningless.
  */
 export function Statistics({ store, profile, focusId, onNavigate }: StatisticsProps) {
-  const { t, n, entries: allEntries } = useI18n()
+  const { t, n, locale, entries: allEntries } = useI18n()
   const scoped = useMemo(() => {
     const ids = profileEntryIds(profile)
     const entries = ids
@@ -114,7 +114,7 @@ export function Statistics({ store, profile, focusId, onNavigate }: StatisticsPr
           label={t('stats.days')}
           hint={
             summary.lastPlayedAt
-              ? t('stats.lastOn', { date: summary.lastPlayedAt.slice(0, 10) })
+              ? t('stats.lastOn', { date: formatDate(summary.lastPlayedAt, locale) })
               : t('stats.never')
           }
         />
@@ -213,7 +213,7 @@ function EntryDetail({
   store: ProgressStore
   onNavigate: (route: Route) => void
 }) {
-  const { t } = useI18n()
+  const { t, locale } = useI18n()
   const lines = lineStats(store, entry.id)
   const moves = movesFor(store, entry.id).map(rankMove).sort((a, b) => a.accuracy - b.accuracy)
   const gaps = coverageGaps(store, entry, 8)
@@ -248,9 +248,9 @@ function EntryDetail({
           <p className="detail__trend-label">
             {t('stats.trendEntry', {
               from: trend[0].accuracy,
-              fromDay: trend[0].day,
+              fromDay: formatShortDate(trend[0].day, locale),
               to: trend[trend.length - 1].accuracy,
-              toDay: trend[trend.length - 1].day,
+              toDay: formatShortDate(trend[trend.length - 1].day, locale),
             })}
           </p>
           <TrendChart trend={trend} />
@@ -407,19 +407,24 @@ function MissCard({ move, onNavigate }: { move: RankedMove; onNavigate: (route: 
 
 /** Accuracy per day, as a bar chart. No library: it is fifteen rectangles. */
 function TrendChart({ trend }: { trend: Array<{ day: string; accuracy: number; attempts: number }> }) {
+  const { t, locale } = useI18n()
   const points = trend.slice(-30)
   return (
     <div className="trend">
       <div className="trend__bars">
         {points.map((point) => (
-          <div className="trend__col" key={point.day} title={`${point.day}: ${point.accuracy}% of ${point.attempts}`}>
+          <div className="trend__col" key={point.day} title={t('stats.trendPoint', {
+              date: formatShortDate(point.day, locale),
+              accuracy: point.accuracy,
+              attempts: point.attempts,
+            })}>
             <div className="trend__bar-track">
               <div
                 className={`trend__bar${point.accuracy >= 85 ? ' trend__bar--good' : point.accuracy < 60 ? ' trend__bar--bad' : ''}`}
                 style={{ height: `${Math.max(3, point.accuracy)}%` }}
               />
             </div>
-            <span className="trend__label">{point.day.slice(5)}</span>
+            <span className="trend__label">{formatShortDate(point.day, locale)}</span>
           </div>
         ))}
       </div>

@@ -204,6 +204,7 @@ export const en = {
   'stats.trend': 'Progress over time',
   'stats.trendBlurb': 'Accuracy per day. Are you getting better, or just repeating it?',
   'stats.trendEntry': 'Accuracy per day in this line - {from}% on {fromDay} to {to}% on {toDay}',
+  'stats.trendPoint': '{date}: {accuracy}% of {attempts}',
   'stats.byOpening': 'By opening',
   'stats.byOpeningBlurb': 'Click one to open the detail below.',
   'stats.colOpening': 'Opening',

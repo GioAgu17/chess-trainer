@@ -258,6 +258,40 @@ await wait(400)
 await shot(`${label}-17-profiles`, true)
 await check('profiles')
 
+console.log('10. language switch')
+await clickText('.segmented--tight button', 'IT')
+await wait(500)
+const italian = await page.evaluate(() => ({
+  lang: document.documentElement.lang,
+  nav: [...document.querySelectorAll('.app__nav-item')].map((n) => n.textContent.trim()),
+  body: document.body.innerText.slice(0, 4000),
+}))
+if (italian.lang !== 'it') problems.push(`language: <html lang> is "${italian.lang}", expected "it"`)
+if (!italian.nav.some((n) => n === 'Allenati' || n === 'Statistiche'))
+  problems.push(`language: navigation still reads ${JSON.stringify(italian.nav)}`)
+await shot(`${label}-18-italian-profiles`, true)
+await check('italian/profiles')
+
+await clickText('.app__nav-item', 'Teoria')
+await wait(400)
+await shot(`${label}-19-italian-study`, true)
+await check('italian/study')
+
+await clickText('.app__nav-item', 'Allenati')
+await wait(500)
+await check('italian/train')
+
+await clickText('.app__nav-item', 'Statistiche')
+await wait(400)
+await shot(`${label}-20-italian-stats`, true)
+await check('italian/stats')
+
+// And back, so the stored locale does not leak into the next run.
+await clickText('.segmented--tight button', 'EN')
+await wait(400)
+const backToEnglish = await page.evaluate(() => document.documentElement.lang)
+if (backToEnglish !== 'en') problems.push(`language: switching back left <html lang> as "${backToEnglish}"`)
+
 await browser.close()
 console.log(errors.length ? `\nCONSOLE ERRORS:\n${errors.join('\n')}` : '\nno console errors')
 console.log(problems.length ? `\nLAYOUT PROBLEMS:\n${problems.join('\n')}` : 'no layout overflow')
