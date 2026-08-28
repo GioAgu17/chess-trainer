@@ -22,6 +22,7 @@ import { vsRetiTrees } from './vs-reti'
 import { studyItalianRuy } from './study-italian-ruy'
 import { studyQgdLondon } from './study-qgd-london'
 import { studyNajdorfFrench } from './study-najdorf-french'
+import { studyCaroKannKid } from './study-carokann-kid'
 
 /**
  * The repertoire in Italian.
@@ -54,4 +55,5 @@ export const itContent: ContentDictionary = {
   ...studyItalianRuy,
   ...studyQgdLondon,
   ...studyNajdorfFrench,
+  ...studyCaroKannKid,
 }
