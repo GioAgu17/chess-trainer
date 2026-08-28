@@ -6,7 +6,10 @@ import { isDefence } from '../data/types'
 import { Empty } from './ui'
 
 interface StudyProps {
-  entries: RepertoireEntry[]
+  /** The entries in the active repertoire. */
+  mine: RepertoireEntry[]
+  /** Everything, for someone who wants to read outside their repertoire. */
+  all: RepertoireEntry[]
   focusId?: string
   onNavigate: (route: Route) => void
 }
@@ -18,8 +21,14 @@ interface StudyProps {
  * aimed at a 1200-1800 player, with links in both directions - study a line and
  * drill it, or fail a move and read why it matters.
  */
-export function Study({ entries, focusId, onNavigate }: StudyProps) {
-  const [selected, setSelected] = useState<string | null>(focusId ?? entries[0]?.id ?? null)
+export function Study({ mine, all, focusId, onNavigate }: StudyProps) {
+  // Someone asked to read about a line outside their repertoire gets the whole
+  // list, so the link from Browse never lands on an empty page.
+  const [scope, setScope] = useState<'mine' | 'all'>(
+    mine.length === 0 || (focusId && !mine.some((item) => item.id === focusId)) ? 'all' : 'mine',
+  )
+  const entries = scope === 'mine' ? mine : all
+  const [selected, setSelected] = useState<string | null>(focusId ?? mine[0]?.id ?? all[0]?.id ?? null)
   const entry = useMemo(
     () => entries.find((item) => item.id === selected) ?? entries[0],
     [entries, selected],
@@ -45,6 +54,16 @@ export function Study({ entries, focusId, onNavigate }: StudyProps) {
             The ideas behind the moves, in English. Read a line, then go and drill it.
           </p>
         </div>
+        {mine.length > 0 && (
+          <div className="segmented" role="group" aria-label="Which openings to list">
+            <button type="button" aria-pressed={scope === 'mine'} onClick={() => setScope('mine')}>
+              My repertoire
+            </button>
+            <button type="button" aria-pressed={scope === 'all'} onClick={() => setScope('all')}>
+              Everything
+            </button>
+          </div>
+        )}
       </div>
 
       <div className="study__layout">

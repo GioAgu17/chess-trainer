@@ -1798,6 +1798,9 @@ button {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: var(--s4);
+  /* Each pane holds a different amount, so let them be their own height rather
+     than stretching the short ones to match the tall one. */
+  align-items: start;
 }
 
 .pane__head-note {

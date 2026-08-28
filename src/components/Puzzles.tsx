@@ -1,4 +1,4 @@
-import { useMemo, useState } from 'react'
+import { useCallback, useState } from 'react'
 import { Chess } from 'chess.js'
 import type { Route } from '../App'
 import { getEntry } from '../data/entries'
@@ -20,7 +20,10 @@ interface PuzzlesProps {
 
 const SESSION_SIZE = 12
 
-type Verdict = { status: 'solved' } | { status: 'failed'; played: string } | null
+type Verdict =
+  | { status: 'solved' }
+  | { status: 'failed'; played: string; square?: string }
+  | null
 
 /**
  * The puzzle session.
@@ -30,17 +33,19 @@ type Verdict = { status: 'solved' } | { status: 'failed'; played: string } | nul
  * runtime; the answer was decided before the page loaded.
  */
 export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) {
-  const now = useMemo(() => new Date().toISOString(), [])
-
-  const misses = useMemo(() => {
-    const map: Record<string, number> = {}
+  /**
+   * Choose a session's worth of puzzles.
+   *
+   * Deliberately *not* a memo over the record: answering a puzzle updates the
+   * schedule, and a queue derived from the schedule would reorder itself under
+   * the user's hands the moment they answered. The queue is picked once and
+   * held until the session ends.
+   */
+  const buildQueue = useCallback(() => {
+    const misses: Record<string, number> = {}
     for (const stat of Object.values(store.moves)) {
-      map[stat.key] = stat.errors + stat.revealed
+      misses[stat.key] = stat.errors + stat.revealed
     }
-    return map
-  }, [store.moves])
-
-  const queue = useMemo(() => {
     const pool = puzzlePool(entries, VERIFIED_PUZZLES)
     // Recall puzzles share a card with the same move met while drilling, so the
     // schedule is keyed on that rather than on the puzzle id.
@@ -50,11 +55,14 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
       pool: withCards,
       cards: store.cards,
       missesById: misses,
-      now,
+      now: new Date().toISOString(),
       count: SESSION_SIZE,
     }).map((item) => item.puzzle)
-  }, [entries, misses, now, store.cards])
+    // The store is read when a session starts and deliberately not tracked.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entries])
 
+  const [queue, setQueue] = useState<Puzzle[]>(buildQueue)
   const [index, setIndex] = useState(0)
   const [solvedCount, setSolvedCount] = useState(0)
   const [answered, setAnswered] = useState(0)
@@ -71,7 +79,11 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
   const handleMove = (move: BoardMove): boolean => {
     if (!puzzle || verdict) return false
     const correct = isSolution(puzzle, move.san)
-    setVerdict(correct ? { status: 'solved' } : { status: 'failed', played: normalizeSan(move.san) })
+    setVerdict(
+      correct
+        ? { status: 'solved' }
+        : { status: 'failed', played: normalizeSan(move.san), square: move.to },
+    )
     setAnswered((n) => n + 1)
     if (correct) setSolvedCount((n) => n + 1)
     onAnswer(puzzle.id, correct, puzzle.moveKey)
@@ -155,7 +167,11 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
             orientation={puzzle.solver}
             interactive={!verdict}
             lastMove={null}
-            errorSquare={null}
+            errorSquare={
+              verdict?.status === 'failed' && verdict.square
+                ? { square: verdict.square, tone: 'wrong' }
+                : null
+            }
             onMove={handleMove}
           />
         </div>
@@ -222,9 +238,20 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
                   <button
                     type="button"
                     className="btn btn--primary"
-                    onClick={() => (last ? setIndex(0) : setIndex(index + 1))}
+                    onClick={() => {
+                      if (!last) {
+                        setIndex(index + 1)
+                        return
+                      }
+                      // A fresh session re-reads the schedule, so the next batch
+                      // reflects everything just answered.
+                      setQueue(buildQueue())
+                      setIndex(0)
+                      setSolvedCount(0)
+                      setAnswered(0)
+                    }}
                   >
-                    {last ? 'Start again' : 'Next puzzle'}
+                    {last ? 'New session' : 'Next puzzle'}
                   </button>
                 )}
                 {entry && (

@@ -52,10 +52,11 @@ const NAV: Array<{ name: Route['name']; label: string }> = [
 
 export default function App() {
   // Read once on mount so a reload restores whatever the last session saved,
-  // upgrading a version 1 record on the way.
-  const [store, setStore] = useState<ProgressStore>(() => loadProgress())
+  // upgrading a version 1 record on the way. The first route is derived from
+  // that same read - a second load could disagree with it.
+  const [store, setStore] = useState<ProgressStore>(loadProgress)
   const [route, setRoute] = useState<Route>(() =>
-    loadProgress().profiles.length === 0 ? { name: 'setup' } : { name: 'home' },
+    store.profiles.length === 0 ? { name: 'setup' } : { name: 'home' },
   )
 
   useEffect(() => {
@@ -212,7 +213,7 @@ export default function App() {
         )}
 
         {route.name === 'study' && (
-          <Study entries={entries.length > 0 ? entries : ENTRIES} focusId={route.entryId} onNavigate={setRoute} />
+          <Study mine={entries} all={ENTRIES} focusId={route.entryId} onNavigate={setRoute} />
         )}
 
         {route.name === 'profiles' && (
