@@ -21,6 +21,7 @@ import { vsEnglishTrees } from './vs-english'
 import { vsRetiTrees } from './vs-reti'
 import { studyItalianRuy } from './study-italian-ruy'
 import { studyQgdLondon } from './study-qgd-london'
+import { studyNajdorfFrench } from './study-najdorf-french'
 
 /**
  * The repertoire in Italian.
@@ -52,4 +53,5 @@ export const itContent: ContentDictionary = {
   ...vsRetiTrees,
   ...studyItalianRuy,
   ...studyQgdLondon,
+  ...studyNajdorfFrench,
 }
