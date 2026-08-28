@@ -19,6 +19,7 @@ import { vsViennaTrees } from './vs-vienna'
 import { vsDanishGoringTrees } from './vs-danish-goring'
 import { vsEnglishTrees } from './vs-english'
 import { vsRetiTrees } from './vs-reti'
+import { studyItalianRuy } from './study-italian-ruy'
 
 /**
  * The repertoire in Italian.
@@ -48,4 +49,5 @@ export const itContent: ContentDictionary = {
   ...vsDanishGoringTrees,
   ...vsEnglishTrees,
   ...vsRetiTrees,
+  ...studyItalianRuy,
 }
