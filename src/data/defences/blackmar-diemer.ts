@@ -41,7 +41,7 @@ export const vsBlackmarDiemer: Defence = {
       moves: ['d4', 'd5', 'e4', 'dxe4', 'f3', 'e5'],
       setup: 5,
       point:
-        'Against the Blackmar Gambit proper (3.f3 without Nc3), ...e5! is a clean refutation. After dxe5 Qxd1+ Kxd1 Nc6 the queens are off, White has lost the right to castle, and the pawn on e5 falls next. A gambit with no attack and no pawn is simply a lost game.',
+        'Against the Blackmar Gambit proper (3.f3 without Nc3), ...e5! is the most convincing answer. Taking the second pawn is fine too, but the central strike is the one that ends the game as a contest: after dxe5 Qxd1+ Kxd1 Nc6 the queens are off, White has lost the right to castle, and the pawn on e5 falls next. A gambit with no attack and no pawn is simply a lost game.',
     },
   ],
   tree: [

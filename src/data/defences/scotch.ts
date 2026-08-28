@@ -41,7 +41,7 @@ export const vsScotch: Defence = {
       moves: ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'exd4', 'Nxd4', 'Qh4', 'Nb5'],
       setup: 8,
       point:
-        'Attacking e4 with the queen looks tempting because White\'s knight has left the queenside. But Nb5! defends nothing and threatens everything: Nxc7+ is coming, and after ...Qxe4+ Be3 the black king is stuck on d8 with White developing every piece with tempo. The queen is a poor attacker on move four.',
+        'Attacking e4 with the queen looks tempting because White\'s knight has left the queenside. It is not: White has more than one good answer, and the most direct is Nb5, when Nxc7+ is coming and ...Qxe4+ Be3 leaves the black king stuck on d8 while every white piece develops with tempo. Whichever move White picks, the queen is a poor attacker on move four.',
     },
   ],
   tree: [

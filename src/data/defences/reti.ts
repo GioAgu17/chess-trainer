@@ -36,6 +36,7 @@ export const vsReti: Defence = {
     },
     {
       id: 'reti-c5-break',
+      drillable: false,
       name: 'The ...c5 space grab',
       owner: 'ours',
       moves: ['Nf3', 'd5', 'c4', 'e6', 'g3', 'Nf6', 'Bg2', 'Be7', 'O-O', 'O-O', 'b3', 'c5'],

@@ -20,6 +20,7 @@ export const londonSystem: Opening = {
     },
     {
       id: 'london-c4-tempo',
+      drillable: false,
       name: 'Losing a tempo to ...c4',
       owner: 'theirs',
       moves: ['d4', 'd5', 'Bf4', 'Nf6', 'e3', 'c5', 'c3', 'Qb6', 'Qb3', 'c4'],

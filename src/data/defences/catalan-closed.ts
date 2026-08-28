@@ -31,6 +31,7 @@ export const catalanClosed: Defence = {
   traps: [
     {
       id: 'catalan-closed-passive',
+      drillable: false,
       name: 'The Exchange Catalan squeeze',
       owner: 'theirs',
       moves: ['d4', 'Nf6', 'c4', 'e6', 'g3', 'd5', 'Bg2', 'Be7', 'Nf3', 'O-O', 'cxd5', 'exd5', 'Nc3', 'c6', 'Qb3'],

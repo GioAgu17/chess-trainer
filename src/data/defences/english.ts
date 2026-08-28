@@ -30,12 +30,13 @@ export const vsEnglish: Defence = {
       name: 'The premature ...e4',
       owner: 'theirs',
       moves: ['c4', 'e5', 'Nc3', 'Nf6', 'Nf3', 'Nc6', 'g3', 'd5', 'cxd5', 'Nxd5', 'Bg2', 'Nxc3', 'bxc3', 'e4', 'Ng5', 'Qxg5', 'Bxe4'],
-      setup: 14,
+      setup: 16,
       point:
         'Pushing ...e4 to gain space runs into Ng5, when the pawn is attacked twice and defended by nothing. If Black then panics with ...Qxg5, Bxe4 forks the knight on c6 and the rook on a8. The lesson is more general than the trap: once the long diagonal opens, a bishop on g2 sees a8, and every loose piece on the queenside becomes a tactic.',
     },
     {
       id: 'english-nb6',
+      drillable: false,
       name: 'Retreat to b6, do not trade',
       owner: 'ours',
       moves: ['c4', 'e5', 'Nc3', 'Nf6', 'Nf3', 'Nc6', 'g3', 'd5', 'cxd5', 'Nxd5', 'Bg2', 'Nb6'],

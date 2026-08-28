@@ -184,6 +184,9 @@ export function trapCandidates(entries: RepertoireEntry[]): PuzzleCandidate[] {
   const candidates: PuzzleCandidate[] = []
   for (const entry of entries) {
     for (const trap of entry.traps ?? []) {
+      // A trap that teaches a habit has no single engine-best answer, so it is
+      // study material rather than an exercise.
+      if (trap.drillable === false) continue
       const sans = trap.moves.slice(0, trap.setup).map(normalizeSan)
       const answer = normalizeSan(trap.moves[trap.setup])
       const solver: Side = sans.length % 2 === 0 ? 'white' : 'black'

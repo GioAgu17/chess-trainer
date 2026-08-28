@@ -38,6 +38,7 @@ export const vsColleZukertort: Defence = {
     },
     {
       id: 'colle-trade-on-d3',
+      drillable: false,
       name: 'Killing the attack on move four',
       owner: 'ours',
       moves: ['d4', 'd5', 'Nf3', 'Nf6', 'e3', 'Bf5', 'Bd3', 'Bxd3', 'Qxd3', 'e6'],

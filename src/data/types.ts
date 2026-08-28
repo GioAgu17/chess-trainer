@@ -83,6 +83,13 @@ export interface Trap {
   moves: string[]
   /** Index into `moves` of the move that is the point of the trap. */
   setup: number
+  /**
+   * Set to false for a trap that teaches a habit rather than a tactic - "take
+   * on d3 the moment the bishop lands there" is worth knowing and is not a
+   * puzzle, because there is no single move an engine would call the answer.
+   * Those are shown in the study section and never sent to the verifier.
+   */
+  drillable?: boolean
   /** What the trap does, in plain English. Shown after the puzzle is answered. */
   point: string
 }
