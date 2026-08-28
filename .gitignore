@@ -28,3 +28,4 @@ theory-report.json
 
 # Engine answer cache (resumes an interrupted verify:theory run)
 .verify-cache.jsonl
+.vercel
