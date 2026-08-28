@@ -25,6 +25,7 @@ import { studyNajdorfFrench } from './study-najdorf-french'
 import { studyCaroKannKid } from './study-carokann-kid'
 import { studyVsCatalanLondon } from './study-vs-catalan-london'
 import { studyVsTrompColleBdg } from './study-vs-tromp-colle-bdg'
+import { studyVsKgScotchVienna } from './study-vs-kg-scotch-vienna'
 
 /**
  * The repertoire in Italian.
@@ -60,4 +61,5 @@ export const itContent: ContentDictionary = {
   ...studyCaroKannKid,
   ...studyVsCatalanLondon,
   ...studyVsTrompColleBdg,
+  ...studyVsKgScotchVienna,
 }
