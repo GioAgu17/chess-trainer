@@ -23,6 +23,7 @@ import { studyItalianRuy } from './study-italian-ruy'
 import { studyQgdLondon } from './study-qgd-london'
 import { studyNajdorfFrench } from './study-najdorf-french'
 import { studyCaroKannKid } from './study-carokann-kid'
+import { studyVsCatalanLondon } from './study-vs-catalan-london'
 
 /**
  * The repertoire in Italian.
@@ -56,4 +57,5 @@ export const itContent: ContentDictionary = {
   ...studyQgdLondon,
   ...studyNajdorfFrench,
   ...studyCaroKannKid,
+  ...studyVsCatalanLondon,
 }
