@@ -10,6 +10,7 @@ import { najdorfTree } from './sicilian-najdorf'
 import { frenchTree } from './french-defence'
 import { caroKannTree } from './caro-kann'
 import { kingsIndianTree } from './kings-indian'
+import { vsCatalanTrees } from './vs-catalan'
 
 /**
  * The repertoire in Italian.
@@ -30,4 +31,5 @@ export const itContent: ContentDictionary = {
   ...frenchTree,
   ...caroKannTree,
   ...kingsIndianTree,
+  ...vsCatalanTrees,
 }
