@@ -26,6 +26,7 @@ import { studyCaroKannKid } from './study-carokann-kid'
 import { studyVsCatalanLondon } from './study-vs-catalan-london'
 import { studyVsTrompColleBdg } from './study-vs-tromp-colle-bdg'
 import { studyVsKgScotchVienna } from './study-vs-kg-scotch-vienna'
+import { studyVsDanishEnglishReti } from './study-vs-danish-english-reti'
 
 /**
  * The repertoire in Italian.
@@ -62,4 +63,5 @@ export const itContent: ContentDictionary = {
   ...studyVsCatalanLondon,
   ...studyVsTrompColleBdg,
   ...studyVsKgScotchVienna,
+  ...studyVsDanishEnglishReti,
 }
