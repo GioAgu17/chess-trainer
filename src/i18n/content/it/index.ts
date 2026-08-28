@@ -6,6 +6,8 @@ import { italianGameTree } from './italian-game'
 import { ruyLopezTree } from './ruy-lopez'
 import { qgdTree } from './queens-gambit-declined'
 import { londonSystemTree } from './london-system'
+import { najdorfTree } from './sicilian-najdorf'
+import { frenchTree } from './french-defence'
 
 /**
  * The repertoire in Italian.
@@ -22,4 +24,6 @@ export const itContent: ContentDictionary = {
   ...ruyLopezTree,
   ...qgdTree,
   ...londonSystemTree,
+  ...najdorfTree,
+  ...frenchTree,
 }
