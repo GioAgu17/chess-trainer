@@ -220,6 +220,9 @@ function EntryDetail({
   const lines = lineStats(store, entry.id)
   const moves = movesFor(store, entry.id).map(rankMove).sort((a, b) => a.accuracy - b.accuracy)
   const gaps = coverageGaps(store, entry, 8)
+  // The question this answers is "am I getting better at *this*", which the
+  // repertoire-wide trend above cannot tell you.
+  const trend = accuracyTrend(store, [entry.id])
 
   return (
     <section className="section detail">
@@ -242,6 +245,16 @@ function EntryDetail({
           </button>
         </div>
       </div>
+
+      {trend.length > 1 && (
+        <div className="detail__trend">
+          <p className="detail__trend-label">
+            Accuracy per day in this line - {trend[0].accuracy}% on {trend[0].day} to{' '}
+            {trend[trend.length - 1].accuracy}% on {trend[trend.length - 1].day}
+          </p>
+          <TrendChart trend={trend} />
+        </div>
+      )}
 
       <div className="detail__cols">
         <div className="pane">

@@ -25,3 +25,6 @@ dist-ssr
 
 # Engine verification output (regenerate with npm run verify:theory)
 theory-report.json
+
+# Engine answer cache (resumes an interrupted verify:theory run)
+.verify-cache.jsonl

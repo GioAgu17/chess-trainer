@@ -44,14 +44,19 @@ export async function startEngine({ threads = 1, hash = 256, multiThreaded = fal
 
   const send = (command) => child.stdin.write(`${command}\n`)
 
-  /** Run `command` and collect output until `isDone` says we are finished. */
-  const run = (command, isDone) =>
+  /**
+   * Run `command` and collect output until `isDone` says we are finished.
+   *
+   * `budgetMs` is a backstop, not the search limit - searches are bounded by
+   * `movetime` below. If this fires, the engine is genuinely wedged.
+   */
+  const run = (command, isDone, budgetMs = 5 * 60 * 1000) =>
     new Promise((resolve, reject) => {
       const lines = []
       const timer = setTimeout(() => {
         listeners.delete(listener)
         reject(new Error(`engine timed out on: ${command}`))
-      }, 15 * 60 * 1000)
+      }, budgetMs)
       const listener = (line) => {
         lines.push(line)
         if (!isDone(line)) return
@@ -70,16 +75,26 @@ export async function startEngine({ threads = 1, hash = 256, multiThreaded = fal
 
   /**
    * Search one position and return an eval per line, best first.
+   *
    * `searchmoves` restricts the search to exactly those moves, which is what
    * makes checking a handful of specific candidates cheap.
+   *
+   * `movetime` caps how long any one search may take. Without it a single
+   * awkward position can run for many minutes and take a whole verification
+   * run down with it; with it, a hard position returns the deepest line it
+   * reached instead. The returned entries carry the depth actually reached, so
+   * a capped search is visible rather than silently passed off as a full one.
    */
-  async function analyse(fen, { depth, searchmoves = [], multipv = 1 }) {
+  async function analyse(fen, { depth, searchmoves = [], multipv = 1, movetime = 0 }) {
     send(`setoption name MultiPV value ${multipv}`)
     await run('isready', (line) => line === 'readyok')
     send(`position fen ${fen}`)
     const restriction = searchmoves.length ? ` searchmoves ${searchmoves.join(' ')}` : ''
-    const lines = await run(`go depth ${depth}${restriction}`, (line) =>
-      line.startsWith('bestmove'),
+    const limit = movetime > 0 ? ` movetime ${movetime}` : ''
+    const lines = await run(
+      `go depth ${depth}${limit}${restriction}`,
+      (line) => line.startsWith('bestmove'),
+      movetime > 0 ? movetime + 60 * 1000 : 5 * 60 * 1000,
     )
 
     // Keep only the deepest `info` line seen for each multipv slot.

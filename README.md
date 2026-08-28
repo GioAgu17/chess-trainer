@@ -71,6 +71,8 @@ Twelve prepared answers, indexed by the system you are facing rather than by the
 Each defence names the opponent's system, the position where it becomes recognisable, what they are trying to do, the concrete recipe against it, and the traps that actually catch people at this level.
 The Catalan gets two full answers so you can choose between taking the pawn and building a wall.
 
+Between them the twenty entries hold 139 complete lines, 334 decision points where you have to find a move, and 34 named traps split between ones you can spring and ones you have to see coming.
+
 ![The training loop](docs/screenshots/desktop-08-line-complete.png)
 
 A wrong move is caught immediately, with a reason that does not give the answer away - and a *sound* move that simply is not this repertoire is told apart from an actual mistake:

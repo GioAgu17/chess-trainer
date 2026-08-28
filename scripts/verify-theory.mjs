@@ -20,10 +20,16 @@
  *
  * Dev tooling. Nothing here ships with the app.
  *
+ * A full run takes over an hour, so every engine answer is cached to disk as it
+ * arrives. Re-running picks up where the last one stopped instead of starting
+ * again, which is what makes an interrupted run cheap to finish.
+ *
  *   node scripts/verify-theory.mjs [--depth 24] [--threads 6] [--out report.json]
+ *                                  [--movetime 90000] [--no-cache]
  *                                  [--skip-puzzles] [--only-puzzles]
  */
-import { writeFile } from 'node:fs/promises'
+import { appendFile, readFile, writeFile } from 'node:fs/promises'
+import { createHash } from 'node:crypto'
 import { Chess } from 'chess.js'
 import { startEngine } from './engine.mjs'
 import { loadRepertoire } from './build-openings.mjs'
@@ -47,6 +53,14 @@ const DEPTH = Number(args.get('depth') ?? 24)
 const THREADS = Number(args.get('threads') ?? 6)
 const OUT = args.get('out') ?? 'theory-report.json'
 const PUZZLE_OUT = args.get('puzzles-out') ?? 'src/data/puzzles.generated.ts'
+const CACHE = args.get('cache') ?? '.verify-cache.jsonl'
+/**
+ * Hard cap on any one search. Almost every opening position finishes depth 24
+ * in a few seconds; a handful can run for many minutes, and one of those used
+ * to be enough to kill a ninety-minute run. Ninety seconds is generous enough
+ * that the cap almost never binds, and the report says when it did.
+ */
+const MOVETIME = Number(args.get('movetime') ?? 90000)
 
 /**
  * How far a move may fall short of the engine's choice before we call it out.
@@ -85,6 +99,51 @@ const repertoire = await loadRepertoire()
 const entries = repertoire.ENTRIES
 const engine = await startEngine({ threads: THREADS, multiThreaded: THREADS > 1, hash: 512 })
 
+/* ------------------------------------------------------------------- cache */
+
+/**
+ * Engine answers, cached to a line-per-entry file as they arrive.
+ *
+ * Keyed by everything that could change the answer, so a deeper run or a
+ * changed candidate list never reuses a stale evaluation. Appending rather
+ * than rewriting means a crash loses at most the search in flight.
+ */
+const cache = new Map()
+if (!flags.has('no-cache')) {
+  const raw = await readFile(CACHE, 'utf8').catch(() => '')
+  for (const line of raw.split('\n')) {
+    if (!line.trim()) continue
+    try {
+      const entry = JSON.parse(line)
+      cache.set(entry.k, entry.v)
+    } catch {
+      // A half-written last line after a crash is expected; skip it.
+    }
+  }
+  if (cache.size > 0) console.error(`reusing ${cache.size} cached engine answers from ${CACHE}`)
+}
+
+const cacheKey = (fen, options) =>
+  createHash('sha1')
+    .update(JSON.stringify([fen, DEPTH, MOVETIME, options]))
+    .digest('hex')
+
+/** Analyse, or return the answer from a previous run. */
+async function analyse(fen, options) {
+  const key = cacheKey(fen, options)
+  const hit = cache.get(key)
+  if (hit) return hit
+  const value = await engine.analyse(fen, { ...options, depth: DEPTH, movetime: MOVETIME })
+  cache.set(key, value)
+  if (!flags.has('no-cache')) {
+    await appendFile(CACHE, `${JSON.stringify({ k: key, v: value })}\n`)
+  }
+  return value
+}
+
+/** Searches that hit the time cap rather than reaching full depth. */
+const capped = []
+
 const findings = []
 const evaluations = []
 const started = Date.now()
@@ -107,12 +166,12 @@ if (!flags.has('only-puzzles')) {
     const candidates = candidatesFor(entry)
     const uciBySan = new Map(candidates.map((san) => [san, sanToUci(entry.fen, san)]))
 
-    const [best] = await engine.analyse(entry.fen, { depth: DEPTH, multipv: 1 })
-    const restricted = await engine.analyse(entry.fen, {
-      depth: DEPTH,
+    const [best] = await analyse(entry.fen, { multipv: 1 })
+    const restricted = await analyse(entry.fen, {
       multipv: candidates.length,
       searchmoves: [...uciBySan.values()],
     })
+    if (best && best.depth < DEPTH) capped.push({ fen: entry.fen, depth: best.depth })
     const cpByUci = new Map(restricted.map((line) => [line.move, line.cp]))
     const cpOf = (san) => cpByUci.get(uciBySan.get(san))
 
@@ -208,7 +267,8 @@ if (!flags.has('skip-puzzles')) {
     progress('puzzles', index, candidates.length)
 
     // Two lines is enough: the best move and whatever comes closest to it.
-    const lines = await engine.analyse(candidate.fen, { depth: DEPTH, multipv: 2 })
+    const lines = await analyse(candidate.fen, { multipv: 2 })
+    if (lines[0] && lines[0].depth < DEPTH) capped.push({ fen: candidate.fen, depth: lines[0].depth })
     if (lines.length === 0) {
       rejected.push({ id: candidate.id, reason: 'engine returned nothing' })
       continue
@@ -261,7 +321,11 @@ if (!flags.has('skip-puzzles')) {
       prompt: candidate.prompt,
       explanation,
       line: candidate.line,
-      verified: { depth: DEPTH, marginCp: Number.isFinite(margin) ? margin : 9999, at },
+      verified: {
+        depth: Math.min(DEPTH, lines[0].depth ?? DEPTH),
+        marginCp: Number.isFinite(margin) ? margin : 9999,
+        at,
+      },
     })
   }
   process.stderr.write('\n')
@@ -298,13 +362,26 @@ findings.sort((a, b) => order[a.severity] - order[b.severity] || a.where.localeC
 await writeFile(
   OUT,
   JSON.stringify(
-    { depth: DEPTH, positions: positions.size, findings, evaluations, puzzles: { shipped: puzzles.length, rejected } },
+    {
+      depth: DEPTH,
+      movetime: MOVETIME,
+      positions: positions.size,
+      findings,
+      evaluations,
+      cappedSearches: capped,
+      puzzles: { shipped: puzzles.length, rejected },
+    },
     null,
     2,
   ),
 )
 
 console.log(`\nStockfish depth ${DEPTH}, ${positions.size} positions, ${findings.length} findings\n`)
+if (capped.length > 0) {
+  console.log(
+    `${capped.length} searches hit the ${MOVETIME}ms cap and were judged at a shallower depth\n`,
+  )
+}
 for (const finding of findings) {
   console.log(`[${finding.severity}] ${finding.type}`)
   console.log(`  ${finding.where}`)
