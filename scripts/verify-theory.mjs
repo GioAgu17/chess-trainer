@@ -133,13 +133,25 @@ async function analyse(fen, options) {
   const key = cacheKey(fen, options)
   const hit = cache.get(key)
   if (hit) return hit
-  const value = await engine.analyse(fen, { ...options, depth: DEPTH, movetime: MOVETIME })
+  let value
+  try {
+    value = await engine.analyse(fen, { ...options, depth: DEPTH, movetime: MOVETIME })
+  } catch (error) {
+    // The engine wrapper already restarted and retried once. If it still will
+    // not answer, record the position as unverified and keep going: a run that
+    // reports one gap is far more useful than one that dies.
+    unverified.push({ fen, reason: error.message })
+    return []
+  }
   cache.set(key, value)
   if (!flags.has('no-cache')) {
     await appendFile(CACHE, `${JSON.stringify({ k: key, v: value })}\n`)
   }
   return value
 }
+
+/** Positions the engine would not answer for, even after a restart. */
+const unverified = []
 
 /** Searches that hit the time cap rather than reaching full depth. */
 const capped = []
@@ -382,6 +394,7 @@ await writeFile(
       findings,
       evaluations,
       cappedSearches: capped,
+      unverified,
       puzzles: { shipped: puzzles.length, rejected },
     },
     null,
@@ -394,6 +407,11 @@ if (capped.length > 0) {
   console.log(
     `${capped.length} searches hit the ${MOVETIME}ms cap and were judged at a shallower depth\n`,
   )
+}
+if (unverified.length > 0) {
+  console.log(`${unverified.length} positions the engine would not answer for:\n`)
+  for (const entry of unverified) console.log(`  ${entry.fen}`)
+  console.log()
 }
 for (const finding of findings) {
   console.log(`[${finding.severity}] ${finding.type}`)

@@ -32,15 +32,24 @@ export async function startEngine({ threads = 1, hash = 256, multiThreaded = fal
         '  npm install --no-save stockfish\n',
     )
   }
-  const child = spawn(process.execPath, [enginePath], { stdio: ['pipe', 'pipe', 'pipe'] })
-  child.stderr.resume()
 
-  const listeners = new Set()
-  createInterface({ input: child.stdout }).on('line', (line) => {
-    const trimmed = line.trim()
-    if (!trimmed) return
-    for (const listener of [...listeners]) listener(trimmed)
-  })
+  // The engine is a child process that can wedge - under heavy load the WASM
+  // build has been seen to stop answering entirely. Everything below is
+  // written so that a wedged engine costs one position, not the whole run.
+  let child
+  let listeners
+
+  const spawnEngine = () => {
+    child = spawn(process.execPath, [enginePath], { stdio: ['pipe', 'pipe', 'pipe'] })
+    child.stderr.resume()
+    listeners = new Set()
+    createInterface({ input: child.stdout }).on('line', (line) => {
+      const trimmed = line.trim()
+      if (!trimmed) return
+      for (const listener of [...listeners]) listener(trimmed)
+    })
+  }
+  spawnEngine()
 
   const send = (command) => child.stdin.write(`${command}\n`)
 
@@ -68,10 +77,25 @@ export async function startEngine({ threads = 1, hash = 256, multiThreaded = fal
       send(command)
     })
 
-  await run('uci', (line) => line === 'uciok')
-  send(`setoption name Threads value ${threads}`)
-  send(`setoption name Hash value ${hash}`)
-  await run('isready', (line) => line === 'readyok')
+  /** Bring a freshly spawned engine up to the settings this run wants. */
+  const configure = async () => {
+    await run('uci', (line) => line === 'uciok')
+    send(`setoption name Threads value ${threads}`)
+    send(`setoption name Hash value ${hash}`)
+    await run('isready', (line) => line === 'readyok')
+  }
+  await configure()
+
+  /** Kill a wedged engine and start a clean one. */
+  const restart = async () => {
+    try {
+      child.kill('SIGKILL')
+    } catch {
+      // Already gone; that is the outcome we wanted anyway.
+    }
+    spawnEngine()
+    await configure()
+  }
 
   /**
    * Search one position and return an eval per line, best first.
@@ -85,17 +109,31 @@ export async function startEngine({ threads = 1, hash = 256, multiThreaded = fal
    * reached instead. The returned entries carry the depth actually reached, so
    * a capped search is visible rather than silently passed off as a full one.
    */
-  async function analyse(fen, { depth, searchmoves = [], multipv = 1, movetime = 0 }) {
+  async function search(fen, { depth, searchmoves, multipv, movetime }) {
     send(`setoption name MultiPV value ${multipv}`)
     await run('isready', (line) => line === 'readyok')
     send(`position fen ${fen}`)
     const restriction = searchmoves.length ? ` searchmoves ${searchmoves.join(' ')}` : ''
     const limit = movetime > 0 ? ` movetime ${movetime}` : ''
-    const lines = await run(
+    return run(
       `go depth ${depth}${limit}${restriction}`,
       (line) => line.startsWith('bestmove'),
       movetime > 0 ? movetime + 60 * 1000 : 5 * 60 * 1000,
     )
+  }
+
+  async function analyse(fen, { depth, searchmoves = [], multipv = 1, movetime = 0 }) {
+    let lines
+    try {
+      lines = await search(fen, { depth, searchmoves, multipv, movetime })
+    } catch (error) {
+      // A wedged engine is recoverable: kill it, start a clean one, and give
+      // the position one more go. Losing an hour of work to one position is
+      // not.
+      process.stderr.write(`\nengine wedged (${error.message}); restarting\n`)
+      await restart()
+      lines = await search(fen, { depth, searchmoves, multipv, movetime })
+    }
 
     // Keep only the deepest `info` line seen for each multipv slot.
     const best = new Map()
@@ -122,8 +160,12 @@ export async function startEngine({ threads = 1, hash = 256, multiThreaded = fal
   return {
     analyse,
     quit: () => {
-      send('quit')
-      child.kill()
+      try {
+        send('quit')
+        child.kill()
+      } catch {
+        // Already gone.
+      }
     },
   }
 }
