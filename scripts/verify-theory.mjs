@@ -275,6 +275,19 @@ if (!flags.has('skip-puzzles')) {
     }
     const bestSan = uciToSan(candidate.fen, lines[0].move)
     const margin = lines.length > 1 ? lines[0].cp - lines[1].cp : Infinity
+    const reached = lines[0].depth ?? 0
+
+    // A search that ran out of time before getting near the target depth has
+    // not really answered the question, so it does not get to ship a puzzle.
+    if (reached < DEPTH - 4) {
+      rejected.push({
+        kind: 'shallow',
+        id: candidate.id,
+        reason: `search only reached depth ${reached} of ${DEPTH} within the ${MOVETIME}ms cap`,
+        fen: candidate.fen,
+      })
+      continue
+    }
 
     if (candidate.expected && bestSan !== candidate.expected) {
       // The data claimed an answer and the engine disagrees. That is worth
@@ -322,7 +335,7 @@ if (!flags.has('skip-puzzles')) {
       explanation,
       line: candidate.line,
       verified: {
-        depth: Math.min(DEPTH, lines[0].depth ?? DEPTH),
+        depth: Math.min(DEPTH, reached),
         marginCp: Number.isFinite(margin) ? margin : 9999,
         at,
       },
@@ -395,8 +408,11 @@ if (!flags.has('skip-puzzles')) {
   const disputed = rejected.filter((entry) => entry.kind === 'disputed')
   const notUnique = rejected.filter((entry) => entry.kind === 'not-unique').length
   const nothingToPunish = rejected.filter((entry) => entry.kind === 'nothing-to-punish').length
+  const shallow = rejected.filter((entry) => entry.kind === 'shallow').length
   console.log(`Puzzles: ${puzzles.length} verified and written to ${PUZZLE_OUT}`)
-  console.log(`  dropped: ${notUnique} with no single clear answer, ${nothingToPunish} with nothing to punish`)
+  console.log(
+    `  dropped: ${notUnique} with no single clear answer, ${nothingToPunish} with nothing to punish, ${shallow} not searched deeply enough`,
+  )
   // A candidate whose answer came from the data is the only kind worth
   // reading one by one: the engine is contradicting something we wrote down.
   console.log(`  disputed by the engine: ${disputed.length}`)
