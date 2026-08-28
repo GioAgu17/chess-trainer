@@ -14,6 +14,7 @@ import { vsCatalanTrees } from './vs-catalan'
 import { vsLondonTrompTrees } from './vs-london-tromp'
 import { vsColleBdgTrees } from './vs-colle-bdg'
 import { vsKingsGambitTrees } from './vs-kings-gambit'
+import { vsScotchTrees } from './vs-scotch'
 
 /**
  * The repertoire in Italian.
@@ -38,4 +39,5 @@ export const itContent: ContentDictionary = {
   ...vsLondonTrompTrees,
   ...vsColleBdgTrees,
   ...vsKingsGambitTrees,
+  ...vsScotchTrees,
 }
