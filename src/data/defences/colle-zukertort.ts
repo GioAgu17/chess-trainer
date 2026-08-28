@@ -34,7 +34,7 @@ export const vsColleZukertort: Defence = {
       ],
       setup: 18,
       point:
-        'This is the game the Colle is designed to produce, and it is why ...e6 before ...Bf5 is such a bad idea. Once the bishop on e4 and the knight on f3 both point at the kingside, Bxh7+ Kxh7 Ng5+ and Qh5 is a standard mating attack. Getting the light-squared bishop out early is not a preference - it is the antidote.',
+        'This is the game the Colle is designed to produce, and it is why ...e6 before ...Bf5 is such a bad idea. Once a bishop lands on the b1-h7 diagonal with a knight ready for g5 and a queen for h5, the Greek gift is on the board: the bishop takes on h7, the king takes, and the knight arrives with check. Whether it wins in any particular position is a calculation - the point is that Black should never have to do that calculation. Getting the light-squared bishop out early takes the whole pattern off the table.',
     },
     {
       id: 'colle-trade-on-d3',

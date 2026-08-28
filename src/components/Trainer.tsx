@@ -170,7 +170,9 @@ export function Trainer({ entry, store, onRunComplete, onAttempt, onNavigate }: 
         </button>
       </div>
 
-      {isDefence(entry) && state.path.length === 0 && (
+      {/* Shown for the whole run, not just before the first move: it is useful
+          context, and a strip that vanishes on move one moves the board. */}
+      {isDefence(entry) && (
         <div className="trainer__brief">
           <p className="trainer__brief-tell">
             <strong>{entry.recognisedBy.moves}</strong> {entry.recognisedBy.tell}
@@ -263,6 +265,7 @@ export function Trainer({ entry, store, onRunComplete, onAttempt, onNavigate }: 
                 openingSummary={entry.summary}
                 onTryAgain={handleTryAgain}
                 onShowMe={handleShowMe}
+                onStudy={() => onNavigate({ name: 'study', entryId: entry.id })}
               />
             )}
           </div>

@@ -9,7 +9,7 @@ The computer plays the opposing side straight from a repertoire tree.
 You play your own moves by drag-and-drop or click-click.
 A wrong move is never silently accepted: the board refuses it, the coach panel says why, and you can either try again or ask to be shown.
 
-![The setup conversation](docs/screenshots/01-setup.png)
+![The setup conversation](docs/screenshots/desktop-01-setup.png)
 
 ## Running it
 
@@ -71,11 +71,11 @@ Twelve prepared answers, indexed by the system you are facing rather than by the
 Each defence names the opponent's system, the position where it becomes recognisable, what they are trying to do, the concrete recipe against it, and the traps that actually catch people at this level.
 The Catalan gets two full answers so you can choose between taking the pawn and building a wall.
 
-![The training loop](docs/screenshots/07-trainer.png)
+![The training loop](docs/screenshots/desktop-08-line-complete.png)
 
 A wrong move is caught immediately, with a reason that does not give the answer away - and a *sound* move that simply is not this repertoire is told apart from an actual mistake:
 
-![A sound move off the repertoire](docs/screenshots/06-off-repertoire.png)
+![A sound move off the repertoire](docs/screenshots/desktop-06-off-repertoire.png)
 
 ## The setup conversation
 
@@ -98,7 +98,11 @@ Drawn from the moves you actually played, not from vanity counters.
 Throughout, a **real mistake** (a move that is worse) is counted separately from an **off-repertoire choice** (a sound move this repertoire does not play).
 Playing the Ruy Lopez against an Italian repertoire is a preference, not a weakness, and adding the two together would make every number on the page a lie.
 
-![Statistics](docs/screenshots/10-stats.png)
+![Statistics](docs/screenshots/desktop-10-stats.png)
+
+Every ranked move opens to the position it came from, the answer, and what you have played there instead:
+
+![A move you keep missing](docs/screenshots/desktop-12-stats-miss.png)
 
 ## Puzzles
 
@@ -116,17 +120,19 @@ Every punish and trap puzzle is verified by Stockfish **before it ships**, at th
 A candidate that fails either test is dropped rather than guessed at, and the run reports which.
 Nothing is evaluated at runtime - the app ships no engine and makes no network calls.
 
+![A puzzle](docs/screenshots/desktop-13-puzzle.png)
+
 ## Study
 
 A readable guide per opening and per defence, written for a 1200-1800 player: the big idea, the pawn structures and what each side wants from them, the standard plans and piece manoeuvres, the key squares and pawn breaks, what the middlegame actually feels like, and the ways club players go wrong.
 
 It is linked to the drills in both directions - read a line then drill it, or fail a move and read why it matters.
 
-![Study](docs/screenshots/15-study.png)
+![Study](docs/screenshots/desktop-15-study.png)
 
 It works down to phone width:
 
-![Phone width](docs/screenshots/18-phone.png)
+![Phone width](docs/screenshots/phone-05-home.png)
 
 ## Progress and storage
 

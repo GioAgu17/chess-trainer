@@ -58,6 +58,28 @@ const clickText = async (sel, text) => {
   await wait(260)
 }
 
+/** Click a button inside the card whose title matches, not the first on the page. */
+const clickInCard = async (cardText, buttonText) => {
+  const ok = await page.evaluate(
+    (cardText, buttonText) => {
+      const card = [...document.querySelectorAll('.card, .system')].find((n) =>
+        n.textContent.toLowerCase().includes(cardText.toLowerCase()),
+      )
+      if (!card) return false
+      const button = [...card.querySelectorAll('button')].find((n) =>
+        n.textContent.toLowerCase().includes(buttonText.toLowerCase()),
+      )
+      if (!button) return false
+      button.click()
+      return true
+    },
+    cardText,
+    buttonText,
+  )
+  if (!ok) throw new Error(`no "${buttonText}" in a card matching "${cardText}"`)
+  await wait(300)
+}
+
 const square = async (name) => {
   const el = await page.$(`[data-square="${name}"]`)
   if (!el) throw new Error(`no square ${name}`)
@@ -137,8 +159,7 @@ await shot(`${label}-05-home`, true)
 await check('home')
 
 console.log('3. drill the Italian, one move wrong')
-await clickText('.card', 'Italian Game')
-await clickText('.btn--primary', 'Drill')
+await clickInCard('Italian Game', 'Drill')
 await wait(500)
 await check('trainer')
 // A sound move that is not this repertoire: 1.d4.
@@ -165,8 +186,7 @@ await check('trainer/summary')
 console.log('4. drill a defence')
 await clickText('.app__nav-item', 'Train')
 await wait(300)
-await clickText('.card', 'Catalan')
-await clickText('.btn--primary', 'Drill')
+await clickInCard('Catalan', 'Drill')
 await wait(700)
 await check('defence')
 await move('g8', 'f6')

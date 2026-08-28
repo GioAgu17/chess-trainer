@@ -12,6 +12,8 @@ interface FeedbackPanelProps {
   openingSummary: string
   onTryAgain: () => void
   onShowMe: () => void
+  /** Fail a move, read why it matters: the link into the study section. */
+  onStudy: () => void
 }
 
 type Tone = 'good' | 'bad' | 'info' | 'warn'
@@ -25,6 +27,7 @@ export function FeedbackPanel({
   openingSummary,
   onTryAgain,
   onShowMe,
+  onStudy,
 }: FeedbackPanelProps) {
   const isUserPly = (ply: number) => (ply % 2 === 0 ? 'white' : 'black') === side
 
@@ -68,6 +71,9 @@ export function FeedbackPanel({
           </button>
           <button type="button" className="btn" onClick={onShowMe}>
             Show me
+          </button>
+          <button type="button" className="btn btn--ghost" onClick={onStudy}>
+            Why?
           </button>
         </div>
       </div>
