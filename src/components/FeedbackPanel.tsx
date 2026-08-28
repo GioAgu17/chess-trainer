@@ -1,6 +1,7 @@
 import type { MoveNode, Side } from '../data/types'
 import type { Phase } from '../engine/session'
 import { moveLabel, normalizeSan } from '../engine/tree'
+import { useI18n } from '../i18n'
 
 interface FeedbackPanelProps {
   side: Side
@@ -29,6 +30,7 @@ export function FeedbackPanel({
   onShowMe,
   onStudy,
 }: FeedbackPanelProps) {
+  const { t } = useI18n()
   const isUserPly = (ply: number) => (ply % 2 === 0 ? 'white' : 'black') === side
 
   // The two halves of the current exchange. Keeping the user's own move on
@@ -52,28 +54,28 @@ export function FeedbackPanel({
     return (
       <div className="feedback">
         {error.deliberate ? (
-          <Status tone="warn" icon="~" text="Sound move, not this repertoire" />
+          <Status tone="warn" icon="~" text={t('coach.offRepertoire')} />
         ) : (
-          <Status tone="bad" icon="✕" text="That is not the move" />
+          <Status tone="bad" icon="✕" text={t('coach.wrong')} />
         )}
         <div>
           <div className="feedback__move">
             {moveLabel(path.length, error.played)}
             <span className="feedback__label">
-              {error.deliberate ? ' is playable, but off the line' : ' is not in the repertoire here'}
+              {error.deliberate ? t('coach.playableOffLine') : t('coach.notInRepertoire')}
             </span>
           </div>
           <p className="feedback__text">{error.reason}</p>
         </div>
         <div className="feedback__actions">
           <button type="button" className="btn btn--primary" onClick={onTryAgain}>
-            Try again
+            {t('coach.tryAgain')}
           </button>
           <button type="button" className="btn" onClick={onShowMe}>
-            Show me
+            {t('coach.showMe')}
           </button>
           <button type="button" className="btn btn--ghost" onClick={onStudy}>
-            Why?
+            {t('coach.why')}
           </button>
         </div>
       </div>
@@ -83,12 +85,14 @@ export function FeedbackPanel({
   if (!userNode && !opponentNode) {
     return (
       <div className="feedback">
-        <Status tone="info" icon="▸" text={side === 'white' ? 'Your move' : 'Getting started'} />
+        <Status
+          tone="info"
+          icon="▸"
+          text={side === 'white' ? t('trainer.yourMove') : t('coach.gettingStarted')}
+        />
         <p className="feedback__text">{openingSummary}</p>
         <p className="feedback__hint">
-          {side === 'white'
-            ? 'You have White. Play the first move of the repertoire.'
-            : 'You have Black. The computer opens; your reply follows.'}
+          {side === 'white' ? t('coach.youHaveWhite') : t('coach.youHaveBlack')}
         </p>
       </div>
     )
@@ -107,24 +111,24 @@ export function FeedbackPanel({
 
   const status: { tone: Tone; icon: string; text: string } = userNode
     ? revealed
-      ? { tone: 'warn', icon: '!', text: 'Shown to you' }
-      : { tone: 'good', icon: '✓', text: 'Correct' }
-    : { tone: 'info', icon: '▸', text: 'The computer opened' }
+      ? { tone: 'warn', icon: '!', text: t('coach.shown') }
+      : { tone: 'good', icon: '✓', text: t('coach.correct') }
+    : { tone: 'info', icon: '▸', text: t('coach.computerOpened') }
 
   return (
     <div className="feedback">
       <Status {...status} />
 
       {blocks.map((block) => (
-        <MoveBlock key={block.ply} {...block} />
+        <MoveBlock key={block.ply} {...block} who={t(`coach.${block.who}`)} />
       ))}
 
       <p className="feedback__hint">
         {phase === 'complete'
-          ? 'End of the line.'
+          ? t('coach.endOfLine')
           : phase === 'opponent'
-            ? 'The computer is replying...'
-            : 'Your move.'}
+            ? t('coach.replying')
+            : t('coach.yourMove')}
       </p>
     </div>
   )
@@ -138,7 +142,8 @@ function MoveBlock({
 }: {
   ply: number
   node: MoveNode
-  who: 'you' | 'computer'
+  /** Already translated by the caller. */
+  who: string
   dim: boolean
 }) {
   return (

@@ -22,7 +22,8 @@ export interface PuzzleCandidate {
   fen: string
   solver: Side
   line: string[]
-  prompt: string
+  prompt: { key: string; vars?: Record<string, string> }
+  explanationKey?: string
   explanation: string
   /** Set when the data already knows the answer; absent means the engine finds it. */
   expected?: string
@@ -63,7 +64,8 @@ function walk(
   recurse(entry.tree, [])
 }
 
-const SIDE_NAME: Record<Side, string> = { white: 'White', black: 'Black' }
+/** The catalogue key for a colour, so a prompt can name it in any language. */
+const SIDE_KEY: Record<Side, string> = { white: 'common.white', black: 'common.black' }
 
 /**
  * One recall puzzle per decision point in the repertoire: the position, out of
@@ -90,10 +92,11 @@ export function recallPuzzles(entries: RepertoireEntry[]): Puzzle[] {
         fen: fenOf(sans),
         solver: entry.side,
         solution: normalizeSan(node.san),
-        prompt:
-          sans.length === 0
-            ? `${SIDE_NAME[entry.side]} to play the first move of the repertoire.`
-            : `${SIDE_NAME[entry.side]} to play. What does the repertoire play here?`,
+        prompt: {
+          key: sans.length === 0 ? 'puzzles.promptRecallFirst' : 'puzzles.promptRecall',
+          vars: { side: SIDE_KEY[entry.side] },
+        },
+        explanationKey: node.idea ? `${entry.id}.n.${pathKey(path)}.idea` : undefined,
         explanation: node.idea ?? 'The repertoire move.',
         line: sans,
         moveKey: `${entry.id}|${key}`,
@@ -140,7 +143,11 @@ export function punishCandidates(entries: RepertoireEntry[]): PuzzleCandidate[] 
           fen: chess.fen(),
           solver,
           line: sans,
-          prompt: `Your opponent has just played ${moveLabel(sans.length - 1, normalizeSan(mistake.san))}. Show why it does not work.`,
+          prompt: {
+            key: 'puzzles.promptPunish',
+            vars: { move: moveLabel(sans.length - 1, normalizeSan(mistake.san)) },
+          },
+          explanationKey: `${entry.id}.n.${pathKey(path.slice(0, -1))}.m.${normalizeSan(mistake.san)}`,
           explanation: mistake.why,
           flaw: mistake.why,
         })
@@ -171,7 +178,13 @@ export function punishBranchCandidates(entries: RepertoireEntry[]): PuzzleCandid
         solver: entry.side,
         line: sans,
         expected: normalizeSan(answer.san),
-        prompt: `Your opponent has just played ${moveLabel(sans.length - 1, normalizeSan(node.san))}. Punish it.`,
+        prompt: {
+          key: 'puzzles.promptPunishBranch',
+          vars: { move: moveLabel(sans.length - 1, normalizeSan(node.san)) },
+        },
+        explanationKey: answer.idea
+          ? `${entry.id}.n.${pathKey([...path, answer])}.idea`
+          : undefined,
         explanation: answer.idea ?? 'The refutation.',
       })
     })
@@ -198,10 +211,11 @@ export function trapCandidates(entries: RepertoireEntry[]): PuzzleCandidate[] {
         solver,
         line: sans,
         expected: answer,
-        prompt:
-          trap.owner === 'ours'
-            ? `${trap.name}. ${SIDE_NAME[solver]} to play - find the move that makes it work.`
-            : `${trap.name}. ${SIDE_NAME[solver]} to play - find the move you need to see coming.`,
+        prompt: {
+          key: trap.owner === 'ours' ? 'puzzles.promptTrapOurs' : 'puzzles.promptTrapTheirs',
+          vars: { name: `${entry.id}.trap.${trap.id}.name`, side: SIDE_KEY[solver] },
+        },
+        explanationKey: `${entry.id}.trap.${trap.id}.point`,
         explanation: trap.point,
       })
     }
@@ -240,8 +254,9 @@ export function isSolution(puzzle: Puzzle, san: string): boolean {
   return (puzzle.alsoAccepted ?? []).some((alt) => normalizeSan(alt) === played)
 }
 
-export const KIND_LABEL: Record<PuzzleKind, string> = {
-  recall: 'Recall',
-  punish: 'Punish the mistake',
-  trap: 'Trap',
+/** Catalogue keys for the puzzle kinds. */
+export const KIND_KEY: Record<PuzzleKind, string> = {
+  recall: 'puzzles.kind.recall',
+  punish: 'puzzles.kind.punish',
+  trap: 'puzzles.kind.trap',
 }

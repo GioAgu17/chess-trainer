@@ -1,12 +1,18 @@
 import type { RepertoireEntry } from '../data/types'
+import { useI18n } from '../i18n'
 
 /** The coloured pill that says what an entry is. */
 export function EntryTag({ entry }: { entry: RepertoireEntry }) {
+  const { t } = useI18n()
   return (
     <span className="card__tags">
       <span className="tag">{entry.eco}</span>
       <span className={`tag tag--${entry.kind === 'defence' ? 'defence' : entry.side}`}>
-        {entry.kind === 'defence' ? 'defence' : entry.side === 'white' ? 'White' : 'Black'}
+        {entry.kind === 'defence'
+          ? t('common.defence')
+          : entry.side === 'white'
+            ? t('common.white')
+            : t('common.black')}
       </span>
     </span>
   )

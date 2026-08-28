@@ -85,15 +85,21 @@ export function overdueDays(card: Card, now: string): number {
   return (new Date(now).getTime() - new Date(card.dueAt).getTime()) / DAY_MS
 }
 
-/** Plain-English "when will I see this again". */
-export function dueLabel(card: Card, now: string): string {
+/**
+ * When the card comes back, as a catalogue key and its values rather than a
+ * sentence - the scheduler has no business knowing what language the user
+ * reads.
+ */
+export function dueLabel(
+  card: Card,
+  now: string,
+): { key: string; vars?: Record<string, number> } {
   const days = -overdueDays(card, now)
-  if (days <= 0) return 'due now'
-  if (days < 1) return 'due today'
-  if (days < 2) return 'due tomorrow'
-  if (days < 30) return `due in ${Math.round(days)} days`
-  const months = Math.round(days / 30)
-  return `due in ${months} month${months === 1 ? '' : 's'}`
+  if (days <= 0) return { key: 'puzzles.dueNow' }
+  if (days < 1) return { key: 'puzzles.dueToday' }
+  if (days < 2) return { key: 'puzzles.dueTomorrow' }
+  if (days < 30) return { key: 'puzzles.dueDays', vars: { count: Math.round(days) } }
+  return { key: 'puzzles.dueMonths', vars: { count: Math.round(days / 30) } }
 }
 
 export interface SelectionInput<T> {

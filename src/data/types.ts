@@ -241,10 +241,21 @@ export interface Puzzle {
   solution: string
   /** Other moves good enough to accept, if any. */
   alsoAccepted?: string[]
-  /** The question, in plain English. */
-  prompt: string
-  /** Shown once the puzzle is answered. */
+  /**
+   * The question, as a catalogue key and its values rather than a sentence, so
+   * a puzzle generated offline can still be asked in any language.
+   */
+  prompt: { key: string; vars?: Record<string, string> }
+  /**
+   * Content key for the explanation. It points at the same string the coach
+   * shows while drilling - a named mistake's reason, or a trap's point - so
+   * the two never drift apart.
+   */
+  explanationKey?: string
+  /** The English explanation, used when there is no key or no translation. */
   explanation: string
+  /** Punish puzzles: the move the explanation should end by naming. */
+  answerNamed?: string
   /** SAN from move 1 up to the puzzle position. */
   line: string[]
   /**

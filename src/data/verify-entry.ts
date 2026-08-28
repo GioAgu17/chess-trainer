@@ -8,3 +8,5 @@
 export { ENTRIES, OPENINGS, DEFENCES } from './entries'
 export { engineCandidates, recallPuzzles, describeLine } from '../engine/puzzles'
 export type { PuzzleCandidate } from '../engine/puzzles'
+export { STUDY_GUIDES } from './study'
+export { entryStrings, studyStrings, allContentStrings } from '../i18n/keys'

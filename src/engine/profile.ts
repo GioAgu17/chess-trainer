@@ -1,5 +1,5 @@
-import type { Defence, DefenceFamily, Side } from '../data/types'
-import { DEFENCES, OPENINGS, defenceSystems, getEntry } from '../data/entries'
+import type { Defence, DefenceFamily, RepertoireEntry, Side } from '../data/types'
+import { DEFENCES, OPENINGS, defenceSystems } from '../data/entries'
 import type { ProfileInput } from './progress'
 
 /**
@@ -37,41 +37,14 @@ export interface SetupSession {
   past: SetupState[]
 }
 
-/** A one-line pitch per opening, in the language of how it feels to play. */
-export const OPENING_PITCH: Record<string, { tag: string; why: string }> = {
-  'italian-game': {
-    tag: 'Slow and safe',
-    why: 'Low memorisation and a plan you can follow every game: build up quietly, then break in the centre when you are ready.',
-  },
-  'ruy-lopez': {
-    tag: 'The classical choice',
-    why: 'The most respected opening in chess. More to learn than the Italian, but every idea you pick up here works everywhere else.',
-  },
-  'queens-gambit-declined': {
-    tag: 'Positional squeeze',
-    why: 'You get a small, permanent edge and a clear plan on the queenside. Very few sharp lines to memorise, and almost nothing can go wrong early.',
-  },
-  'london-system': {
-    tag: 'One set-up, every game',
-    why: 'The same six moves against almost anything. The least memorisation of any opening here, at the cost of the smallest edge.',
-  },
-  'sicilian-najdorf': {
-    tag: 'Sharp and double-edged',
-    why: 'You will get attacking positions and you will be attacked. The most theory of anything here, and the most winning chances.',
-  },
-  'french-defence': {
-    tag: 'Solid, with a plan',
-    why: 'A closed centre and a clear plan every game: hit d4 with ...c5 and pile up on it. You will get very few surprises.',
-  },
-  'caro-kann': {
-    tag: 'Solid and low-risk',
-    why: 'A sound structure with no early weaknesses and a good bishop outside the pawn chain. Hard to lose quickly with it.',
-  },
-  'kings-indian-defence': {
-    tag: 'Attacking, on purpose',
-    why: 'You give up space and then throw everything at the enemy king. Sharp, one-sided games where knowing the plan matters more than knowing the moves.',
-  },
-}
+/**
+ * A one-line pitch per opening, in the language of how it feels to play.
+ *
+ * The text lives in the interface catalogues under `pitch.<id>.tag` and
+ * `pitch.<id>.why`; this list is only here so the tests and the question
+ * builder know which openings have one.
+ */
+export const PITCHED = OPENINGS.map((opening) => opening.id)
 
 /** The one to suggest when the user says "recommend me one". */
 export const RECOMMENDED: Record<Side, string> = {
@@ -127,8 +100,10 @@ export type SetupAnswer =
   | { kind: 'name'; name: string }
 
 /** Answers for one system, in list order. Two means a temperament choice. */
-export function answersFor(system: string): Defence[] {
-  return DEFENCES.filter((defence) => defence.system === system)
+export function answersFor(system: string, entries: RepertoireEntry[] = DEFENCES): Defence[] {
+  return entries.filter(
+    (entry): entry is Defence => entry.kind === 'defence' && entry.system === system,
+  )
 }
 
 /**
@@ -192,16 +167,25 @@ function addOnce(ids: string[], id: string): string[] {
 }
 
 /** A name that says something about the repertoire rather than "Profile 1". */
-export function suggestName(state: SetupState): string {
+export function suggestName(
+  state: SetupState,
+  entries: RepertoireEntry[] = [...OPENINGS, ...DEFENCES],
+  words: { and: string; repertoire: string; answersTo: string; mine: string } = {
+    and: 'and',
+    repertoire: 'repertoire',
+    answersTo: 'Answers to',
+    mine: 'My repertoire',
+  },
+): string {
   const parts = [state.whiteOpeningId, state.blackOpeningId]
-    .map((id) => (id ? getEntry(id) : undefined))
+    .map((id) => (id ? findEntry(id, entries) : undefined))
     .filter((entry) => entry !== undefined)
     .map((entry) => shortName(entry.name))
-  if (parts.length === 2) return `${parts[0]} and ${parts[1]}`
-  if (parts.length === 1) return `${parts[0]} repertoire`
-  const first = state.defenceIds[0] ? getEntry(state.defenceIds[0]) : undefined
-  if (first) return `Answers to ${shortName(first.name)}`
-  return 'My repertoire'
+  if (parts.length === 2) return `${parts[0]} ${words.and} ${parts[1]}`
+  if (parts.length === 1) return `${parts[0]} ${words.repertoire}`
+  const first = state.defenceIds[0] ? findEntry(state.defenceIds[0], entries) : undefined
+  if (first) return `${words.answersTo} ${shortName(first.name)}`
+  return words.mine
 }
 
 /** "Italian Game (Giuoco Piano)" becomes "Italian Game". */
@@ -209,9 +193,17 @@ function shortName(name: string): string {
   return name.replace(/\s*\(.*\)\s*$/, '').split(':')[0].trim()
 }
 
-export function toProfileInput(state: SetupState): ProfileInput {
+/** Look an entry up in whichever language list the caller is using. */
+function findEntry(id: string, entries: RepertoireEntry[]): RepertoireEntry | undefined {
+  return entries.find((entry) => entry.id === id)
+}
+
+export function toProfileInput(
+  state: SetupState,
+  fallbackName = suggestName(state),
+): ProfileInput {
   return {
-    name: state.name.trim() || suggestName(state),
+    name: state.name.trim() || fallbackName,
     whiteOpeningId: state.whiteOpeningId,
     blackOpeningId: state.blackOpeningId,
     defenceIds: [...state.defenceIds],
@@ -225,116 +217,129 @@ export function isComplete(state: SetupState): boolean {
 
 /* ------------------------------------------------------------- questions */
 
+/**
+ * An option, as keys rather than sentences.
+ *
+ * The conversation is the first thing anyone sees, so its wording lives in the
+ * interface catalogues where a translator can work on it as prose. Everything
+ * here is either a catalogue key or a value taken from the repertoire, which
+ * the caller has already localised.
+ */
 export interface SetupOption {
   /** Value handed back with the answer. */
   value: string
-  label: string
-  /** Two or three words on the character of the choice. */
-  tag?: string
-  /** One sentence on why someone would pick it. */
-  why: string
+  /** Catalogue key, or a literal when the label comes from the repertoire. */
+  labelKey?: string
+  label?: string
+  /** Catalogue key for two or three words on the character of the choice. */
+  tagKey?: string
+  /** Catalogue key, or a literal, for why someone would pick it. */
+  whyKey?: string
+  why?: string
   /** Marks the "recommend me one" answer, which is a real option here. */
   recommended?: boolean
 }
 
 export interface SetupQuestion {
   step: SetupStep
-  /** What the coach says, in the second person. */
-  ask: string
-  /** An optional aside under the question. */
-  note?: string
+  /** Catalogue key for what the coach says. */
+  askKey: string
+  /** Values for the question, when it names something. */
+  askVars?: Record<string, string>
+  /** Catalogue key for the aside under the question. */
+  noteKey?: string
+  noteVars?: Record<string, string>
   options: SetupOption[]
   /** Set on the step that asks for free text rather than a choice. */
-  freeText?: { placeholder: string; suggestion: string }
+  freeText?: { suggestion: string }
 }
 
 const SKIP: SetupOption = {
   value: '',
-  label: 'Skip this for now',
-  why: 'You can add one later - the profile is editable and nothing here is final.',
+  labelKey: 'setup.skip',
+  whyKey: 'setup.skipWhy',
 }
 
-function openingOptions(side: Side): SetupOption[] {
-  return OPENINGS.filter((opening) => opening.side === side).map((opening) => ({
-    value: opening.id,
-    label: opening.name,
-    tag: OPENING_PITCH[opening.id]?.tag,
-    why: OPENING_PITCH[opening.id]?.why ?? opening.summary,
-    recommended: RECOMMENDED[side] === opening.id,
-  }))
+function openingOptions(entries: RepertoireEntry[], side: Side): SetupOption[] {
+  return entries
+    .filter((entry) => entry.kind === 'opening' && entry.side === side)
+    .map((opening) => ({
+      value: opening.id,
+      label: opening.name,
+      tagKey: `pitch.${opening.id}.tag`,
+      whyKey: `pitch.${opening.id}.why`,
+      recommended: RECOMMENDED[side] === opening.id,
+    }))
 }
 
-const FAMILY_QUESTIONS: Record<DefenceFamily, { label: string; why: string }> = {
-  d4: {
-    label: 'Someone who plays 1.d4',
-    why: 'The Catalan, the London, the Trompowsky and the queen\'s pawn gambits - the slow systems that grind you down if you have no plan.',
-  },
-  e4: {
-    label: 'Someone who plays 1.e4',
-    why: 'The King\'s Gambit, the Scotch, the Vienna and the Danish - open games and gambits where one wrong move early is fatal.',
-  },
-  flank: {
-    label: 'Someone who avoids the centre',
-    why: 'The English and the Reti. Nothing to attack, nothing obvious to do, and the game is somehow worse by move twenty.',
-  },
-}
+const FAMILIES_IN_ORDER: DefenceFamily[] = ['d4', 'e4', 'flank']
 
-export function currentQuestion(state: SetupState): SetupQuestion {
+/**
+ * The current question.
+ *
+ * `entries` is the repertoire in the reader's language, so the names of
+ * openings and systems come out translated without this file knowing anything
+ * about languages.
+ */
+export function currentQuestion(
+  state: SetupState,
+  entries: RepertoireEntry[] = [...OPENINGS, ...DEFENCES],
+): SetupQuestion {
   switch (state.step) {
     case 'white':
       return {
         step: 'white',
-        ask: 'What do you want to play as White?',
-        note: 'Pick the one that sounds like the game you enjoy. There is no wrong answer here.',
-        options: [...openingOptions('white'), SKIP],
+        askKey: 'setup.white.ask',
+        noteKey: 'setup.white.note',
+        options: [...openingOptions(entries, 'white'), SKIP],
       }
     case 'black':
       return {
         step: 'black',
-        ask: 'And as Black?',
-        note: 'Against 1.e4 and 1.d4 both. Solid and sharp are equally respectable choices.',
-        options: [...openingOptions('black'), SKIP],
+        askKey: 'setup.black.ask',
+        noteKey: 'setup.black.note',
+        options: [...openingOptions(entries, 'black'), SKIP],
       }
     case 'defence-family':
       return {
         step: 'defence-family',
-        ask:
-          state.defenceIds.length === 0
-            ? 'Now the useful part: who keeps beating you?'
-            : 'Who else gives you trouble?',
-        note: 'This is the half most repertoires skip. Knowing what to do against the opening you keep facing is worth more than another line of your own.',
-        options: (['d4', 'e4', 'flank'] as DefenceFamily[]).map((family) => ({
+        askKey:
+          state.defenceIds.length === 0 ? 'setup.family.askFirst' : 'setup.family.askMore',
+        noteKey: 'setup.family.note',
+        options: FAMILIES_IN_ORDER.map((family) => ({
           value: family,
-          label: FAMILY_QUESTIONS[family].label,
-          why: FAMILY_QUESTIONS[family].why,
+          labelKey: `setup.family.${family}`,
+          whyKey: `setup.family.${family}why`,
         })),
       }
     case 'defence-system': {
       const family = state.pendingFamily ?? 'd4'
-      const groups = defenceSystems().filter((group) => group.family === family)
+      const defences = entries.filter(
+        (entry): entry is Defence => entry.kind === 'defence' && entry.family === family,
+      )
       return {
         step: 'defence-system',
-        ask: 'Which one, specifically?',
-        note: 'Each of these comes with the plan behind it and the traps that actually catch people.',
-        options: groups.map((group) => ({
+        askKey: 'setup.system.ask',
+        noteKey: 'setup.system.note',
+        options: defenceSystems(defences).map((group) => ({
           value: group.system,
           label: group.system,
-          tag: group.answers.length > 1 ? 'two ways to meet it' : undefined,
+          tagKey: group.answers.length > 1 ? 'setup.system.twoWays' : undefined,
           why: group.answers[0].recognisedBy.tell,
           recommended: RECOMMENDED_DEFENCE[family] === group.system,
         })),
       }
     }
     case 'temperament': {
-      const answers = answersFor(state.pendingSystem ?? '')
+      const answers = answersFor(state.pendingSystem ?? '', entries)
       return {
         step: 'temperament',
-        ask: `There are two good ways to meet the ${state.pendingSystem}. Which suits you?`,
-        note: 'Both are sound. This is a question about temperament, not about theory.',
+        askKey: 'setup.temperament.ask',
+        askVars: { system: state.pendingSystem ?? '' },
+        noteKey: 'setup.temperament.note',
         options: answers.map((defence) => ({
           value: defence.id,
           label: defence.temperament?.name ?? defence.name,
-          tag: defence.temperament?.name,
           why: defence.temperament?.blurb ?? defence.summary,
           recommended: defence.temperament?.key === 'open',
         })),
@@ -343,17 +348,15 @@ export function currentQuestion(state: SetupState): SetupQuestion {
     case 'more-defences':
       return {
         step: 'more-defences',
-        ask: 'Add another opening to defend against?',
-        note:
-          state.defenceIds.length === 1
-            ? 'One is plenty to start with. You can always come back.'
-            : `${state.defenceIds.length} so far.`,
+        askKey: 'setup.more.ask',
+        noteKey: state.defenceIds.length === 1 ? 'setup.more.noteOne' : 'setup.more.noteMany',
+        noteVars: { count: String(state.defenceIds.length) },
         options: [
-          { value: 'yes', label: 'Yes, there is another one', why: 'Pick a second system to prepare against.' },
+          { value: 'yes', labelKey: 'setup.more.yes', whyKey: 'setup.more.yesWhy' },
           {
             value: 'no',
-            label: 'No, that is enough for now',
-            why: 'Start training. You can add more to this profile at any time.',
+            labelKey: 'setup.more.no',
+            whyKey: 'setup.more.noWhy',
             recommended: true,
           },
         ],
@@ -361,16 +364,16 @@ export function currentQuestion(state: SetupState): SetupQuestion {
     case 'name':
       return {
         step: 'name',
-        ask: 'Last thing - what should I call this repertoire?',
-        note: 'You can keep more than one, so a name that says what it is helps.',
+        askKey: 'setup.name.ask',
+        noteKey: 'setup.name.note',
         options: [],
-        freeText: { placeholder: suggestName(state), suggestion: suggestName(state) },
+        freeText: { suggestion: suggestName(state) },
       }
     case 'review':
       return {
         step: 'review',
-        ask: 'Here is your repertoire.',
-        note: 'Everything here is editable later, and nothing is deleted when you change it.',
+        askKey: 'setup.review.ask',
+        noteKey: 'setup.review.note',
         options: [],
       }
   }

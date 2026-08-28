@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
-import { ENTRIES, getEntry } from './data/entries'
+
 import {
   activeProfile,
   addProfile,
@@ -17,7 +17,9 @@ import {
 } from './engine/progress'
 import type { CompletedRun, LoggedAttempt } from './engine/session'
 import { dueCount } from './engine/scheduler'
+import { useI18n, type UiKey } from './i18n'
 import { Browse } from './components/Browse'
+import { LanguageSwitcher } from './components/LanguageSwitcher'
 import { Home } from './components/Home'
 import { ProfileEditor } from './components/ProfileEditor'
 import { Puzzles } from './components/Puzzles'
@@ -42,15 +44,17 @@ export type Route =
   | { name: 'study'; entryId?: string }
   | { name: 'profiles' }
 
-const NAV: Array<{ name: Route['name']; label: string }> = [
-  { name: 'home', label: 'Train' },
-  { name: 'puzzles', label: 'Puzzles' },
-  { name: 'stats', label: 'Statistics' },
-  { name: 'study', label: 'Study' },
-  { name: 'browse', label: 'Browse' },
+const NAV: Array<{ name: Route['name']; label: UiKey }> = [
+  { name: 'home', label: 'nav.train' },
+  { name: 'puzzles', label: 'nav.puzzles' },
+  { name: 'stats', label: 'nav.stats' },
+  { name: 'study', label: 'nav.study' },
+  { name: 'browse', label: 'nav.browse' },
 ]
 
 export default function App() {
+  const { t, entries: allEntries } = useI18n()
+
   // Read once on mount so a reload restores whatever the last session saved,
   // upgrading a version 1 record on the way. The first route is derived from
   // that same read - a second load could disagree with it.
@@ -65,9 +69,13 @@ export default function App() {
 
   const profile = activeProfile(store)
   const entryIds = useMemo(() => profileEntryIds(profile), [profile])
+  // Entries come from the translator, so switching language rebuilds them.
   const entries = useMemo(
-    () => entryIds.map((id) => getEntry(id)).filter((entry) => entry !== undefined),
-    [entryIds],
+    () =>
+      entryIds
+        .map((id) => allEntries.find((entry) => entry.id === id))
+        .filter((entry) => entry !== undefined),
+    [entryIds, allEntries],
   )
 
   const due = useMemo(() => {
@@ -120,7 +128,8 @@ export default function App() {
     setRoute({ name: 'home' })
   }, [])
 
-  const trained = route.name === 'train' ? getEntry(route.entryId) : undefined
+  const trained =
+    route.name === 'train' ? allEntries.find((entry) => entry.id === route.entryId) : undefined
 
   return (
     <div className="app">
@@ -138,15 +147,13 @@ export default function App() {
               <span />
             </span>
             <span className="app__brand-text">
-              <span className="app__title">Chess Trainer</span>
-              <span className="app__tagline">
-                {profile ? profile.name : 'Learn an opening by playing it, move by move.'}
-              </span>
+              <span className="app__title">{t('app.title')}</span>
+              <span className="app__tagline">{profile ? profile.name : t('app.tagline')}</span>
             </span>
           </button>
 
           {store.profiles.length > 0 && (
-            <nav className="app__nav" aria-label="Sections">
+            <nav className="app__nav" aria-label={t('app.sections')}>
               {NAV.map((item) => (
                 <button
                   key={item.name}
@@ -155,7 +162,7 @@ export default function App() {
                   aria-current={route.name === item.name ? 'page' : undefined}
                   onClick={() => setRoute({ name: item.name } as Route)}
                 >
-                  {item.label}
+                  {t(item.label)}
                   {item.name === 'puzzles' && due > 0 && (
                     <span className="app__nav-badge">{due}</span>
                   )}
@@ -167,10 +174,11 @@ export default function App() {
                 aria-current={route.name === 'profiles' ? 'page' : undefined}
                 onClick={() => setRoute({ name: 'profiles' })}
               >
-                Repertoire
+                {t('nav.repertoire')}
               </button>
             </nav>
           )}
+          <LanguageSwitcher />
         </div>
       </header>
 
@@ -213,7 +221,7 @@ export default function App() {
         )}
 
         {route.name === 'study' && (
-          <Study mine={entries} all={ENTRIES} focusId={route.entryId} onNavigate={setRoute} />
+          <Study mine={entries} all={allEntries} focusId={route.entryId} onNavigate={setRoute} />
         )}
 
         {route.name === 'profiles' && (
@@ -230,9 +238,7 @@ export default function App() {
         )}
       </main>
 
-      <footer className="app__footer">
-        Progress is stored in this browser only. Nothing is sent anywhere.
-      </footer>
+      <footer className="app__footer">{t('app.footer')}</footer>
     </div>
   )
 }

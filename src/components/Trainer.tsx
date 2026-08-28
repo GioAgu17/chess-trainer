@@ -18,6 +18,7 @@ import {
 import { isUserPly, moveLabel, normalizeSan, totalPlies, type OpponentMode } from '../engine/tree'
 import type { ProgressStore } from '../engine/progress'
 import { entryStats, movesFor, rankMove } from '../engine/stats'
+import { useI18n } from '../i18n'
 import { Board, type BoardMove } from './Board'
 import { FeedbackPanel } from './FeedbackPanel'
 import { LineSummary } from './LineSummary'
@@ -36,6 +37,7 @@ interface TrainerProps {
 }
 
 export function Trainer({ entry, store, onRunComplete, onAttempt, onNavigate }: TrainerProps) {
+  const { t, n } = useI18n()
   const [state, setState] = useState<SessionState>(newSession)
   const [mode, setMode] = useState<OpponentMode>('main-line')
   const [errorSquare, setErrorSquare] = useState<
@@ -132,41 +134,41 @@ export function Trainer({ entry, store, onRunComplete, onAttempt, onNavigate }: 
 
   const announcement = (() => {
     if (state.error) {
-      return `${state.error.played} is not the repertoire move. ${state.error.reason}`
+      return `${state.error.played}: ${t('coach.wrong')}. ${state.error.reason}`
     }
-    if (run) return `Line complete: ${run.lineName}. Accuracy ${run.accuracy} percent.`
+    if (run) return `${t('trainer.complete')}: ${run.lineName}. ${run.accuracy}%.`
     const played = state.path[state.path.length - 1]
-    if (!played) return 'Your move.'
-    const mover = isUserPly(entry.side, state.path.length - 1) ? 'You played' : 'The computer played'
+    if (!played) return t('coach.yourMove')
+    const mover = isUserPly(entry.side, state.path.length - 1) ? t('coach.you') : t('coach.computer')
     const label = moveLabel(state.path.length - 1, normalizeSan(played.san))
-    return `${mover} ${label}. ${played.idea ?? ''} ${phase === 'user' ? 'Your move.' : ''}`.trim()
+    return `${mover} ${label}. ${played.idea ?? ''} ${phase === 'user' ? t('coach.yourMove') : ''}`.trim()
   })()
 
   return (
     <div className="trainer">
       <div className="trainer__bar">
         <button type="button" className="btn btn--ghost" onClick={() => onNavigate({ name: 'home' })}>
-          ← Repertoire
+          {t('trainer.back')}
         </button>
         <div className="trainer__bar-title">
           <h2>{entry.name}</h2>
           <EntryTag entry={entry} />
         </div>
         <div className="trainer__bar-spacer" />
-        <div className="segmented" role="group" aria-label="Which replies the computer plays">
+        <div className="segmented" role="group" aria-label={t('trainer.mode')}>
           <button
             type="button"
             aria-pressed={mode === 'main-line'}
             onClick={() => setMode('main-line')}
           >
-            Main line
+            {t('trainer.mainLine')}
           </button>
           <button type="button" aria-pressed={mode === 'mixed'} onClick={() => setMode('mixed')}>
-            Add sidelines
+            {t('trainer.sidelines')}
           </button>
         </div>
         <button type="button" className="btn" onClick={restart}>
-          Restart
+          {t('trainer.restart')}
         </button>
       </div>
 
@@ -182,7 +184,7 @@ export function Trainer({ entry, store, onRunComplete, onAttempt, onNavigate }: 
             className="btn btn--ghost"
             onClick={() => onNavigate({ name: 'study', entryId: entry.id })}
           >
-            Read the plan first →
+            {t('trainer.readPlan')}
           </button>
         </div>
       )}
@@ -209,21 +211,22 @@ export function Trainer({ entry, store, onRunComplete, onAttempt, onNavigate }: 
               }`}
             />
             {phase === 'complete'
-              ? 'Line complete'
+              ? t('trainer.complete')
               : phase === 'opponent'
-                ? 'Computer to move'
-                : 'Your move'}
+                ? t('trainer.computerToMove')
+                : t('trainer.yourMove')}
           </span>
           <span className="board-meta__score">
             <span>
-              Ply {state.path.length}
+              {t('trainer.ply', { played: state.path.length })}
               {/* Only the main line has a known length; a sideline can end
                   anywhere, so quoting a total there would be wrong. */}
               {mode === 'main-line' && <span className="dim"> / {plies}</span>}
             </span>
             {state.decisions > 0 && (
               <span>
-                Accuracy <strong className="board-meta__value">{runAccuracy(state)}%</strong>
+                {t('trainer.accuracy')}{' '}
+                <strong className="board-meta__value">{runAccuracy(state)}%</strong>
               </span>
             )}
           </span>
@@ -233,11 +236,9 @@ export function Trainer({ entry, store, onRunComplete, onAttempt, onNavigate }: 
       <div className="panel">
         <section className="pane">
           <header className="pane__head">
-            <span>Moves</span>
+            <span>{t('trainer.moves')}</span>
             <span className="pane__head-note">
-              {state.mistakes === 0
-                ? 'no mistakes'
-                : `${state.mistakes} mistake${state.mistakes === 1 ? '' : 's'}`}
+              {state.mistakes === 0 ? t('trainer.noMistakes') : n('common.mistake', state.mistakes)}
             </span>
           </header>
           <MoveList path={state.path} side={entry.side} />
@@ -245,7 +246,7 @@ export function Trainer({ entry, store, onRunComplete, onAttempt, onNavigate }: 
 
         <section className="pane">
           <header className="pane__head">
-            <span>{run ? 'Summary' : 'Coach'}</span>
+            <span>{run ? t('trainer.summary') : t('trainer.coach')}</span>
           </header>
           <div className="pane__body">
             {run ? (
@@ -273,35 +274,32 @@ export function Trainer({ entry, store, onRunComplete, onAttempt, onNavigate }: 
 
         <section className="pane">
           <header className="pane__head">
-            <span>Your record</span>
-            <span className="pane__head-note">
-              {stats.runs} run{stats.runs === 1 ? '' : 's'}
-            </span>
+            <span>{t('trainer.record')}</span>
+            <span className="pane__head-note">{n('common.run', stats.runs)}</span>
           </header>
           <div className="progress-list">
             <div className="progress-row">
-              <span className="progress-row__name">Repertoire seen</span>
+              <span className="progress-row__name">{t('trainer.seen')}</span>
               <span className="progress-row__value">
                 {stats.decisionsSeen} / {stats.totalDecisions}
               </span>
             </div>
             <div className="progress-row">
-              <span className="progress-row__name">Accuracy</span>
+              <span className="progress-row__name">{t('trainer.accuracy')}</span>
               <span className="progress-row__value">
                 {stats.attempts === 0 ? <span className="dim">-</span> : `${stats.accuracy}%`}
               </span>
             </div>
             {spots.length === 0 ? (
               <div className="progress-empty">
-                {stats.attempts === 0
-                  ? 'Nothing recorded yet. Play a line to the end and it will show up here.'
-                  : 'No recurring mistakes here. Keep it that way.'}
+                {stats.attempts === 0 ? t('trainer.nothingYet') : t('trainer.noRecurring')}
               </div>
             ) : (
               spots.map((spot) => (
                 <div className="progress-row" key={spot.key}>
                   <span className="progress-row__name">
-                    Keeps missing <code className="mono is-warn">{spot.label}</code>
+                    {t('trainer.keepsMissing')}{' '}
+                    <code className="mono is-warn">{spot.label}</code>
                   </span>
                   <span className="progress-row__value">{spot.misses}×</span>
                 </div>

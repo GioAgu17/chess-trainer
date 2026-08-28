@@ -4,6 +4,7 @@ import type { Route } from '../App'
 import type { ProgressStore, RepertoireProfile } from '../engine/progress'
 import { entryStats, summarise, weakestMoves } from '../engine/stats'
 import { dueCount } from '../engine/scheduler'
+import { useI18n } from '../i18n'
 import { EntryTag, Meter } from './ui'
 
 interface HomeProps {
@@ -18,6 +19,7 @@ interface HomeProps {
  * you keep getting wrong - each one a single click from the thing itself.
  */
 export function Home({ store, profile, entries, onNavigate }: HomeProps) {
+  const { t, n } = useI18n()
   const summary = useMemo(() => summarise(store, entries), [store, entries])
   const weakest = useMemo(
     () => weakestMoves(store, entries.map((entry) => entry.id), 5),
@@ -33,10 +35,10 @@ export function Home({ store, profile, entries, onNavigate }: HomeProps) {
   if (!profile || entries.length === 0) {
     return (
       <div className="empty">
-        <h2>No repertoire yet</h2>
-        <p>Build one in a minute and the trainer will know what to show you.</p>
+        <h2>{t('home.noneTitle')}</h2>
+        <p>{t('home.noneBody')}</p>
         <button type="button" className="btn btn--primary" onClick={() => onNavigate({ name: 'profiles' })}>
-          Set one up
+          {t('home.noneAction')}
         </button>
       </div>
     )
@@ -49,14 +51,16 @@ export function Home({ store, profile, entries, onNavigate }: HomeProps) {
     <div className="home">
       <section className="hero">
         <div className="hero__text">
-          <p className="hero__eyebrow">Your repertoire</p>
+          <p className="hero__eyebrow">{t('home.eyebrow')}</p>
           <h1 className="hero__title">{profile.name}</h1>
           <p className="hero__sub">
             {summary.attempts === 0
-              ? 'Nothing drilled yet. Pick a line below and play it to the end.'
-              : `${summary.accuracy}% accuracy across ${summary.attempts} move${
-                  summary.attempts === 1 ? '' : 's'
-                }, ${summary.coverage}% of the repertoire seen.`}
+              ? t('home.emptySub')
+              : t('home.sub', {
+                  accuracy: summary.accuracy,
+                  moves: n('common.move', summary.attempts),
+                  coverage: summary.coverage,
+                })}
           </p>
         </div>
         <div className="hero__actions">
@@ -65,10 +69,10 @@ export function Home({ store, profile, entries, onNavigate }: HomeProps) {
             className="btn btn--primary btn--lg"
             onClick={() => onNavigate({ name: 'puzzles' })}
           >
-            {due > 0 ? `Review ${due} due` : 'Practise puzzles'}
+            {due > 0 ? t('home.review', { count: due }) : t('home.practise')}
           </button>
           <button type="button" className="btn" onClick={() => onNavigate({ name: 'stats' })}>
-            See statistics
+            {t('home.seeStats')}
           </button>
         </div>
       </section>
@@ -76,13 +80,13 @@ export function Home({ store, profile, entries, onNavigate }: HomeProps) {
       {weakest.length > 0 && (
         <section className="section">
           <div className="section__head">
-            <h2>Weakest moves</h2>
+            <h2>{t('home.weakest')}</h2>
             <button
               type="button"
               className="btn btn--ghost"
               onClick={() => onNavigate({ name: 'stats' })}
             >
-              All of them →
+              {t('home.allOfThem')}
             </button>
           </div>
           <ul className="weak-list">
@@ -96,7 +100,7 @@ export function Home({ store, profile, entries, onNavigate }: HomeProps) {
                   <code className="weak-row__move">{move.label}</code>
                   <span className="weak-row__entry">{nameOf(entries, move.entryId)}</span>
                   <span className="weak-row__count">
-                    missed {move.misses}× of {move.attempts}
+                    {t('home.missed', { misses: move.misses, attempts: move.attempts })}
                   </span>
                   <span className="weak-row__accuracy">{move.accuracy}%</span>
                 </button>
@@ -107,8 +111,8 @@ export function Home({ store, profile, entries, onNavigate }: HomeProps) {
       )}
 
       {[
-        { title: 'Your openings', items: openings, blurb: 'The games you choose to play.' },
-        { title: 'What you face', items: defences, blurb: 'The systems you have prepared against.' },
+        { title: t('home.yourOpenings'), items: openings, blurb: t('home.yourOpeningsBlurb') },
+        { title: t('home.whatYouFace'), items: defences, blurb: t('home.whatYouFaceBlurb') },
       ]
         .filter((group) => group.items.length > 0)
         .map((group) => (
@@ -141,6 +145,7 @@ export function EntryCard({
   store: ProgressStore
   onNavigate: (route: Route) => void
 }) {
+  const { t, n } = useI18n()
   const stats = entryStats(store, entry)
   return (
     <article className="card">
@@ -153,13 +158,14 @@ export function EntryCard({
       </p>
       <div className="card__foot">
         <div className="card__stats">
-          <span>
-            <strong>{stats.coverage}%</strong> seen
-          </span>
+          <span>{t('home.seen', { percent: stats.coverage })}</span>
           <span>
             {stats.attempts === 0
-              ? 'Not started'
-              : `${stats.accuracy}% accuracy · ${stats.runs} run${stats.runs === 1 ? '' : 's'}`}
+              ? t('common.notStarted')
+              : t('home.accuracyRuns', {
+                  accuracy: stats.accuracy,
+                  runs: n('common.run', stats.runs),
+                })}
           </span>
         </div>
         <Meter percent={stats.coverage} />
@@ -169,14 +175,14 @@ export function EntryCard({
             className="btn btn--primary"
             onClick={() => onNavigate({ name: 'train', entryId: entry.id })}
           >
-            Drill
+            {t('common.drill')}
           </button>
           <button
             type="button"
             className="btn"
             onClick={() => onNavigate({ name: 'study', entryId: entry.id })}
           >
-            Study
+            {t('common.study')}
           </button>
         </div>
       </div>

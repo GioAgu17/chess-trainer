@@ -1,7 +1,14 @@
 import { useState } from 'react'
-import { DEFENCES, FAMILIES, OPENINGS, getEntry } from '../data/entries'
+import type { Defence, DefenceFamily, Opening } from '../data/types'
 import type { ProfileInput, ProgressStore } from '../engine/progress'
+import { useI18n, type UiKey } from '../i18n'
 import { Empty } from './ui'
+
+const FAMILY_KEYS: Array<{ key: DefenceFamily; title: UiKey }> = [
+  { key: 'd4', title: 'browse.family.d4' },
+  { key: 'e4', title: 'browse.family.e4' },
+  { key: 'flank', title: 'browse.family.flank' },
+]
 
 interface ProfileEditorProps {
   store: ProgressStore
@@ -18,27 +25,27 @@ interface ProfileEditorProps {
  * changing your mind about one thing.
  */
 export function ProfileEditor({ store, onSave, onSelect, onRemove, onNew }: ProfileEditorProps) {
+  const { t, entries } = useI18n()
   const [editing, setEditing] = useState<string | null>(null)
+  const nameOf = (id: string) => entries.find((entry) => entry.id === id)?.name ?? id
 
   return (
     <div className="profiles">
       <div className="page-head">
         <div>
-          <h1 className="page-head__title">Your repertoires</h1>
-          <p className="page-head__sub">
-            Keep as many as you like. Switching does not delete anything you have drilled.
-          </p>
+          <h1 className="page-head__title">{t('profiles.title')}</h1>
+          <p className="page-head__sub">{t('profiles.sub')}</p>
         </div>
         <button type="button" className="btn btn--primary" onClick={onNew}>
-          Build another
+          {t('profiles.build')}
         </button>
       </div>
 
       {store.profiles.length === 0 ? (
-        <Empty title="No repertoires yet">
-          <p>The setup conversation takes about a minute.</p>
+        <Empty title={t('profiles.emptyTitle')}>
+          <p>{t('profiles.emptyBody')}</p>
           <button type="button" className="btn btn--primary" onClick={onNew}>
-            Start it
+            {t('profiles.emptyAction')}
           </button>
         </Empty>
       ) : (
@@ -61,35 +68,37 @@ export function ProfileEditor({ store, onSave, onSelect, onRemove, onNew }: Prof
               >
                 <div className="profile__head">
                   <h2 className="profile__name">{profile.name}</h2>
-                  {store.activeProfileId === profile.id && <span className="tag tag--pick">active</span>}
+                  {store.activeProfileId === profile.id && (
+                    <span className="tag tag--pick">{t('common.active')}</span>
+                  )}
                 </div>
                 <dl className="profile__rows">
-                  <ProfileRow label="As White" id={profile.whiteOpeningId} />
-                  <ProfileRow label="As Black" id={profile.blackOpeningId} />
+                  <ProfileRow label={t('setup.asWhite')} id={profile.whiteOpeningId} name={nameOf} />
+                  <ProfileRow label={t('setup.asBlack')} id={profile.blackOpeningId} name={nameOf} />
                   <div className="profile__row">
-                    <dt>Defending against</dt>
+                    <dt>{t('profiles.defending')}</dt>
                     <dd>
                       {profile.defenceIds.length === 0
-                        ? 'Nothing yet'
-                        : profile.defenceIds.map((id) => getEntry(id)?.name ?? id).join(', ')}
+                        ? t('profiles.nothingYet')
+                        : profile.defenceIds.map(nameOf).join(', ')}
                     </dd>
                   </div>
                 </dl>
                 <div className="profile__actions">
                   {store.activeProfileId !== profile.id && (
                     <button type="button" className="btn btn--primary" onClick={() => onSelect(profile.id)}>
-                      Use this one
+                      {t('profiles.use')}
                     </button>
                   )}
                   <button type="button" className="btn" onClick={() => setEditing(profile.id)}>
-                    Edit
+                    {t('common.edit')}
                   </button>
                   <button
                     type="button"
                     className="btn btn--ghost"
                     onClick={() => onRemove(profile.id)}
                   >
-                    Delete
+                    {t('common.delete')}
                   </button>
                 </div>
               </article>
@@ -101,11 +110,20 @@ export function ProfileEditor({ store, onSave, onSelect, onRemove, onNew }: Prof
   )
 }
 
-function ProfileRow({ label, id }: { label: string; id: string | null }) {
+function ProfileRow({
+  label,
+  id,
+  name,
+}: {
+  label: string
+  id: string | null
+  name: (id: string) => string
+}) {
+  const { t } = useI18n()
   return (
     <div className="profile__row">
       <dt>{label}</dt>
-      <dd>{id ? (getEntry(id)?.name ?? id) : <span className="dim">Skipped</span>}</dd>
+      <dd>{id ? name(id) : <span className="dim">{t('common.skipped')}</span>}</dd>
     </div>
   )
 }
@@ -119,6 +137,9 @@ function ProfileForm({
   onSave: (input: ProfileInput) => void
   onCancel: () => void
 }) {
+  const { t, entries } = useI18n()
+  const openings = entries.filter((entry): entry is Opening => entry.kind === 'opening')
+  const allDefences = entries.filter((entry): entry is Defence => entry.kind === 'defence')
   const [name, setName] = useState(initial.name)
   const [white, setWhite] = useState(initial.whiteOpeningId ?? '')
   const [black, setBlack] = useState(initial.blackOpeningId ?? '')
@@ -143,16 +164,16 @@ function ProfileForm({
       }}
     >
       <label className="field">
-        <span className="field__label">Name</span>
+        <span className="field__label">{t('profiles.name')}</span>
         <input className="input" value={name} onChange={(event) => setName(event.target.value)} />
       </label>
 
       <div className="field-row">
         <label className="field">
-          <span className="field__label">As White</span>
+          <span className="field__label">{t('setup.asWhite')}</span>
           <select className="input" value={white} onChange={(event) => setWhite(event.target.value)}>
-            <option value="">Skipped</option>
-            {OPENINGS.filter((opening) => opening.side === 'white').map((opening) => (
+            <option value="">{t('common.skipped')}</option>
+            {openings.filter((opening) => opening.side === 'white').map((opening) => (
               <option key={opening.id} value={opening.id}>
                 {opening.name}
               </option>
@@ -160,10 +181,10 @@ function ProfileForm({
           </select>
         </label>
         <label className="field">
-          <span className="field__label">As Black</span>
+          <span className="field__label">{t('setup.asBlack')}</span>
           <select className="input" value={black} onChange={(event) => setBlack(event.target.value)}>
-            <option value="">Skipped</option>
-            {OPENINGS.filter((opening) => opening.side === 'black').map((opening) => (
+            <option value="">{t('common.skipped')}</option>
+            {openings.filter((opening) => opening.side === 'black').map((opening) => (
               <option key={opening.id} value={opening.id}>
                 {opening.name}
               </option>
@@ -173,12 +194,12 @@ function ProfileForm({
       </div>
 
       <fieldset className="field">
-        <legend className="field__label">Defending against</legend>
-        {FAMILIES.map((family) => (
+        <legend className="field__label">{t('profiles.defending')}</legend>
+        {FAMILY_KEYS.map((family) => (
           <div className="check-group" key={family.key}>
-            <span className="check-group__title">{family.title}</span>
+            <span className="check-group__title">{t(family.title)}</span>
             <div className="check-group__items">
-              {DEFENCES.filter((defence) => defence.family === family.key).map((defence) => (
+              {allDefences.filter((defence) => defence.family === family.key).map((defence) => (
                 <label className="check" key={defence.id}>
                   <input
                     type="checkbox"
@@ -195,10 +216,10 @@ function ProfileForm({
 
       <div className="profile__actions">
         <button type="submit" className="btn btn--primary">
-          Save
+          {t('common.save')}
         </button>
         <button type="button" className="btn" onClick={onCancel}>
-          Cancel
+          {t('common.cancel')}
         </button>
       </div>
     </form>

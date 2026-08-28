@@ -1,8 +1,8 @@
 import { useMemo, useState } from 'react'
 import type { Route } from '../App'
-import { getStudy } from '../data/study'
 import type { RepertoireEntry, StudyGuide } from '../data/types'
 import { isDefence } from '../data/types'
+import { useI18n } from '../i18n'
 import { Empty } from './ui'
 
 interface StudyProps {
@@ -22,6 +22,7 @@ interface StudyProps {
  * drill it, or fail a move and read why it matters.
  */
 export function Study({ mine, all, focusId, onNavigate }: StudyProps) {
+  const { t, guides } = useI18n()
   // Someone asked to read about a line outside their repertoire gets the whole
   // list, so the link from Browse never lands on an empty page.
   const [scope, setScope] = useState<'mine' | 'all'>(
@@ -33,13 +34,13 @@ export function Study({ mine, all, focusId, onNavigate }: StudyProps) {
     () => entries.find((item) => item.id === selected) ?? entries[0],
     [entries, selected],
   )
-  const guide = entry ? getStudy(entry.id) : undefined
+  const guide = entry ? guides.find((item) => item.id === entry.id) : undefined
 
   if (!entry) {
     return (
       <div className="study">
-        <Empty title="Nothing to read yet">
-          <p>Build a repertoire and every opening in it comes with a guide.</p>
+        <Empty title={t('study.emptyTitle')}>
+          <p>{t('study.emptyBody')}</p>
         </Empty>
       </div>
     )
@@ -49,25 +50,23 @@ export function Study({ mine, all, focusId, onNavigate }: StudyProps) {
     <div className="study">
       <div className="page-head">
         <div>
-          <h1 className="page-head__title">Study</h1>
-          <p className="page-head__sub">
-            The ideas behind the moves, in English. Read a line, then go and drill it.
-          </p>
+          <h1 className="page-head__title">{t('study.title')}</h1>
+          <p className="page-head__sub">{t('study.sub')}</p>
         </div>
         {mine.length > 0 && (
-          <div className="segmented" role="group" aria-label="Which openings to list">
+          <div className="segmented" role="group" aria-label={t('study.scope')}>
             <button type="button" aria-pressed={scope === 'mine'} onClick={() => setScope('mine')}>
-              My repertoire
+              {t('study.mine')}
             </button>
             <button type="button" aria-pressed={scope === 'all'} onClick={() => setScope('all')}>
-              Everything
+              {t('study.all')}
             </button>
           </div>
         )}
       </div>
 
       <div className="study__layout">
-        <nav className="study__nav" aria-label="Openings">
+        <nav className="study__nav" aria-label={t('study.openings')}>
           {entries.map((item) => (
             <button
               type="button"
@@ -78,7 +77,11 @@ export function Study({ mine, all, focusId, onNavigate }: StudyProps) {
             >
               <span className="study__nav-name">{item.name}</span>
               <span className="study__nav-kind">
-                {item.kind === 'defence' ? 'defence' : item.side === 'white' ? 'White' : 'Black'}
+                {item.kind === 'defence'
+                  ? t('common.defence')
+                  : item.side === 'white'
+                    ? t('common.white')
+                    : t('common.black')}
               </span>
             </button>
           ))}
@@ -88,7 +91,10 @@ export function Study({ mine, all, focusId, onNavigate }: StudyProps) {
           <header className="study__head">
             <div>
               <p className="study__eyebrow">
-                {entry.kind === 'defence' ? `Against the ${entry.system}` : 'Opening'} · {entry.eco}
+                {entry.kind === 'defence'
+                  ? t('study.against', { system: entry.system })
+                  : t('study.opening')}{' '}
+                · {entry.eco}
               </p>
               <h2 className="study__title">{entry.name}</h2>
             </div>
@@ -98,28 +104,28 @@ export function Study({ mine, all, focusId, onNavigate }: StudyProps) {
                 className="btn btn--primary"
                 onClick={() => onNavigate({ name: 'train', entryId: entry.id })}
               >
-                Drill this line
+                {t('study.drillLine')}
               </button>
               <button
                 type="button"
                 className="btn"
                 onClick={() => onNavigate({ name: 'stats', entryId: entry.id })}
               >
-                My results
+                {t('study.myResults')}
               </button>
             </div>
           </header>
 
           {isDefence(entry) && (
             <section className="study__section study__section--callout">
-              <h3>How to spot it</h3>
+              <h3>{t('study.spot')}</h3>
               <p className="study__moves">
                 <code className="mono">{entry.recognisedBy.moves}</code>
               </p>
               <p>{entry.recognisedBy.tell}</p>
-              <h3>What they are trying to do</h3>
+              <h3>{t('study.theirPlan')}</h3>
               <p>{entry.theirPlan}</p>
-              <h3>Your recipe</h3>
+              <h3>{t('study.recipe')}</h3>
               <ol className="study__recipe">
                 {entry.recipe.map((step, i) => (
                   <li key={step}>
@@ -131,17 +137,17 @@ export function Study({ mine, all, focusId, onNavigate }: StudyProps) {
             </section>
           )}
 
-          {guide ? <Guide guide={guide} /> : <Empty title="No guide for this one yet" />}
+          {guide ? <Guide guide={guide} /> : <Empty title={t('study.noGuide')} />}
 
           {(entry.traps ?? []).length > 0 && (
             <section className="study__section">
-              <h3>Traps worth knowing</h3>
+              <h3>{t('study.traps')}</h3>
               <div className="trap-list">
                 {(entry.traps ?? []).map((trap) => (
                   <div className="trap" key={trap.id}>
                     <div className="trap__head">
                       <span className={`tag tag--${trap.owner === 'ours' ? 'ours' : 'theirs'}`}>
-                        {trap.owner === 'ours' ? 'you can spring it' : 'do not fall for it'}
+                        {trap.owner === 'ours' ? t('study.trapOurs') : t('study.trapTheirs')}
                       </span>
                       <strong>{trap.name}</strong>
                     </div>
@@ -161,14 +167,14 @@ export function Study({ mine, all, focusId, onNavigate }: StudyProps) {
               className="btn btn--primary btn--lg"
               onClick={() => onNavigate({ name: 'train', entryId: entry.id })}
             >
-              Drill {entry.name}
+              {t('study.drillNamed', { name: entry.name })}
             </button>
             <button
               type="button"
               className="btn btn--lg"
               onClick={() => onNavigate({ name: 'puzzles' })}
             >
-              Practise the puzzles
+              {t('study.practise')}
             </button>
           </div>
         </article>
@@ -178,26 +184,27 @@ export function Study({ mine, all, focusId, onNavigate }: StudyProps) {
 }
 
 function Guide({ guide }: { guide: StudyGuide }) {
+  const { t } = useI18n()
   return (
     <>
       <section className="study__section">
-        <h3>The big idea</h3>
+        <h3>{t('study.bigIdea')}</h3>
         <p className="study__lead">{guide.bigIdea}</p>
       </section>
 
       <section className="study__section">
-        <h3>Pawn structures</h3>
+        <h3>{t('study.structures')}</h3>
         {guide.structures.map((structure) => (
           <div className="structure" key={structure.name}>
             <h4>{structure.name}</h4>
             <p className="structure__shape">{structure.shape}</p>
             <div className="structure__sides">
               <div>
-                <span className="structure__who">You want</span>
+                <span className="structure__who">{t('study.youWant')}</span>
                 <p>{structure.yourPlay}</p>
               </div>
               <div>
-                <span className="structure__who">They want</span>
+                <span className="structure__who">{t('study.theyWant')}</span>
                 <p>{structure.theirPlay}</p>
               </div>
             </div>
@@ -206,7 +213,7 @@ function Guide({ guide }: { guide: StudyGuide }) {
       </section>
 
       <section className="study__section">
-        <h3>Standard plans</h3>
+        <h3>{t('study.plans')}</h3>
         <ol className="plan-list">
           {guide.plans.map((plan, i) => (
             <li key={plan.title}>
@@ -222,7 +229,7 @@ function Guide({ guide }: { guide: StudyGuide }) {
 
       <section className="study__section study__section--split">
         <div>
-          <h3>Key squares</h3>
+          <h3>{t('study.keySquares')}</h3>
           <ul className="square-list">
             {guide.keySquares.map((square) => (
               <li key={square.square}>
@@ -233,7 +240,7 @@ function Guide({ guide }: { guide: StudyGuide }) {
           </ul>
         </div>
         <div>
-          <h3>Pawn breaks</h3>
+          <h3>{t('study.breaks')}</h3>
           <ul className="square-list">
             {guide.breaks.map((item) => (
               <li key={item.move}>
@@ -246,12 +253,12 @@ function Guide({ guide }: { guide: StudyGuide }) {
       </section>
 
       <section className="study__section">
-        <h3>What the middlegame feels like</h3>
+        <h3>{t('study.feel')}</h3>
         <p className="study__lead">{guide.middlegameFeel}</p>
       </section>
 
       <section className="study__section">
-        <h3>How club players go wrong</h3>
+        <h3>{t('study.pitfalls')}</h3>
         <div className="pitfall-list">
           {guide.pitfalls.map((pitfall) => (
             <div className="pitfall" key={pitfall.title}>

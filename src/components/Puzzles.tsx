@@ -1,13 +1,13 @@
 import { useCallback, useState } from 'react'
 import { Chess } from 'chess.js'
 import type { Route } from '../App'
-import { getEntry } from '../data/entries'
 import { VERIFIED_PUZZLES } from '../data/puzzles.generated'
 import type { Puzzle, RepertoireEntry } from '../data/types'
 import type { ProgressStore } from '../engine/progress'
-import { KIND_LABEL, describeLine, isSolution, puzzlePool } from '../engine/puzzles'
+import { KIND_KEY, describeLine, isSolution, puzzlePool } from '../engine/puzzles'
 import { dueLabel, selectDue } from '../engine/scheduler'
 import { normalizeSan } from '../engine/tree'
+import { useI18n, type UiKey } from '../i18n'
 import { Board, type BoardMove } from './Board'
 import { Empty } from './ui'
 
@@ -33,6 +33,7 @@ type Verdict =
  * runtime; the answer was decided before the page loaded.
  */
 export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) {
+  const { t, n, content } = useI18n()
   /**
    * Choose a session's worth of puzzles.
    *
@@ -97,13 +98,13 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
       <div className="puzzles">
         <div className="page-head">
           <div>
-            <h1 className="page-head__title">Puzzles</h1>
+            <h1 className="page-head__title">{t('puzzles.title')}</h1>
           </div>
         </div>
-        <Empty title="No repertoire to build puzzles from">
-          <p>Set up a repertoire and the exercises are generated from it and from your record.</p>
+        <Empty title={t('puzzles.noRepertoireTitle')}>
+          <p>{t('puzzles.noRepertoireBody')}</p>
           <button type="button" className="btn btn--primary" onClick={() => onNavigate({ name: 'profiles' })}>
-            Set one up
+            {t('home.noneAction')}
           </button>
         </Empty>
       </div>
@@ -115,18 +116,36 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
       <div className="puzzles">
         <div className="page-head">
           <div>
-            <h1 className="page-head__title">Puzzles</h1>
+            <h1 className="page-head__title">{t('puzzles.title')}</h1>
           </div>
         </div>
-        <Empty title="Nothing to solve right now">
-          <p>Drill a line first - the exercises are generated from the positions you have met.</p>
+        <Empty title={t('puzzles.noneTitle')}>
+          <p>{t('puzzles.noneBody')}</p>
         </Empty>
       </div>
     )
   }
 
-  const entry = getEntry(puzzle.entryId)
+  const entry = entries.find((item) => item.id === puzzle.entryId)
   const card = store.cards[puzzle.moveKey ?? puzzle.id]
+
+  // A prompt is a catalogue key plus values, and some of those values are keys
+  // themselves - the side to move, or a trap's name. Resolve them first.
+  const promptVars = Object.fromEntries(
+    Object.entries(puzzle.prompt.vars ?? {}).map(([name, value]) => [
+      name,
+      value.includes('.') ? content(value, value) : value,
+    ]),
+  )
+  const prompt = t(puzzle.prompt.key as UiKey, promptVars)
+  const explanation = [
+    puzzle.explanationKey
+      ? content(puzzle.explanationKey, puzzle.explanation)
+      : puzzle.explanation,
+    puzzle.answerNamed ? t('puzzles.punishSuffix', { san: puzzle.answerNamed }) : '',
+  ]
+    .filter(Boolean)
+    .join(' ')
   const fenAfterAnswer = () => {
     const chess = new Chess(puzzle.fen)
     try {
@@ -143,19 +162,15 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
     <div className="puzzles">
       <div className="page-head">
         <div>
-          <h1 className="page-head__title">Puzzles</h1>
-          <p className="page-head__sub">
-            Generated from your repertoire and weighted towards the moves you keep missing.
-          </p>
+          <h1 className="page-head__title">{t('puzzles.title')}</h1>
+          <p className="page-head__sub">{t('puzzles.sub')}</p>
         </div>
         <div className="puzzles__score">
           <span>
             {index + 1} / {queue.length}
           </span>
           {answered > 0 && (
-            <span className="dim">
-              {solvedCount} solved
-            </span>
+            <span className="dim">{t('puzzles.solved', { count: solvedCount })}</span>
           )}
         </div>
       </div>
@@ -179,21 +194,16 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
         <aside className="puzzle__side">
           <div className="pane">
             <header className="pane__head">
-              <span>{KIND_LABEL[puzzle.kind]}</span>
+              <span>{t(KIND_KEY[puzzle.kind] as UiKey)}</span>
               <span className="pane__head-note">{entry?.name}</span>
             </header>
             <div className="pane__body puzzle__prompt-body">
-              <p className="puzzle__prompt">{puzzle.prompt}</p>
+              <p className="puzzle__prompt">{prompt}</p>
               <p className="puzzle__line">
-                <code className="mono">{describeLine(puzzle.line) || 'From the start'}</code>
+                <code className="mono">{describeLine(puzzle.line) || t('puzzles.fromStart')}</code>
               </p>
 
-              {verdict === null && (
-                <p className="puzzle__hint">
-                  Play the move on the board. There is one answer and it has been checked by an
-                  engine.
-                </p>
-              )}
+              {verdict === null && <p className="puzzle__hint">{t('puzzles.hint')}</p>}
 
               {verdict?.status === 'solved' && (
                 <div className="verdict verdict--good">
@@ -201,8 +211,8 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
                     ✓
                   </span>
                   <div>
-                    <strong>{normalizeSan(puzzle.solution)} is right.</strong>
-                    <p>{puzzle.explanation}</p>
+                    <strong>{t('puzzles.rightAnswer', { san: normalizeSan(puzzle.solution) })}</strong>
+                    <p>{explanation}</p>
                   </div>
                 </div>
               )}
@@ -214,9 +224,12 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
                   </span>
                   <div>
                     <strong>
-                      {verdict.played} is not it. The move is {normalizeSan(puzzle.solution)}.
+                      {t('puzzles.wrongAnswer', {
+                        played: verdict.played,
+                        san: normalizeSan(puzzle.solution),
+                      })}
                     </strong>
-                    <p>{puzzle.explanation}</p>
+                    <p>{explanation}</p>
                   </div>
                 </div>
               )}
@@ -232,7 +245,7 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
                       onAnswer(puzzle.id, false, puzzle.moveKey)
                     }}
                   >
-                    Show me
+                    {t('puzzles.showMe')}
                   </button>
                 ) : (
                   <button
@@ -251,7 +264,7 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
                       setAnswered(0)
                     }}
                   >
-                    {last ? 'New session' : 'Next puzzle'}
+                    {last ? t('puzzles.newSession') : t('puzzles.next')}
                   </button>
                 )}
                 {entry && (
@@ -260,29 +273,35 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
                     className="btn"
                     onClick={() => onNavigate({ name: 'train', entryId: entry.id })}
                   >
-                    Drill the line
+                    {t('puzzles.drillLine')}
                   </button>
                 )}
               </div>
 
-              {card && <p className="puzzle__due">This one is {dueLabel(card, new Date().toISOString())}.</p>}
+              {card && (
+                <p className="puzzle__due">
+                  {t('puzzles.due', {
+                    when: (() => {
+                      const due = dueLabel(card, new Date().toISOString())
+                      return due.vars && 'count' in due.vars
+                        ? n(due.key, due.vars.count)
+                        : t(due.key as UiKey)
+                    })(),
+                  })}
+                </p>
+              )}
             </div>
           </div>
 
           <div className="pane">
             <header className="pane__head">
-              <span>How these are made</span>
+              <span>{t('puzzles.howTitle')}</span>
             </header>
             <div className="pane__body puzzle__note">
-              <p>
-                <strong>Recall</strong> drills come from your repertoire, out of sequence, weighted
-                towards the moves you keep missing.
-              </p>
-              <p>
-                <strong>Punish</strong> and <strong>trap</strong> puzzles were each checked by
-                Stockfish before they shipped: the answer has to be the engine's first choice and
-                clear of the next move, or the puzzle is dropped rather than guessed at.
-              </p>
+              {/* The catalogue marks the emphasised words with <b>, which is
+                  the one bit of markup a translator needs to keep. */}
+              <p dangerouslySetInnerHTML={{ __html: t('puzzles.howRecall') }} />
+              <p dangerouslySetInnerHTML={{ __html: t('puzzles.howVerified') }} />
             </div>
           </div>
         </aside>

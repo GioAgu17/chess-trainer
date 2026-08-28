@@ -1,7 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import { DEFENCES, OPENINGS, getEntry } from '../data/entries'
 import {
-  OPENING_PITCH,
+  PITCHED,
   RECOMMENDED,
   RECOMMENDED_DEFENCE,
   answer,
@@ -38,7 +38,7 @@ describe('the conversation', () => {
   it('starts by asking about White', () => {
     const question = currentQuestion(startSetup().current)
     expect(question.step).toBe('white')
-    expect(question.ask).toContain('White')
+    expect(question.askKey).toBe('setup.white.ask')
   })
 
   it('asks one question at a time', () => {
@@ -64,7 +64,7 @@ describe('the conversation', () => {
     expect(values).toContain('')
   })
 
-  it('gives a short reason for every choice', () => {
+  it('gives a reason for every choice, as a key or as text from the repertoire', () => {
     let session = startSetup()
     for (const given of [
       { kind: 'white', openingId: 'italian-game' } as const,
@@ -73,7 +73,9 @@ describe('the conversation', () => {
       { kind: 'system', system: 'Catalan' } as const,
     ]) {
       for (const option of currentQuestion(session.current).options) {
-        expect(option.why.split(' ').length, `${option.label} has no real reason`).toBeGreaterThan(6)
+        const reason = option.whyKey ?? option.why ?? ''
+        expect(reason.length, `${option.label ?? option.labelKey} has no reason`).toBeGreaterThan(0)
+        if (option.why) expect(option.why.split(' ').length).toBeGreaterThan(6)
       }
       session = answer(session, given)
     }
@@ -282,11 +284,16 @@ describe('finishing', () => {
 })
 
 describe('the copy', () => {
-  it('pitches every opening in the picker', () => {
+  it('offers a pitch for every opening in the picker', () => {
     for (const opening of OPENINGS) {
-      expect(OPENING_PITCH[opening.id], `${opening.id} has no pitch`).toBeDefined()
-      expect(OPENING_PITCH[opening.id].tag.length).toBeGreaterThan(0)
-      expect(OPENING_PITCH[opening.id].why.split(' ').length).toBeGreaterThan(10)
+      expect(PITCHED, `${opening.id} has no pitch`).toContain(opening.id)
+    }
+    // The words themselves live in the interface catalogues, where the parity
+    // test checks that both languages have them.
+    for (const option of currentQuestion(startSetup().current).options) {
+      if (option.value === '') continue
+      expect(option.tagKey).toBe(`pitch.${option.value}.tag`)
+      expect(option.whyKey).toBe(`pitch.${option.value}.why`)
     }
   })
 

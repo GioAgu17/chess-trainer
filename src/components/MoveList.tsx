@@ -1,5 +1,6 @@
 import type { MoveNode, Side } from '../data/types'
 import { normalizeSan } from '../engine/tree'
+import { useI18n } from '../i18n'
 
 interface MoveListProps {
   path: MoveNode[]
@@ -8,10 +9,11 @@ interface MoveListProps {
 
 /** The scoresheet. The user's own moves are picked out in a stronger colour. */
 export function MoveList({ path, side }: MoveListProps) {
+  const { t } = useI18n()
   if (path.length === 0) {
     return (
       <div className="moves">
-        <span className="moves__empty">No moves yet.</span>
+        <span className="moves__empty">{t('trainer.noMovesYet')}</span>
       </div>
     )
   }

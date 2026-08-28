@@ -1,4 +1,5 @@
 import type { CompletedRun } from '../engine/session'
+import { useI18n, type UiKey } from '../i18n'
 
 interface LineSummaryProps {
   run: CompletedRun
@@ -8,13 +9,14 @@ interface LineSummaryProps {
   onStudy: () => void
 }
 
-const WORDING: Record<CompletedRun['mistakes'][number]['result'], string> = {
-  error: 'you played',
-  'off-repertoire': 'you played the sound',
-  revealed: 'you asked to be shown',
+const WORDING: Record<CompletedRun['mistakes'][number]['result'], UiKey> = {
+  error: 'summary.youPlayed',
+  'off-repertoire': 'summary.youPlayedSound',
+  revealed: 'summary.youAsked',
 }
 
 export function LineSummary({ run, onReplay, onChoose, onStudy }: LineSummaryProps) {
+  const { t } = useI18n()
   const clean = run.mistakes.length === 0
   return (
     <div className="feedback feedback--summary">
@@ -22,13 +24,15 @@ export function LineSummary({ run, onReplay, onChoose, onStudy }: LineSummaryPro
         <span className={`feedback__icon feedback__icon--${clean ? 'good' : 'warn'}`}>
           {clean ? '✓' : '!'}
         </span>
-        <span>Line complete</span>
+        <span>{t('summary.complete')}</span>
       </div>
 
       <div className="summary__accuracy">
         <b>{run.accuracy}%</b>
         <span>
-          accuracy {clean ? 'this run' : `- ${run.mistakes.length} move${run.mistakes.length === 1 ? '' : 's'} missed`}
+          {clean
+            ? t('summary.accuracyClean')
+            : t('summary.accuracyMissed', { count: run.mistakes.length })}
         </span>
       </div>
 
@@ -42,7 +46,7 @@ export function LineSummary({ run, onReplay, onChoose, onStudy }: LineSummaryPro
 
       {!clean && (
         <div className="summary__missed">
-          <div className="summary__missed-title">Moves to review</div>
+          <div className="summary__missed-title">{t('summary.review')}</div>
           {run.mistakes.map((mistake) => (
             <div className="missed-row" key={`${mistake.key}-${mistake.played}`}>
               {/* The label already carries the move, so drop it and let the
@@ -51,7 +55,7 @@ export function LineSummary({ run, onReplay, onChoose, onStudy }: LineSummaryPro
               <code className="is-right">{mistake.expected}</code>
               {mistake.played && (
                 <>
-                  <span>{WORDING[mistake.result]}</span>
+                  <span>{t(WORDING[mistake.result])}</span>
                   {/* A sound move played off the repertoire is not an error, so
                       it is not shown in the colour errors are shown in. */}
                   <code className={mistake.result === 'off-repertoire' ? 'is-off' : 'is-wrong'}>
@@ -66,13 +70,13 @@ export function LineSummary({ run, onReplay, onChoose, onStudy }: LineSummaryPro
 
       <div className="feedback__actions">
         <button type="button" className="btn btn--primary" onClick={onReplay}>
-          Drill it again
+          {t('summary.again')}
         </button>
         <button type="button" className="btn" onClick={onStudy}>
-          Why these moves?
+          {t('summary.why')}
         </button>
         <button type="button" className="btn btn--ghost" onClick={onChoose}>
-          Back to repertoire
+          {t('summary.back')}
         </button>
       </div>
     </div>

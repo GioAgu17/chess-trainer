@@ -75,7 +75,7 @@ describe('recall puzzles', () => {
   it('explains itself once answered', () => {
     for (const puzzle of puzzles) {
       expect(puzzle.explanation.length, `${puzzle.id} has no explanation`).toBeGreaterThan(0)
-      expect(puzzle.prompt.length).toBeGreaterThan(0)
+      expect(puzzle.prompt.key, `${puzzle.id} has no prompt key`).toMatch(/^puzzles\./)
     }
   })
 })

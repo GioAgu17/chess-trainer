@@ -15,7 +15,7 @@ import {
   type SetupOption,
   type SetupSession,
 } from '../engine/profile'
-import { getEntry } from '../data/entries'
+import { useI18n, type UiKey } from '../i18n'
 
 interface SetupConversationProps {
   onDone: (input: ProfileInput) => void
@@ -32,12 +32,27 @@ interface SetupConversationProps {
  * and this component only has to render and animate.
  */
 export function SetupConversation({ onDone, onCancel }: SetupConversationProps) {
+  const { t, entries } = useI18n()
   const [session, setSession] = useState<SetupSession>(() => startSetup())
   const [name, setName] = useState('')
   const endRef = useRef<HTMLDivElement>(null)
 
-  const question = currentQuestion(session.current)
+  const question = currentQuestion(session.current, entries)
   const { index, total } = stepProgress(session.current)
+
+  const nameOf = (id: string | null | undefined) =>
+    id ? (entries.find((entry) => entry.id === id)?.name ?? t('common.skipped')) : t('common.skipped')
+  const suggested = suggestName(session.current, entries, {
+    and: t('setup.nameAnd'),
+    repertoire: t('setup.nameRepertoire'),
+    answersTo: t('setup.nameAnswersTo'),
+    mine: t('setup.nameMine'),
+  })
+  /** An option's label or reason: a catalogue key, or a name from the data. */
+  const label = (option: { labelKey?: string; label?: string }) =>
+    option.labelKey ? t(option.labelKey as UiKey) : (option.label ?? '')
+  const why = (option: { whyKey?: string; why?: string }) =>
+    option.whyKey ? t(option.whyKey as UiKey) : (option.why ?? '')
 
   // Remounting the question on this key is what replays the entrance
   // animation, so the conversation reads as one thing arriving rather than a
@@ -69,7 +84,7 @@ export function SetupConversation({ onDone, onCancel }: SetupConversationProps) 
     }
   }
 
-  const transcript = buildTranscript(session)
+  const transcript = buildTranscript(session, nameOf, suggested, t)
   const recommended = recommendationFor(question)
 
   return (
@@ -80,21 +95,17 @@ export function SetupConversation({ onDone, onCancel }: SetupConversationProps) 
             <span key={i} className={`setup__dot${i <= index ? ' setup__dot--done' : ''}`} />
           ))}
         </div>
-        <p className="setup__step">
-          Step {index + 1} of {total + 1}
-        </p>
+        <p className="setup__step">{t('setup.step', { index: index + 1, total: total + 1 })}</p>
         {onCancel && (
           <button type="button" className="btn btn--ghost setup__cancel" onClick={onCancel}>
-            Cancel
+            {t('common.cancel')}
           </button>
         )}
       </div>
 
       <div className="setup__thread">
         <div className="bubble bubble--coach bubble--intro">
-          <p>
-            Let us build you a repertoire. Three questions, and you can change any of it later.
-          </p>
+          <p>{t('setup.intro')}</p>
         </div>
 
         {transcript.map((line) => (
@@ -105,12 +116,14 @@ export function SetupConversation({ onDone, onCancel }: SetupConversationProps) 
         ))}
 
         <div className="bubble bubble--coach" key={asked}>
-          <h2 className="bubble__ask">{question.ask}</h2>
-          {question.note && <p className="bubble__note">{question.note}</p>}
+          <h2 className="bubble__ask">{t(question.askKey as UiKey, question.askVars)}</h2>
+          {question.noteKey && (
+            <p className="bubble__note">{t(question.noteKey as UiKey, question.noteVars)}</p>
+          )}
         </div>
 
         {question.options.length > 0 && (
-          <div className="setup__options" role="group" aria-label={question.ask}>
+          <div className="setup__options" role="group" aria-label={t(question.askKey as UiKey, question.askVars)}>
             {question.options.map((option) => (
               <button
                 type="button"
@@ -121,11 +134,13 @@ export function SetupConversation({ onDone, onCancel }: SetupConversationProps) 
                 onClick={() => choose(option)}
               >
                 <span className="choice__head">
-                  <span className="choice__label">{option.label}</span>
-                  {option.tag && <span className="tag tag--word">{option.tag}</span>}
-                  {option.recommended && <span className="tag tag--pick">suggested</span>}
+                  <span className="choice__label">{label(option)}</span>
+                  {option.tagKey && <span className="tag tag--word">{t(option.tagKey as UiKey)}</span>}
+                  {option.recommended && (
+                    <span className="tag tag--pick">{t('common.suggested')}</span>
+                  )}
                 </span>
-                <span className="choice__why">{option.why}</span>
+                <span className="choice__why">{why(option)}</span>
               </button>
             ))}
             {recommended && (
@@ -135,11 +150,10 @@ export function SetupConversation({ onDone, onCancel }: SetupConversationProps) 
                 onClick={() => choose(recommended)}
               >
                 <span className="choice__head">
-                  <span className="choice__label">Not sure - recommend me one</span>
+                  <span className="choice__label">{t('setup.recommendLabel')}</span>
                 </span>
                 <span className="choice__why">
-                  I will pick {recommended.label} for you. It is the safest choice here and you can
-                  change it in a click.
+                  {t('setup.recommendWhy', { name: label(recommended) })}
                 </span>
               </button>
             )}
@@ -151,23 +165,23 @@ export function SetupConversation({ onDone, onCancel }: SetupConversationProps) 
             className="setup__name"
             onSubmit={(event) => {
               event.preventDefault()
-              give({ kind: 'name', name: name || question.freeText!.suggestion })
+              give({ kind: 'name', name: name || suggested })
             }}
           >
             <label className="setup__name-label" htmlFor="profile-name">
-              Repertoire name
+              {t('setup.nameLabel')}
             </label>
             <div className="setup__name-row">
               <input
                 id="profile-name"
                 className="input"
                 value={name}
-                placeholder={question.freeText?.placeholder}
+                placeholder={suggested}
                 onChange={(event) => setName(event.target.value)}
                 autoComplete="off"
               />
               <button type="submit" className="btn btn--primary">
-                Continue
+                {t('common.continue')}
               </button>
             </div>
           </form>
@@ -175,13 +189,13 @@ export function SetupConversation({ onDone, onCancel }: SetupConversationProps) 
 
         {question.step === 'review' && (
           <div className="setup__review">
-            <ReviewRow label="As White" value={nameOf(session.current.whiteOpeningId)} />
-            <ReviewRow label="As Black" value={nameOf(session.current.blackOpeningId)} />
+            <ReviewRow label={t('setup.asWhite')} value={nameOf(session.current.whiteOpeningId)} />
+            <ReviewRow label={t('setup.asBlack')} value={nameOf(session.current.blackOpeningId)} />
             <ReviewRow
-              label="Defending against"
+              label={t('setup.defending')}
               value={
                 session.current.defenceIds.length === 0
-                  ? 'Nothing yet'
+                  ? t('common.nothingYet')
                   : session.current.defenceIds.map((id) => nameOf(id)).join(', ')
               }
             />
@@ -190,15 +204,11 @@ export function SetupConversation({ onDone, onCancel }: SetupConversationProps) 
                 type="button"
                 className="btn btn--primary btn--lg"
                 disabled={!isComplete(session.current)}
-                onClick={() => onDone(toProfileInput(session.current))}
+                onClick={() => onDone(toProfileInput(session.current, suggested))}
               >
-                Start training
+                {t('setup.start')}
               </button>
-              {!isComplete(session.current) && (
-                <p className="setup__warn">
-                  Pick at least one opening or one defence and we can begin.
-                </p>
-              )}
+              {!isComplete(session.current) && <p className="setup__warn">{t('setup.incomplete')}</p>}
             </div>
           </div>
         )}
@@ -216,7 +226,7 @@ export function SetupConversation({ onDone, onCancel }: SetupConversationProps) 
               setName('')
             }}
           >
-            ← Change my last answer
+            {t('setup.back')}
           </button>
         </div>
       )}
@@ -233,11 +243,6 @@ function ReviewRow({ label, value }: { label: string; value: string }) {
   )
 }
 
-function nameOf(id: string | null | undefined): string {
-  if (!id) return 'Skipped'
-  return getEntry(id)?.name ?? 'Skipped'
-}
-
 interface TranscriptLine {
   key: string
   label: string
@@ -245,22 +250,27 @@ interface TranscriptLine {
 }
 
 /** The answers so far, as a short transcript above the live question. */
-function buildTranscript(session: SetupSession): TranscriptLine[] {
+function buildTranscript(
+  session: SetupSession,
+  nameOf: (id: string | null | undefined) => string,
+  suggested: string,
+  t: (key: UiKey) => string,
+): TranscriptLine[] {
   const state = session.current
   const lines: TranscriptLine[] = []
   const answered = (step: string) => session.past.some((past) => past.step === step)
 
   if (answered('white')) {
-    lines.push({ key: 'white', label: 'As White', value: nameOf(state.whiteOpeningId) })
+    lines.push({ key: 'white', label: t('setup.asWhite'), value: nameOf(state.whiteOpeningId) })
   }
   if (answered('black')) {
-    lines.push({ key: 'black', label: 'As Black', value: nameOf(state.blackOpeningId) })
+    lines.push({ key: 'black', label: t('setup.asBlack'), value: nameOf(state.blackOpeningId) })
   }
   for (const id of state.defenceIds) {
-    lines.push({ key: id, label: 'Defending against', value: nameOf(id) })
+    lines.push({ key: id, label: t('setup.defending'), value: nameOf(id) })
   }
   if (state.step === 'review') {
-    lines.push({ key: 'name', label: 'Called', value: state.name || suggestName(state) })
+    lines.push({ key: 'name', label: t('setup.called'), value: state.name || suggested })
   }
   return lines
 }

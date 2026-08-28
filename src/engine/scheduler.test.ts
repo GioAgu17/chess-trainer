@@ -86,10 +86,13 @@ describe('reviewing a card', () => {
     expect(overdueDays(card, AT(1))).toBeCloseTo(-1, 5)
   })
 
-  it('says when a card is coming back, in English', () => {
-    expect(dueLabel(newCard('x', AT(1)), AT(1))).toBe('due now')
-    expect(dueLabel(review(newCard('x', AT(1)), true, AT(1)), AT(1))).toBe('due tomorrow')
-    expect(dueLabel(drill(5), AT(1))).toContain('month')
+  it('says when a card is coming back, as a key the interface can translate', () => {
+    expect(dueLabel(newCard('x', AT(1)), AT(1))).toEqual({ key: 'puzzles.dueNow' })
+    expect(dueLabel(review(newCard('x', AT(1)), true, AT(1)), AT(1))).toEqual({
+      key: 'puzzles.dueTomorrow',
+    })
+    expect(dueLabel(drill(5), AT(1)).key).toBe('puzzles.dueMonths')
+    expect(dueLabel(drill(3), AT(1)).key).toBe('puzzles.dueDays')
   })
 })
 

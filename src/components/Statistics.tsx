@@ -1,7 +1,6 @@
 import { useMemo, useState } from 'react'
 import { Chess } from 'chess.js'
 import type { Route } from '../App'
-import { ENTRIES, getEntry } from '../data/entries'
 import type { RepertoireEntry } from '../data/types'
 import { profileEntryIds, type ProgressStore, type RepertoireProfile } from '../engine/progress'
 import {
@@ -16,6 +15,7 @@ import {
   type RankedMove,
 } from '../engine/stats'
 import { describeLine } from '../engine/puzzles'
+import { useI18n } from '../i18n'
 import { MiniBoard } from './MiniBoard'
 import { Empty, Meter, Stat } from './ui'
 
@@ -35,14 +35,17 @@ interface StatisticsProps {
  * would make the accuracy figure meaningless.
  */
 export function Statistics({ store, profile, focusId, onNavigate }: StatisticsProps) {
+  const { t, n, entries: allEntries } = useI18n()
   const scoped = useMemo(() => {
     const ids = profileEntryIds(profile)
-    const entries = ids.map((id) => getEntry(id)).filter((entry) => entry !== undefined)
-    return entries.length > 0 ? entries : ENTRIES
-  }, [profile])
+    const entries = ids
+      .map((id) => allEntries.find((entry) => entry.id === id))
+      .filter((entry) => entry !== undefined)
+    return entries.length > 0 ? entries : allEntries
+  }, [profile, allEntries])
 
   const [selected, setSelected] = useState<string | null>(focusId ?? null)
-  const focus = selected ? getEntry(selected) : undefined
+  const focus = selected ? allEntries.find((entry) => entry.id === selected) : undefined
 
   const summary = useMemo(() => summarise(store, scoped), [store, scoped])
   const trend = useMemo(
@@ -59,17 +62,14 @@ export function Statistics({ store, profile, focusId, onNavigate }: StatisticsPr
       <div className="stats">
         <div className="page-head">
           <div>
-            <h1 className="page-head__title">Statistics</h1>
-            <p className="page-head__sub">Drawn from the moves you actually play, not from counters.</p>
+            <h1 className="page-head__title">{t('stats.title')}</h1>
+            <p className="page-head__sub">{t('stats.subEmpty')}</p>
           </div>
         </div>
-        <Empty title="Nothing to measure yet">
-          <p>
-            Play a line to the end and this page fills up: accuracy per opening, per line and per
-            move, what you keep missing, and how much of the repertoire you have seen.
-          </p>
+        <Empty title={t('stats.emptyTitle')}>
+          <p>{t('stats.emptyBody')}</p>
           <button type="button" className="btn btn--primary" onClick={() => onNavigate({ name: 'home' })}>
-            Go and drill something
+            {t('stats.emptyAction')}
           </button>
         </Empty>
       </div>
@@ -80,47 +80,51 @@ export function Statistics({ store, profile, focusId, onNavigate }: StatisticsPr
     <div className="stats">
       <div className="page-head">
         <div>
-          <h1 className="page-head__title">Statistics</h1>
-          <p className="page-head__sub">
-            Every number here comes from a move you played. Click one to see the position.
-          </p>
+          <h1 className="page-head__title">{t('stats.title')}</h1>
+          <p className="page-head__sub">{t('stats.sub')}</p>
         </div>
       </div>
 
       <section className="stat-row">
         <Stat
           value={`${summary.accuracy}%`}
-          label="Accuracy"
-          hint={`${summary.correct} right of ${summary.attempts}`}
+          label={t('stats.accuracy')}
+          hint={t('stats.accuracyHint', { correct: summary.correct, attempts: summary.attempts })}
           tone={summary.accuracy >= 85 ? 'good' : summary.accuracy >= 60 ? 'warn' : 'bad'}
         />
         <Stat
           value={summary.errors}
-          label="Real mistakes"
-          hint="Moves that were worse"
+          label={t('stats.errors')}
+          hint={t('stats.errorsHint')}
           tone={summary.errors > 0 ? 'bad' : undefined}
         />
         <Stat
           value={summary.offRepertoire}
-          label="Off repertoire"
-          hint="Sound, just not this line"
+          label={t('stats.offRepertoire')}
+          hint={t('stats.offRepertoireHint')}
           tone={summary.offRepertoire > 0 ? 'warn' : undefined}
         />
         <Stat
           value={`${summary.coverage}%`}
-          label="Repertoire seen"
-          hint={`${summary.runs} finished run${summary.runs === 1 ? '' : 's'}`}
+          label={t('stats.coverage')}
+          hint={n('stats.coverageHint', summary.runs)}
         />
-        <Stat value={summary.activeDays} label="Days practised" hint={lastPlayed(summary.lastPlayedAt)} />
+        <Stat
+          value={summary.activeDays}
+          label={t('stats.days')}
+          hint={
+            summary.lastPlayedAt
+              ? t('stats.lastOn', { date: summary.lastPlayedAt.slice(0, 10) })
+              : t('stats.never')
+          }
+        />
       </section>
 
       {trend.length > 1 && (
         <section className="section">
           <div className="section__head">
-            <h2>Progress over time</h2>
-            <span className="section__blurb">
-              Accuracy per day. Are you getting better, or just repeating it?
-            </span>
+            <h2>{t('stats.trend')}</h2>
+            <span className="section__blurb">{t('stats.trendBlurb')}</span>
           </div>
           <TrendChart trend={trend} />
         </section>
@@ -128,19 +132,19 @@ export function Statistics({ store, profile, focusId, onNavigate }: StatisticsPr
 
       <section className="section">
         <div className="section__head">
-          <h2>By opening</h2>
-          <span className="section__blurb">Click one to open the detail below.</span>
+          <h2>{t('stats.byOpening')}</h2>
+          <span className="section__blurb">{t('stats.byOpeningBlurb')}</span>
         </div>
         <div className="table-wrap">
           <table className="table">
             <thead>
               <tr>
-                <th>Opening</th>
-                <th className="num">Accuracy</th>
-                <th className="num">Errors</th>
-                <th className="num">Off rep.</th>
-                <th className="num">Seen</th>
-                <th className="num">Runs</th>
+                <th>{t('stats.colOpening')}</th>
+                <th className="num">{t('stats.colAccuracy')}</th>
+                <th className="num">{t('stats.colErrors')}</th>
+                <th className="num">{t('stats.colOff')}</th>
+                <th className="num">{t('stats.colSeen')}</th>
+                <th className="num">{t('stats.colRuns')}</th>
               </tr>
             </thead>
             <tbody>
@@ -181,15 +185,12 @@ export function Statistics({ store, profile, focusId, onNavigate }: StatisticsPr
 
       <section className="section">
         <div className="section__head">
-          <h2>The moves you miss most</h2>
-          <span className="section__blurb">
-            Ranked by how often they actually go wrong. Sound moves played off the repertoire are
-            not counted.
-          </span>
+          <h2>{t('stats.missTitle')}</h2>
+          <span className="section__blurb">{t('stats.missBlurb')}</span>
         </div>
         {worst.length === 0 ? (
-          <Empty title="No recurring mistakes">
-            <p>Nothing in your repertoire has gone wrong more than once. Keep it that way.</p>
+          <Empty title={t('stats.noMissTitle')}>
+            <p>{t('stats.noMissBody')}</p>
           </Empty>
         ) : (
           <div className="miss-list">
@@ -203,11 +204,6 @@ export function Statistics({ store, profile, focusId, onNavigate }: StatisticsPr
   )
 }
 
-function lastPlayed(at: string | null): string {
-  if (!at) return 'never'
-  return `last on ${at.slice(0, 10)}`
-}
-
 function EntryDetail({
   entry,
   store,
@@ -217,6 +213,7 @@ function EntryDetail({
   store: ProgressStore
   onNavigate: (route: Route) => void
 }) {
+  const { t } = useI18n()
   const lines = lineStats(store, entry.id)
   const moves = movesFor(store, entry.id).map(rankMove).sort((a, b) => a.accuracy - b.accuracy)
   const gaps = coverageGaps(store, entry, 8)
@@ -234,14 +231,14 @@ function EntryDetail({
             className="btn"
             onClick={() => onNavigate({ name: 'study', entryId: entry.id })}
           >
-            Read the theory
+            {t('stats.readTheory')}
           </button>
           <button
             type="button"
             className="btn btn--primary"
             onClick={() => onNavigate({ name: 'train', entryId: entry.id })}
           >
-            Drill it
+            {t('stats.drillIt')}
           </button>
         </div>
       </div>
@@ -249,8 +246,12 @@ function EntryDetail({
       {trend.length > 1 && (
         <div className="detail__trend">
           <p className="detail__trend-label">
-            Accuracy per day in this line - {trend[0].accuracy}% on {trend[0].day} to{' '}
-            {trend[trend.length - 1].accuracy}% on {trend[trend.length - 1].day}
+            {t('stats.trendEntry', {
+              from: trend[0].accuracy,
+              fromDay: trend[0].day,
+              to: trend[trend.length - 1].accuracy,
+              toDay: trend[trend.length - 1].day,
+            })}
           </p>
           <TrendChart trend={trend} />
         </div>
@@ -259,11 +260,11 @@ function EntryDetail({
       <div className="detail__cols">
         <div className="pane">
           <header className="pane__head">
-            <span>By line</span>
-            <span className="pane__head-note">weakest first</span>
+            <span>{t('stats.byLine')}</span>
+            <span className="pane__head-note">{t('stats.weakestFirst')}</span>
           </header>
           {lines.length === 0 ? (
-            <div className="progress-empty">No line finished yet.</div>
+            <div className="progress-empty">{t('stats.noLineYet')}</div>
           ) : (
             <div className="progress-list">
               {lines.map((line) => (
@@ -281,11 +282,11 @@ function EntryDetail({
 
         <div className="pane">
           <header className="pane__head">
-            <span>By move</span>
-            <span className="pane__head-note">weakest first</span>
+            <span>{t('stats.byMove')}</span>
+            <span className="pane__head-note">{t('stats.weakestFirst')}</span>
           </header>
           {moves.length === 0 ? (
-            <div className="progress-empty">Nothing recorded yet.</div>
+            <div className="progress-empty">{t('stats.noneRecorded')}</div>
           ) : (
             <div className="progress-list">
               {moves.slice(0, 12).map((move) => (
@@ -293,7 +294,7 @@ function EntryDetail({
                   <span className="progress-row__name">
                     <code className="mono">{move.label}</code>
                     {move.commonestWrong && (
-                      <span className="dim"> you play {move.commonestWrong}</span>
+                      <span className="dim"> {t('stats.youPlay', { san: move.commonestWrong })}</span>
                     )}
                   </span>
                   <span className="progress-row__value">
@@ -308,17 +309,21 @@ function EntryDetail({
 
         <div className="pane">
           <header className="pane__head">
-            <span>Never seen</span>
-            <span className="pane__head-note">{gaps.length === 0 ? 'none' : `${gaps.length}+`}</span>
+            <span>{t('stats.neverSeen')}</span>
+            <span className="pane__head-note">
+              {gaps.length === 0 ? t('stats.none') : `${gaps.length}+`}
+            </span>
           </header>
           {gaps.length === 0 ? (
-            <div className="progress-empty">You have been asked for every move in this line.</div>
+            <div className="progress-empty">{t('stats.allSeen')}</div>
           ) : (
             <div className="progress-list">
               {gaps.map((gap) => (
                 <div className="gap-row" key={gap.key}>
                   <code className="mono">{gap.label}</code>
-                  <span className="gap-row__line">{describeLine(gap.line) || 'from the start'}</span>
+                  <span className="gap-row__line">
+                    {describeLine(gap.line) || t('stats.fromStart')}
+                  </span>
                 </div>
               ))}
             </div>
@@ -331,8 +336,9 @@ function EntryDetail({
 
 /** One weak move, with the position and the answer one click away. */
 function MissCard({ move, onNavigate }: { move: RankedMove; onNavigate: (route: Route) => void }) {
+  const { t, entries } = useI18n()
   const [open, setOpen] = useState(false)
-  const entry = getEntry(move.entryId)
+  const entry = entries.find((item) => item.id === move.entryId)
   const line = move.key.split('|')[1] ?? ''
   const fen = useMemo(() => {
     const chess = new Chess()
@@ -352,7 +358,7 @@ function MissCard({ move, onNavigate }: { move: RankedMove; onNavigate: (route: 
         <code className="miss__move">{move.label}</code>
         <span className="miss__entry">{entry?.name ?? move.entryId}</span>
         <span className="miss__count">
-          {move.misses}× wrong of {move.attempts}
+          {t('stats.wrongOf', { misses: move.misses, attempts: move.attempts })}
         </span>
         <span className="miss__accuracy">{move.accuracy}%</span>
         <span className="miss__chevron" aria-hidden="true">
@@ -364,14 +370,17 @@ function MissCard({ move, onNavigate }: { move: RankedMove; onNavigate: (route: 
           {fen && entry && <MiniBoard fen={fen} orientation={entry.side} />}
           <div className="miss__facts">
             <p className="miss__line">
-              After <code className="mono">{describeLine(line.trim() ? line.trim().split(/\s+/) : []) || 'the start'}</code>
+              {t('stats.after')}{' '}
+              <code className="mono">
+                {describeLine(line.trim() ? line.trim().split(/\s+/) : []) || t('stats.fromStart')}
+              </code>
             </p>
             <p className="miss__answer">
-              The move is <code className="mono is-right">{move.expected}</code>
+              {t('stats.theMoveIs')} <code className="mono is-right">{move.expected}</code>
             </p>
             {Object.keys(move.wrongMoves).length > 0 && (
               <p className="miss__wrong">
-                You have played{' '}
+                {t('stats.youHavePlayed')}{' '}
                 {Object.entries(move.wrongMoves)
                   .sort((a, b) => b[1] - a[1])
                   .map(([san, count]) => (
@@ -387,7 +396,7 @@ function MissCard({ move, onNavigate }: { move: RankedMove; onNavigate: (route: 
               className="btn btn--primary"
               onClick={() => onNavigate({ name: 'train', entryId: move.entryId })}
             >
-              Drill this opening
+              {t('stats.drillThis')}
             </button>
           </div>
         </div>
