@@ -3,7 +3,7 @@
 A local, offline-first web app for building and drilling a personal chess opening repertoire.
 
 Answer three questions and it builds you a repertoire: what you play as White, what you play as Black, and - the part most trainers skip - what to do against the openings you keep facing.
-Then it drills you on it, tracks every move you play, generates puzzles from your own weak spots, and explains the ideas behind the moves in plain English.
+Then it drills you on it, tracks every move you play, generates puzzles from your own weak spots, and explains the ideas behind the moves in plain language - in English or in Italian.
 
 The computer plays the opposing side straight from a repertoire tree.
 You play your own moves by drag-and-drop or click-click.
@@ -136,6 +136,47 @@ It works down to phone width:
 
 ![Phone width](docs/screenshots/phone-05-home.png)
 
+## Languages
+
+The app ships in English and Italian, and the switch in the header changes everything: the interface, the setup conversation, the coach's explanations, the statistics pages, the puzzle text and all twenty study guides.
+The choice is remembered in `localStorage` under `chess-trainer:locale`; on a first visit it is taken from the browser's `navigator.languages`.
+
+Move notation stays in the international standard form throughout, in both languages.
+`chess.js` writes SAN with English piece letters, the engine verification reads them back, and the stored progress records are keyed by them, so localising the piece letters would break all three at once.
+Italian club players who want `Cf3` on the board rather than `Nf3` would need a display-only conversion at the very edge of the rendering code, with the data untouched - a separate decision, not something this translation made on its own.
+
+Opening and defence names use the proper Italian names (Difesa Siciliana, Partita Italiana, Partita Spagnola, Attacco Indiano di Re), not translations of the English.
+
+### How it is put together
+
+```
+src/i18n/
+  locales.ts       the list of locales, the storage key and the browser detection
+  keys.ts          derives a content key for every translatable string in the data
+  localize.ts      rebuilds an entry or a study guide in a locale, cached per locale
+  ui/en.ts         the English UI catalogue - the source of truth for the key list
+  ui/it.ts         the Italian UI catalogue, typed against it
+  content/it/      the repertoire and the study guides in Italian
+  parity.test.ts   the gate: no missing keys, no orphans, no untranslated paragraphs
+```
+
+Two ideas keep it honest:
+
+- **UI strings** live in typed catalogues. `ui/en.ts` exports the `UiKey` union, and `ui/it.ts` is declared as `UiCatalogue`, so a missing or misspelled key is a *type error*, not a runtime fallback.
+- **Content strings** - everything that lives in `src/data` - are not duplicated. `keys.ts` derives a key from where the string sits (`vs-london.n.d4 d5 Bf4.idea`, `study.caro-kann.p.0.detail`), and `localize.ts` rebuilds the entry with those strings swapped in. Rewrite a line in the data and its old keys show up as orphans rather than silently drifting out of date.
+
+`src/i18n/parity.test.ts` is what makes that a guarantee rather than an intention. It fails if either language is missing a key the other has, if a translation is empty, if the `{placeholders}` differ between the two, if a plural form is missing its pair, if too many strings are identical across languages (the sign of a copy-paste that never got translated), or if a content key exists in a translation but no longer exists in the data.
+
+### Adding a third language
+
+1. Add the locale to `LOCALES` in `src/i18n/locales.ts`.
+2. Copy `src/i18n/ui/en.ts` to `ui/<code>.ts`, type it as `UiCatalogue`, and translate the values. TypeScript lists anything you miss.
+3. Add `src/i18n/content/<code>/` and translate the repertoire and the study guides. `node scripts/extract-strings.mjs <entryId>` dumps every key for one entry with its English source; `node scripts/extract-strings.mjs study` does the same for all twenty guides. The `tree()` and `nodes()` helpers in `src/i18n/content/tree.ts` keep the long move-path keys readable.
+4. Register both in `CATALOGUES` in `LocaleProvider.tsx` and `CONTENT` in `src/i18n/content/index.ts`.
+5. Run `npx vitest run src/i18n`. It tells you exactly how many strings are left and which one is next.
+
+No i18n library is involved. Placeholders are `{name}`, plurals are a `_one` / `_other` key pair, and that is the whole feature set - anything cleverer would make the catalogues harder to translate rather than easier.
+
 ## Progress and storage
 
 Progress lives in `localStorage` under `chess-trainer:progress:v2` and survives a reload.
@@ -168,6 +209,13 @@ src/
     scheduler.ts         the spaced-repetition ladder
     puzzles.ts           puzzle generation from the repertoire
     profile.ts           the setup conversation as a state machine
+  i18n/
+    locales.ts           the locale list, storage key and browser detection
+    keys.ts              content keys derived from where each string lives
+    localize.ts          rebuilds entries and guides in a locale
+    ui/en.ts, ui/it.ts   the UI catalogues
+    content/it/          the repertoire and study guides in Italian
+    parity.test.ts       the English/Italian parity gate
   components/
     Board.tsx            react-chessboard wrapper: highlights and move input
     SetupConversation.tsx  the guided setup
@@ -178,6 +226,7 @@ src/
     Study.tsx            the study section
     Browse.tsx           the browse-everything grid
     ProfileEditor.tsx    managing repertoire profiles
+    LanguageSwitcher.tsx the header language switch
 ```
 
 The real logic lives in `src/engine`, and it is all pure functions over plain data, which is why that is where the tests are.
@@ -251,7 +300,9 @@ The real logic lives in `src/engine`, and it is all pure functions over plain da
 
 5. **Register it** in `src/data/openings/index.ts`.
 
-6. **Run the tests.** `npm test` will not let a broken opening through - see the section below.
+6. **Translate it.** `node scripts/extract-strings.mjs <id>` dumps every new key with its English source; add the Italian to `src/i18n/content/it/`. The parity test fails until it is done, and tells you which key is next.
+
+7. **Run the tests.** `npm test` will not let a broken opening through - see the section below.
 
 ## Adding a defence
 
@@ -301,7 +352,9 @@ A defence is the same move tree with a different index: it is filed under what t
 
 4. **Register it** in `src/data/defences/index.ts`.
 
-5. **Run the tests, then the engine.** The defence tests additionally check that the entry explains the opponent's plan, gives a real recipe, starts from the moves it says identify the system, and carries at least one trap.
+5. **Translate it.** Same recipe as for an opening: `node scripts/extract-strings.mjs <id>`, then a file under `src/i18n/content/it/` using the `tree()` helper.
+
+6. **Run the tests, then the engine.** The defence tests additionally check that the entry explains the opponent's plan, gives a real recipe, starts from the moves it says identify the system, and carries at least one trap.
 
 ## The tests
 
@@ -316,6 +369,8 @@ A defence is the same move tree with a different index: it is filed under what t
 - every trap sequence plays out legally and points at a real move as its answer.
 
 `src/engine/session.test.ts` then plays every line of every entry through the training loop and checks that a wrong move is rejected with an explanation at every single user turn, and that exactly one attempt is recorded per decision point however many times the user guesses.
+
+`src/i18n/parity.test.ts` guards the translations: every string present in one language must exist in the other, with the same placeholders, no empty values, and no content key left pointing at data that no longer exists.
 
 The rest of `src/engine` is tested where the logic lives: the profile builder's branching and going-back, the statistics aggregation including the error-versus-off-repertoire split, the spaced-repetition ladder and its selection order, the migration from a version 1 record, and the puzzle generator's invariants.
 
@@ -370,6 +425,20 @@ npm run check:browser -- docs/screenshots --phone
 
 It fails loudly on any console error and on any page where the document itself scrolls horizontally, and writes the screenshots used in this README.
 
+## Deploying
+
+It is a static build with no backend and no secrets, so any static host will do.
+`vercel.json` is set up for Vercel:
+
+```sh
+npm run build
+npx vercel deploy --prod
+```
+
+The config sets the build command and output directory, rewrites every path that is not a real asset to `index.html` so a deep link does not 404, and marks the hashed files in `assets/` as immutable for a year.
+
+Live at **https://chess-trainer-lac.vercel.app**.
+
 ## Notes on the theory
 
 The lines are standard main lines and named deviations, with the explanations written in terms of plans and structures rather than concrete evaluations.
@@ -381,4 +450,5 @@ A puzzle with an ambiguous or wrong answer is worse than no puzzle.
 ## Stack
 
 Vite, React, TypeScript, `chess.js` for rules and FEN, `react-chessboard` for the board, vitest for tests, oxlint for linting.
+The translations are hand-rolled typed catalogues rather than an i18n library.
 No backend, no chess engine, no network calls at runtime.
