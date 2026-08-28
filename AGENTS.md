@@ -28,6 +28,8 @@ A `Mistake` marked `deliberate` means the move is objectively sound and declined
 - Trainer state is remounted per entry via `key={entry.id}` in `App.tsx`, so `restart()` only has to reset the session in place.
 - `src/data/puzzles.generated.ts` is generated. Do not hand-edit it; re-run the verifier.
 - `src/data/verify-entry.ts` exists only as the bundle entry point for `scripts/`, which run in plain node. Keep it free of anything that imports React.
+- **Never run `npm install` while `verify:theory` is running.** Stockfish and Puppeteer are both installed `--no-save`, and any later install prunes the other one out of `node_modules` - which pulls the engine out from under a running verification. Install them together: `npm install --no-save stockfish puppeteer`.
+- A verification run caches every engine answer to `.verify-cache.jsonl` as it arrives, so an interrupted run resumes rather than starting again. Delete the file to force a fresh pass; changing depth or movetime already invalidates it.
 
 ## Browser checking
 

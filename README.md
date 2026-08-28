@@ -347,9 +347,13 @@ Useful flags:
 | `--threads 8` | Engine threads (default 6) |
 | `--only-puzzles` | Skip the theory pass and just regenerate the puzzles |
 | `--skip-puzzles` | Theory only, leaving the generated puzzle file alone |
+| `--movetime 90000` | Hard cap on any one search, in milliseconds |
+| `--no-cache` | Ignore the resume cache and search everything again |
 | `--out report.json` | Where the full per-position report goes |
 
 A full run takes well over an hour at depth 24 and writes a per-position report to `theory-report.json`, so the numbers behind any claim can be checked rather than taken on trust.
+Every engine answer is cached to `.verify-cache.jsonl` as it arrives, so an interrupted run resumes where it stopped instead of starting again, and re-verifying an unchanged repertoire takes a second.
+Install Stockfish and Puppeteer in the same command if you want both - a later `npm install --no-save` prunes the earlier one, and doing that mid-run pulls the engine out from under it.
 
 The engine is a dev tool only. The app ships without it, makes no network calls, and works offline.
 
