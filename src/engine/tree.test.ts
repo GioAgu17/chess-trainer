@@ -20,6 +20,7 @@ import {
 } from './tree'
 
 const toy: Opening = {
+  kind: 'opening',
   id: 'toy',
   name: 'Toy opening',
   eco: 'C00',

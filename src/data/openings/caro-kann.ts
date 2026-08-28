@@ -1,12 +1,24 @@
 import type { Opening } from '../types'
 
 export const caroKann: Opening = {
+  kind: 'opening',
   id: 'caro-kann',
   name: 'Caro-Kann Defence (Classical)',
   eco: 'B18',
   side: 'black',
   summary:
     'Black supports ...d5 with the c-pawn instead of the e-pawn, which means the light-squared bishop gets out to f5 before the pawn chain closes. The result is the French Defence without the bad bishop: a rock-solid structure, an easy plan, and endgames that often favour Black.',
+  traps: [
+    {
+      id: 'caro-smothered',
+      name: 'The move-five smothered mate',
+      owner: 'theirs',
+      moves: ['e4', 'c6', 'd4', 'd5', 'Nc3', 'dxe4', 'Nxe4', 'Nd7', 'Qe2', 'Ngf6', 'Nd6#'],
+      setup: 10,
+      point:
+        'The most famous short mate in the Caro-Kann. After ...Nd7, the natural-looking ...Ngf6 is mate in one: the knight lands on d6 and every escape square is covered by Black\'s own pieces. The rule is simple - once the queen appears on e2, look at d6 before developing the second knight.',
+    },
+  ],
   tree: [
     {
       san: 'e4',

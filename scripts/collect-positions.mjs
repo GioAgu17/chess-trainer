@@ -1,6 +1,9 @@
 /**
  * Flatten the repertoire into a list of unique positions with the candidate
  * moves that need checking at each one. Shared by the verification script.
+ *
+ * "The repertoire" here is every entry - openings you choose and defences you
+ * meet - because both use the same tree shape.
  */
 import { Chess } from 'chess.js'
 
@@ -68,7 +71,13 @@ export function collectPositions(openings) {
           ply,
           line,
           mainLine: normalize(nodes[0].san),
-          deviations: nodes.slice(1).map((n) => ({ san: normalize(n.san), label: n.label })),
+          deviations: nodes.slice(1).map((n) => ({
+            san: normalize(n.san),
+            label: n.label,
+            // A branch marked `punish` is in the tree *because* it loses. The
+            // verifier inverts its plausibility check rather than flagging it.
+            punish: n.punish === true,
+          })),
         })
       }
 

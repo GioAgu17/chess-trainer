@@ -1,12 +1,33 @@
 import type { Opening } from '../types'
 
 export const londonSystem: Opening = {
+  kind: 'opening',
   id: 'london-system',
   name: 'London System',
   eco: 'D02',
   side: 'white',
   summary:
     'White builds the same solid set-up against almost anything: pawns on d4 and e3, the dark-squared bishop developed outside the pawn chain on f4, and knights on f3 and d2. It costs almost no memorisation and leads to a sound middlegame where the standard ideas are Ne5, a kingside build-up, and the e3-e4 break.',
+  traps: [
+    {
+      id: 'london-nb5',
+      name: 'The poisoned b2 pawn',
+      owner: 'ours',
+      moves: ['d4', 'Nf6', 'Bf4', 'c5', 'e3', 'Qb6', 'Nc3', 'Qxb2', 'Nb5'],
+      setup: 8,
+      point:
+        'The b2 pawn is the London\'s one soft spot, and offering it with Nc3 is the way to make that a virtue. If Black takes, Nb5 traps the queen: Rb1 and Nc7+ are both coming and there is no good square. Offer the pawn only when the knight is on c3 first.',
+    },
+    {
+      id: 'london-c4-tempo',
+      name: 'Losing a tempo to ...c4',
+      owner: 'theirs',
+      moves: ['d4', 'd5', 'Bf4', 'Nf6', 'e3', 'c5', 'c3', 'Qb6', 'Qb3', 'c4'],
+      setup: 9,
+      point:
+        'Offering the queen trade with Qb3 looks like the tidy way to defend b2. Black inserts ...c4 first, gaining a tempo and fixing the queenside, and then recaptures on b6 with the a-pawn and a half-open file. Answer ...Qb6 with Qc1 or Nc3 instead, and keep the queens on.',
+    },
+  ],
   tree: [
     {
       san: 'd4',

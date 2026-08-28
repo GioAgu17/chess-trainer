@@ -1,12 +1,33 @@
 import type { Opening } from '../types'
 
 export const italianGame: Opening = {
+  kind: 'opening',
   id: 'italian-game',
   name: 'Italian Game (Giuoco Piano)',
   eco: 'C50',
   side: 'white',
   summary:
     'White develops quickly and points the light-squared bishop at f7, then supports the centre with c3 and d3 rather than rushing d4. The plan is a slow build-up: Nbd2-f1-g3, a rook to e1, and a well-timed d4 break once Black has committed.',
+  traps: [
+    {
+      id: 'italian-legal',
+      name: "Legal's Mate",
+      owner: 'ours',
+      moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'd6', 'Nc3', 'Bg4', 'Nxe5', 'Bxd1', 'Bxf7+', 'Ke7', 'Nd5#'],
+      setup: 8,
+      point:
+        'The oldest trap in chess and it still works. Black pins the knight with the bishop, so White ignores the pin and takes on e5 anyway. If Black grabs the queen, three minor pieces deliver mate on d5. If Black declines and takes on e5 instead, White simply wins a pawn and keeps a good position - the sacrifice is safe either way.',
+    },
+    {
+      id: 'italian-blackburne-shilling',
+      name: 'The Blackburne Shilling',
+      owner: 'theirs',
+      moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'Nd4', 'Nxe5', 'Qg5', 'Nxf7', 'Qxg2', 'Rf1', 'Qxe4+', 'Be2', 'Nf3#'],
+      setup: 7,
+      point:
+        'The knight on d4 looks like a beginner move hanging a pawn, and 4.Nxe5 looks like winning one. Then the queen comes to g5 hitting the knight and g2 at once, and the greedy follow-up ends in mate on f3. The answer is not to take: 4.Nxd4 exd4 5.O-O leaves White a comfortable tempo up.',
+    },
+  ],
   tree: [
     {
       san: 'e4',

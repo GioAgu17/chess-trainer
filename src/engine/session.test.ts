@@ -324,3 +324,82 @@ describe.each(OPENINGS.map((o): [string, typeof o] => [o.name, o]))(
     })
   },
 )
+
+describe('the attempt record', () => {
+  it('records one attempt per decision point, whatever happened', () => {
+    let state = applyUserMove(italianGame, newSession(), 'e4')
+    expect(state.attemptLog).toHaveLength(1)
+    expect(state.attemptLog[0]).toMatchObject({ result: 'correct', expected: 'e4', ply: 0 })
+  })
+
+  it('does not count a second wrong guess at the same move twice', () => {
+    let state = applyUserMove(italianGame, newSession(), 'Nc3')
+    state = tryAgain(state)
+    state = applyUserMove(italianGame, state, 'h4')
+    expect(state.attemptLog).toHaveLength(1)
+    expect(state.mistakes).toBe(1)
+  })
+
+  it('keeps the first verdict even if the user then finds the move', () => {
+    // Someone who guesses wrong and then corrects themselves has still got
+    // that move wrong; the record should say so.
+    let state = applyUserMove(italianGame, newSession(), 'Nc3')
+    state = tryAgain(state)
+    state = applyUserMove(italianGame, state, 'e4')
+    expect(state.attemptLog).toHaveLength(1)
+    expect(state.attemptLog[0].result).toBe('error')
+    expect(state.path).toHaveLength(1)
+  })
+
+  it('marks a sound move played off the repertoire as such, not as an error', () => {
+    const state = applyUserMove(italianGame, newSession(), 'd4')
+    expect(state.attemptLog[0].result).toBe('off-repertoire')
+    expect(state.attemptLog[0].played).toBe('d4')
+  })
+
+  it('marks a revealed move as revealed', () => {
+    const state = showMe(italianGame, newSession())
+    expect(state.attemptLog[0].result).toBe('revealed')
+  })
+
+  it('records every decision point of a full line exactly once', () => {
+    let state = newSession()
+    let guard = 0
+    while (phaseOf(italianGame, state) !== 'complete' && guard < 60) {
+      guard += 1
+      if (phaseOf(italianGame, state) === 'opponent') {
+        state = applyOpponentMove(italianGame, state, 'main-line')
+      } else {
+        const move = expectedMove(italianGame, state)!
+        state = applyUserMove(italianGame, state, move.san)
+      }
+    }
+    expect(state.attemptLog).toHaveLength(state.decisions)
+    expect(new Set(state.attemptLog.map((a) => a.key)).size).toBe(state.attemptLog.length)
+  })
+
+  it('splits errors from off-repertoire choices in the finished run', () => {
+    let state = newSession()
+    let guard = 0
+    let first = true
+    while (phaseOf(italianGame, state) !== 'complete' && guard < 60) {
+      guard += 1
+      if (phaseOf(italianGame, state) === 'opponent') {
+        state = applyOpponentMove(italianGame, state, 'main-line')
+        continue
+      }
+      if (first) {
+        // 1.d4 is sound but not this repertoire.
+        state = applyUserMove(italianGame, state, 'd4')
+        state = tryAgain(state)
+        first = false
+      }
+      const move = expectedMove(italianGame, state)!
+      state = applyUserMove(italianGame, state, move.san)
+    }
+    const run = completedRun(italianGame, state)!
+    expect(run.offRepertoire).toBe(1)
+    expect(run.errors).toBe(0)
+    expect(run.decisions).toBeGreaterThan(1)
+  })
+})

@@ -1,4 +1,4 @@
-import type { MoveNode, Opening } from '../data/types'
+import type { MoveNode, RepertoireEntry } from '../data/types'
 import {
   accuracy,
   childrenAfter,
@@ -18,6 +18,26 @@ export interface LoggedMistake {
   label: string
   expected: string
   played: string
+  /** Why it was not counted as correct. The summary words the two differently. */
+  result: 'error' | 'off-repertoire' | 'revealed'
+}
+
+/**
+ * What happened the *first* time the user was asked for a particular move.
+ *
+ * One record per decision point, never one per try: someone who guesses four
+ * times before finding the move has got one move wrong, not four, and counting
+ * the retries would make every accuracy figure meaningless.
+ */
+export interface LoggedAttempt {
+  key: string
+  label: string
+  expected: string
+  ply: number
+  /** `off-repertoire` is a sound move declined on repertoire grounds. */
+  result: 'correct' | 'error' | 'off-repertoire' | 'revealed'
+  /** The move actually played, when it was not the repertoire one. */
+  played?: string
 }
 
 export interface SessionState {
@@ -32,8 +52,10 @@ export interface SessionState {
   /** Decision points where the user's first attempt was wrong. */
   mistakes: number
   mistakeLog: LoggedMistake[]
-  /** Guards against counting two wrong tries at one decision point twice. */
-  pendingMistake: boolean
+  /** Every decision point reached, with what happened the first time. */
+  attemptLog: LoggedAttempt[]
+  /** True once the current decision point has been recorded. */
+  logged: boolean
 }
 
 export type Phase = 'user' | 'opponent' | 'complete'
@@ -46,22 +68,23 @@ export function newSession(): SessionState {
     decisions: 0,
     mistakes: 0,
     mistakeLog: [],
-    pendingMistake: false,
+    attemptLog: [],
+    logged: false,
   }
 }
 
-export function phaseOf(opening: Opening, state: SessionState): Phase {
+export function phaseOf(opening: RepertoireEntry, state: SessionState): Phase {
   if (isLineComplete(opening, state.path)) return 'complete'
   return isUserPly(opening.side, state.path.length) ? 'user' : 'opponent'
 }
 
 /** The repertoire moves available right now. */
-export function candidates(opening: Opening, state: SessionState): MoveNode[] {
+export function candidates(opening: RepertoireEntry, state: SessionState): MoveNode[] {
   return childrenAfter(opening, state.path)
 }
 
 /** The move the user is being asked to find, if it is their turn. */
-export function expectedMove(opening: Opening, state: SessionState): MoveNode | undefined {
+export function expectedMove(opening: RepertoireEntry, state: SessionState): MoveNode | undefined {
   if (phaseOf(opening, state) !== 'user') return undefined
   return candidates(opening, state)[0]
 }
@@ -75,31 +98,59 @@ export function runAccuracy(state: SessionState): number {
   return accuracy(state.decisions, state.mistakes)
 }
 
-function logMistake(
-  opening: Opening,
+type Logged = Pick<SessionState, 'mistakes' | 'mistakeLog' | 'attemptLog' | 'logged'>
+
+/**
+ * Record what happened at this decision point, once.
+ *
+ * The `logged` flag is what makes a second wrong guess at the same move free:
+ * it is the same mistake, and both the run accuracy and the long-term record
+ * want to count it once.
+ */
+function logAttempt(
+  opening: RepertoireEntry,
   state: SessionState,
   expected: MoveNode,
+  result: LoggedAttempt['result'],
   played: string,
-): Pick<SessionState, 'mistakes' | 'mistakeLog' | 'pendingMistake'> {
-  if (state.pendingMistake) {
+): Logged {
+  if (state.logged) {
     return {
       mistakes: state.mistakes,
       mistakeLog: state.mistakeLog,
-      pendingMistake: true,
+      attemptLog: state.attemptLog,
+      logged: true,
     }
   }
+
+  const key = `${opening.id}|${pathKey(state.path)}`
+  const label = moveLabel(state.path.length, normalizeSan(expected.san))
+  const attempt: LoggedAttempt = {
+    key,
+    label,
+    expected: normalizeSan(expected.san),
+    ply: state.path.length,
+    result,
+    played: played ? normalizeSan(played) : undefined,
+  }
+
+  const missed = result !== 'correct'
   return {
-    mistakes: state.mistakes + 1,
-    pendingMistake: true,
-    mistakeLog: [
-      ...state.mistakeLog,
-      {
-        key: `${opening.id}|${pathKey(state.path)}`,
-        label: moveLabel(state.path.length, normalizeSan(expected.san)),
-        expected: normalizeSan(expected.san),
-        played: normalizeSan(played),
-      },
-    ],
+    mistakes: state.mistakes + (missed ? 1 : 0),
+    logged: true,
+    attemptLog: [...state.attemptLog, attempt],
+    mistakeLog: missed
+      ? [
+          ...state.mistakeLog,
+          {
+            key,
+            label,
+            expected: normalizeSan(expected.san),
+            played: normalizeSan(played),
+            result: result as LoggedMistake['result'],
+          },
+        ]
+      : state.mistakeLog,
   }
 }
 
@@ -108,7 +159,7 @@ function logMistake(
  * on the board: the state records the error and the board stays put.
  */
 export function applyUserMove(
-  opening: Opening,
+  opening: RepertoireEntry,
   state: SessionState,
   san: string,
 ): SessionState {
@@ -119,7 +170,13 @@ export function applyUserMove(
   if (verdict.status === 'wrong') {
     return {
       ...state,
-      ...logMistake(opening, state, verdict.expected, san),
+      ...logAttempt(
+        opening,
+        state,
+        verdict.expected,
+        verdict.deliberate ? 'off-repertoire' : 'error',
+        san,
+      ),
       error: {
         played: normalizeSan(san),
         reason: verdict.reason,
@@ -131,11 +188,12 @@ export function applyUserMove(
 
   return {
     ...state,
+    ...logAttempt(opening, state, verdict.node, 'correct', ''),
     path: [...state.path, verdict.node],
     decisions: state.decisions + 1,
     error: null,
     revealed: false,
-    pendingMistake: false,
+    logged: false,
   }
 }
 
@@ -145,11 +203,11 @@ export function tryAgain(state: SessionState): SessionState {
 }
 
 /** Play the repertoire move for the user and explain it. */
-export function showMe(opening: Opening, state: SessionState): SessionState {
+export function showMe(opening: RepertoireEntry, state: SessionState): SessionState {
   if (phaseOf(opening, state) !== 'user') return state
   const expected = candidates(opening, state)[0]
   if (!expected) return state
-  const counted = logMistake(opening, state, expected, state.error?.played ?? '')
+  const counted = logAttempt(opening, state, expected, 'revealed', state.error?.played ?? '')
   return {
     ...state,
     ...counted,
@@ -157,13 +215,13 @@ export function showMe(opening: Opening, state: SessionState): SessionState {
     decisions: state.decisions + 1,
     error: null,
     revealed: true,
-    pendingMistake: false,
+    logged: false,
   }
 }
 
 /** Play the opponent's reply from the repertoire tree. */
 export function applyOpponentMove(
-  opening: Opening,
+  opening: RepertoireEntry,
   state: SessionState,
   mode: OpponentMode,
   random: () => number = Math.random,
@@ -179,10 +237,15 @@ export interface CompletedRun {
   plans: string[]
   accuracy: number
   mistakes: LoggedMistake[]
+  /** Decision points reached in this run. */
+  decisions: number
+  /** Genuine errors, kept apart from sound moves played off the repertoire. */
+  errors: number
+  offRepertoire: number
 }
 
 /** The end-of-line summary, or undefined while the line is still running. */
-export function completedRun(opening: Opening, state: SessionState): CompletedRun | undefined {
+export function completedRun(opening: RepertoireEntry, state: SessionState): CompletedRun | undefined {
   if (phaseOf(opening, state) !== 'complete') return undefined
   const end = lineEnd(state.path)
   if (!end) return undefined
@@ -191,5 +254,8 @@ export function completedRun(opening: Opening, state: SessionState): CompletedRu
     plans: end.plans,
     accuracy: runAccuracy(state),
     mistakes: state.mistakeLog,
+    decisions: state.decisions,
+    errors: state.attemptLog.filter((a) => a.result === 'error' || a.result === 'revealed').length,
+    offRepertoire: state.attemptLog.filter((a) => a.result === 'off-repertoire').length,
   }
 }

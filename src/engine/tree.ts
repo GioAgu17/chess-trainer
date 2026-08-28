@@ -1,5 +1,5 @@
 import { Chess } from 'chess.js'
-import type { LineEnd, MoveNode, Opening, Side } from '../data/types'
+import type { LineEnd, MoveNode, RepertoireEntry, Side } from '../data/types'
 
 /**
  * Strip SAN decorations so that data written as `Bb5+` matches what chess.js
@@ -30,7 +30,7 @@ export function isUserPly(side: Side, plyCount: number): boolean {
 }
 
 /** The nodes reachable from the position at the end of `path`. */
-export function childrenAfter(opening: Opening, path: MoveNode[]): MoveNode[] {
+export function childrenAfter(opening: RepertoireEntry, path: MoveNode[]): MoveNode[] {
   if (path.length === 0) return opening.tree
   return path[path.length - 1].children ?? []
 }
@@ -43,7 +43,7 @@ export function lineEnd(path: MoveNode[]): LineEnd | undefined {
   return last.end
 }
 
-export function isLineComplete(opening: Opening, path: MoveNode[]): boolean {
+export function isLineComplete(opening: RepertoireEntry, path: MoveNode[]): boolean {
   return path.length > 0 && childrenAfter(opening, path).length === 0
 }
 
@@ -103,7 +103,7 @@ export function pickOpponentMove(
 }
 
 /** The principal variation: follow the first child all the way down. */
-export function mainLine(opening: Opening): MoveNode[] {
+export function mainLine(opening: RepertoireEntry): MoveNode[] {
   const path: MoveNode[] = []
   let nodes = opening.tree
   while (nodes.length > 0) {
@@ -115,7 +115,7 @@ export function mainLine(opening: Opening): MoveNode[] {
 }
 
 /** Every root-to-leaf path in the tree. Used by the data-integrity tests. */
-export function allLines(opening: Opening): MoveNode[][] {
+export function allLines(opening: RepertoireEntry): MoveNode[][] {
   const lines: MoveNode[][] = []
   const walk = (nodes: MoveNode[], prefix: MoveNode[]) => {
     for (const node of nodes) {
@@ -161,6 +161,52 @@ export function accuracy(userMoves: number, mistakes: number): number {
 }
 
 /** Length of the main line in plies. Used for the progress read-out. */
-export function totalPlies(opening: Opening): number {
+export function totalPlies(opening: RepertoireEntry): number {
   return mainLine(opening).length
+}
+
+/** One point in a tree where the user has to find a move. */
+export interface DecisionPoint {
+  /** `${entryId}|${pathKey}` - the identity used by the record and the cards. */
+  key: string
+  /** `5.d3` style label. */
+  label: string
+  /** The repertoire move. */
+  expected: string
+  ply: number
+  /** SAN moves leading to the position. */
+  line: string[]
+}
+
+/**
+ * Every decision point in an entry, in tree order.
+ *
+ * This is the denominator for coverage: how much of a repertoire the user has
+ * ever been asked for, and which moves they have never once seen.
+ */
+export function decisionPoints(entry: RepertoireEntry): DecisionPoint[] {
+  const points: DecisionPoint[] = []
+  const seen = new Set<string>()
+  const walk = (nodes: MoveNode[], prefix: MoveNode[]) => {
+    for (const node of nodes) {
+      const path = [...prefix, node]
+      const ply = path.length - 1
+      if (isUserPly(entry.side, ply)) {
+        const key = pathKey(prefix)
+        if (!seen.has(key)) {
+          seen.add(key)
+          points.push({
+            key: `${entry.id}|${key}`,
+            label: moveLabel(ply, normalizeSan(node.san)),
+            expected: normalizeSan(node.san),
+            ply,
+            line: prefix.map((n) => normalizeSan(n.san)),
+          })
+        }
+      }
+      walk(node.children ?? [], path)
+    }
+  }
+  walk(entry.tree, [])
+  return points
 }

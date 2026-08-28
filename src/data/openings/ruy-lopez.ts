@@ -1,12 +1,36 @@
 import type { Opening } from '../types'
 
 export const ruyLopez: Opening = {
+  kind: 'opening',
   id: 'ruy-lopez',
   name: 'Ruy Lopez (Morphy Defence)',
   eco: 'C84',
   side: 'white',
   summary:
     "White pressures the knight that defends e5, then retreats the bishop along the a2-g8 diagonal and builds the classic Ruy centre with c3 and d4. The long-term asset is the bishop on b3 and a space advantage; the long-term plan is Nbd2-f1-g3 and pressure on Black’s kingside.",
+  traps: [
+    {
+      id: 'ruy-na5-bxf7',
+      name: 'Punishing the early ...Na5',
+      owner: 'ours',
+      moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'b5', 'Bb3', 'Na5', 'Bxf7+', 'Kxf7', 'Nxe5+'],
+      setup: 10,
+      point:
+        'With the knight on a5 and the king still on e8, the bishop sacrifice on f7 works: the king has to take, and the knight forks the king and the loose knight on a5 with check. Black has to answer the bishop retreat with a developing move first; grabbing at the bishop before castling is what loses.',
+    },
+    {
+      id: 'ruy-noahs-ark',
+      name: "Noah's Ark",
+      owner: 'theirs',
+      moves: [
+        'e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'd6', 'd4', 'b5', 'Bb3', 'Nxd4',
+        'Nxd4', 'exd4', 'Qxd4', 'c5', 'Qd5', 'Be6', 'Qc6+', 'Bd7', 'Qd5', 'c4',
+      ],
+      setup: 15,
+      point:
+        'The trap every Ruy Lopez player falls into once. Taking the pawn back on d4 with the queen looks natural, and then the black c- and b-pawns roll forward and the bishop on b3 runs out of squares. The pawns on b5 and c4 build a wall the bishop cannot escape. Recapture with the knight or the c-pawn instead, and check the bishop has a way out before grabbing anything.',
+    },
+  ],
   tree: [
     {
       san: 'e4',

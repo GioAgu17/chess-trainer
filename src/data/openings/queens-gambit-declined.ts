@@ -1,12 +1,27 @@
 import type { Opening } from '../types'
 
 export const queensGambitDeclined: Opening = {
+  kind: 'opening',
   id: 'queens-gambit-declined',
   name: "Queen’s Gambit Declined (Exchange)",
   eco: 'D35',
   side: 'white',
   summary:
     "White exchanges on d5 while the black bishop is still shut in behind the e6-pawn, producing a fixed structure where the plans are clear on both sides. White’s main weapon is the minority attack: b2-b4-b5 to crack open Black’s queenside and leave a weak pawn on c6.",
+  traps: [
+    {
+      id: 'qgd-elephant',
+      name: 'The Elephant Trap',
+      owner: 'theirs',
+      moves: [
+        'd4', 'd5', 'c4', 'e6', 'Nc3', 'Nf6', 'Bg5', 'Nbd7', 'cxd5', 'exd5', 'Nxd5',
+        'Nxd5', 'Bxd8', 'Bb4+', 'Qd2', 'Bxd2+', 'Kxd2', 'Kxd8',
+      ],
+      setup: 11,
+      point:
+        'The knight on f6 looks pinned, so taking on d5 looks like winning a pawn. It is not: the knight takes back anyway, and after the queens come off with Bxd8 the check on b4 wins the piece straight back with a much better position for Black. The pin is only real if Black cannot afford the queen trade.',
+    },
+  ],
   tree: [
     {
       san: 'd4',

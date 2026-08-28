@@ -4,25 +4,34 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 
 ## What this is
 
-A Vite + React + TypeScript single-page app for drilling chess openings. No backend, no chess engine, no runtime network calls. See `README.md` for how to run it and how to add an opening.
+A Vite + React + TypeScript single-page app for building and drilling a personal chess opening repertoire. No backend, no chess engine at runtime, no network calls. See `README.md` for how to run it, what is in the repertoire, and the recipes for adding an opening or a defence.
 
 ## The rule that matters most
 
-**A trainer that teaches a wrong move is worse than no trainer.** Every line in `src/data/openings/` is replayed through `chess.js` by `src/data/openings.test.ts`, which fails on an illegal move, on SAN that is not spelled exactly as `chess.js` writes it (disambiguation included: `Nfd7` vs `Nbd7`), on a named "mistake" that is not actually legal, and on a path with no end summary. Never weaken those assertions to make a line pass - fix the line.
+**A trainer that teaches a wrong move is worse than no trainer.** Every line in `src/data/openings/` and `src/data/defences/` is replayed through `chess.js` by `src/data/openings.test.ts`, which fails on an illegal move, on SAN that is not spelled exactly as `chess.js` writes it (disambiguation included: `Nfd7` vs `Nbd7`), on a named "mistake" that is not actually legal or is named twice, on a trap whose sequence does not play out, and on a path with no end summary. Never weaken those assertions to make a line pass - fix the line.
 
-`npm run verify:theory` is the second half of that guard: it puts every position through Stockfish and reports any move we teach that the engine disputes, and any move we call a mistake that is not actually worse. It needs `npm install --no-save stockfish` (~240 MB, deliberately not a dependency) and takes about twenty minutes. Run it after changing any line.
+`npm run verify:theory` is the second half of that guard: it puts every position through Stockfish, reports any move we teach that the engine disputes and any move we call a mistake that is not actually worse, **and** regenerates `src/data/puzzles.generated.ts` with only the puzzles whose answer the engine agrees is uniquely best. It needs `npm install --no-save stockfish` (~240 MB, deliberately not a dependency) and takes over an hour at depth 24. Run it after changing any line or any trap; `--only-puzzles` re-does just the puzzle half, which is much faster.
 
-A `Mistake` marked `deliberate` means the move is objectively sound and declined on repertoire grounds. It changes what the user is told, so never set it on a move that loses material - there is a test guarding exactly that.
+A `Mistake` marked `deliberate` means the move is objectively sound and declined on repertoire grounds. It changes what the user is told *and* how the statistics count it, so never set it on a move that loses material - there is a test guarding exactly that.
 
 ## Where the logic lives
 
-`src/engine/` is pure functions over plain data (`tree.ts` traversal and judgement, `session.ts` the training loop as transitions, `progress.ts` the localStorage record). That is where the tests belong. `src/components/Board.tsx` is the only file that knows about `react-chessboard`.
+`src/engine/` is pure functions over plain data - `tree.ts` traversal and judgement, `session.ts` the training loop as transitions, `progress.ts` the versioned record, `stats.ts` aggregation, `scheduler.ts` spaced repetition, `puzzles.ts` puzzle generation, `profile.ts` the setup conversation as a state machine. That is where the tests belong. `src/components/Board.tsx` and `MiniBoard.tsx` are the only files that know about `react-chessboard`.
 
 ## Sharp edges
 
+- **Errors and off-repertoire choices are never added together.** An `error` is a move that is worse; `off-repertoire` is a sound move this repertoire declines. They are counted separately in `progress.ts`, reported separately by `stats.ts`, worded differently in the coach and the summary, and an off-repertoire answer does not set the spaced-repetition card back. Conflating them makes every accuracy figure a lie, and there are tests on each of those points.
+- **One attempt is recorded per decision point, not per try.** `session.ts` keeps a `logged` flag so a user who guesses four times has got one move wrong. The first verdict is the one that sticks, even if they then find the move.
 - `.feedback` in `src/styles/index.css` has a **fixed** height, not a floor. The coach panel must never resize as the message changes or every pane below it jumps on each move. If content grows past it, it scrolls; the end-of-line summary opts out via `.feedback--summary`.
+- Everything written since v2 uses the `--s1..--s8` spacing scale defined at the top of `src/styles/index.css`, and is laid out mobile-first with wider arrangements added at `min-width` breakpoints. Keep to the scale rather than adding one-off pixel values.
 - `react-chessboard` v5 applies `squareStyles` to an inner div, not to the `[data-square]` element. Read `[data-square="e4"] > :last-child` when checking highlights from a browser session.
-- Trainer state is remounted per opening via `key={opening.id}` in `App.tsx`, so `restart()` only has to reset the session in place.
+- Trainer state is remounted per entry via `key={entry.id}` in `App.tsx`, so `restart()` only has to reset the session in place.
+- `src/data/puzzles.generated.ts` is generated. Do not hand-edit it; re-run the verifier.
+- `src/data/verify-entry.ts` exists only as the bundle entry point for `scripts/`, which run in plain node. Keep it free of anything that imports React.
+
+## Browser checking
+
+`chrome-devtools-axi` was unusable in the environment this was last built in (`take_snapshot` and `screenshot` both failed with `Required at pageId`). The fallback is `npm install --no-save puppeteer` plus a short script that walks the whole path - setup conversation, a drill, a defence drill, the statistics page, a puzzle, a study page - at 1440x900 and 390x844, asserting no console errors and that the document never scrolls horizontally. Try `chrome-devtools-axi` first; if it is still broken, that fallback is the quickest way back to a real browser.
 
 ## Maintaining this file
 

@@ -1,12 +1,27 @@
 import type { Opening } from '../types'
 
 export const sicilianNajdorf: Opening = {
+  kind: 'opening',
   id: 'sicilian-najdorf',
   name: 'Sicilian Defence (Najdorf)',
   eco: 'B90',
   side: 'black',
   summary:
     'Black trades a wing pawn for a centre pawn and gets the half-open c-file in return, then plays the small but hugely useful move ...a6 to take b5 away from every white piece. The Najdorf keeps maximum flexibility: depending on what White does, Black follows with ...e5 grabbing the centre or ...e6 in a solid Scheveningen set-up.',
+  traps: [
+    {
+      id: 'najdorf-bxb5',
+      name: 'The b5 sacrifice',
+      owner: 'theirs',
+      moves: [
+        'e4', 'c5', 'Nf3', 'd6', 'd4', 'cxd4', 'Nxd4', 'Nf6', 'Nc3', 'a6', 'Bg5', 'e6',
+        'f4', 'Nbd7', 'Qf3', 'Qc7', 'O-O-O', 'b5', 'Bxb5',
+      ],
+      setup: 18,
+      point:
+        'The standard queenside advance runs into the standard sacrifice: with White castled long and every piece pointed at the black king, Bxb5 rips the queenside open before Black has castled. The lesson is about move order rather than about this one position - get the king to safety before pushing the b-pawn when White has already committed to O-O-O.',
+    },
+  ],
   tree: [
     {
       san: 'e4',

@@ -1,12 +1,27 @@
 import type { Opening } from '../types'
 
 export const kingsIndianDefence: Opening = {
+  kind: 'opening',
   id: 'kings-indian-defence',
   name: "King’s Indian Defence (Classical)",
   eco: 'E97',
   side: 'black',
   summary:
     'Black lets White build a big pawn centre, fianchettoes the dark-squared bishop behind it, and only then strikes with ...e5. The resulting positions are unbalanced by design: White expands on the queenside with c4-c5 while Black closes the centre and attacks the king with ...f5, ...f4 and ...g5.',
+  traps: [
+    {
+      id: 'kid-exchange-nxe4',
+      name: 'The exchange-line tactic',
+      owner: 'ours',
+      moves: [
+        'd4', 'Nf6', 'c4', 'g6', 'Nc3', 'Bg7', 'e4', 'd6', 'Nf3', 'O-O', 'Be2', 'e5',
+        'dxe5', 'dxe5', 'Qxd8', 'Rxd8', 'Nxe5', 'Nxe4',
+      ],
+      setup: 17,
+      point:
+        'White trades everything off and then grabs the pawn on e5, apparently a free one because the queens have gone. It is not: ...Nxe4 comes back at once, and after the dust settles Black has regained the material with the better bishop on g7. Worth knowing because the exchange line is the most common way White tries to take the King\'s Indian out of the game.',
+    },
+  ],
   tree: [
     {
       san: 'd4',

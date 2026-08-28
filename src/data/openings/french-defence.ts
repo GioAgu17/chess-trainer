@@ -1,12 +1,39 @@
 import type { Opening } from '../types'
 
 export const frenchDefence: Opening = {
+  kind: 'opening',
   id: 'french-defence',
   name: 'French Defence (Classical, Steinitz)',
   eco: 'C11',
   side: 'black',
   summary:
     'Black answers 1.e4 with ...e6 and ...d5, building a solid pawn chain and accepting a cramped but very hard to crack position. The price is the light-squared bishop, shut in behind e6; the compensation is the ...c5 break and permanent pressure against the base of White’s pawn chain on d4.',
+  traps: [
+    {
+      id: 'french-milner-barry',
+      name: 'The Milner-Barry pawn grab',
+      owner: 'theirs',
+      moves: [
+        'e4', 'e6', 'd4', 'd5', 'e5', 'c5', 'c3', 'Nc6', 'Nf3', 'Qb6', 'Bd3', 'cxd4',
+        'cxd4', 'Nxd4', 'Nxd4', 'Qxd4', 'Bb5+',
+      ],
+      setup: 16,
+      point:
+        'Taking twice on d4 wins a pawn and loses the game: Bb5+ comes with check, and after the bishop is traded off White has a huge lead in development with the black king stuck in the middle. The pawn is there to be taken, but only once the check has been taken away.',
+    },
+    {
+      id: 'french-bd7-first',
+      name: 'Taking on d4 the right way',
+      owner: 'ours',
+      moves: [
+        'e4', 'e6', 'd4', 'd5', 'e5', 'c5', 'c3', 'Nc6', 'Nf3', 'Qb6', 'Bd3', 'cxd4',
+        'cxd4', 'Bd7', 'Bc2', 'Nxd4', 'Nxd4', 'Qxd4',
+      ],
+      setup: 15,
+      point:
+        'The same pawn grab, one move later, and now it works. With the bishop already on d7 there is no Bb5+, so taking twice on d4 simply wins a healthy pawn. One quiet developing move is the difference between a won pawn and a lost game.',
+    },
+  ],
   tree: [
     {
       san: 'e4',

@@ -4,9 +4,17 @@ interface LineSummaryProps {
   run: CompletedRun
   onReplay: () => void
   onChoose: () => void
+  /** Fail a move, read why it matters: the link back into the study section. */
+  onStudy: () => void
 }
 
-export function LineSummary({ run, onReplay, onChoose }: LineSummaryProps) {
+const WORDING: Record<CompletedRun['mistakes'][number]['result'], string> = {
+  error: 'you played',
+  'off-repertoire': 'you played the sound',
+  revealed: 'you asked to be shown',
+}
+
+export function LineSummary({ run, onReplay, onChoose, onStudy }: LineSummaryProps) {
   const clean = run.mistakes.length === 0
   return (
     <div className="feedback feedback--summary">
@@ -43,8 +51,12 @@ export function LineSummary({ run, onReplay, onChoose }: LineSummaryProps) {
               <code className="is-right">{mistake.expected}</code>
               {mistake.played && (
                 <>
-                  <span>you played</span>
-                  <code className="is-wrong">{mistake.played}</code>
+                  <span>{WORDING[mistake.result]}</span>
+                  {/* A sound move played off the repertoire is not an error, so
+                      it is not shown in the colour errors are shown in. */}
+                  <code className={mistake.result === 'off-repertoire' ? 'is-off' : 'is-wrong'}>
+                    {mistake.played}
+                  </code>
                 </>
               )}
             </div>
@@ -56,8 +68,11 @@ export function LineSummary({ run, onReplay, onChoose }: LineSummaryProps) {
         <button type="button" className="btn btn--primary" onClick={onReplay}>
           Drill it again
         </button>
-        <button type="button" className="btn" onClick={onChoose}>
-          Pick another opening
+        <button type="button" className="btn" onClick={onStudy}>
+          Why these moves?
+        </button>
+        <button type="button" className="btn btn--ghost" onClick={onChoose}>
+          Back to repertoire
         </button>
       </div>
     </div>
