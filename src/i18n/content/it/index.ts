@@ -20,6 +20,7 @@ import { vsDanishGoringTrees } from './vs-danish-goring'
 import { vsEnglishTrees } from './vs-english'
 import { vsRetiTrees } from './vs-reti'
 import { studyItalianRuy } from './study-italian-ruy'
+import { studyQgdLondon } from './study-qgd-london'
 
 /**
  * The repertoire in Italian.
@@ -50,4 +51,5 @@ export const itContent: ContentDictionary = {
   ...vsEnglishTrees,
   ...vsRetiTrees,
   ...studyItalianRuy,
+  ...studyQgdLondon,
 }
