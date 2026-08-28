@@ -2,6 +2,10 @@ import type { ContentDictionary } from '../../keys'
 import { openingMeta } from './openings'
 import { defenceMeta } from './defences-meta'
 import { defenceMeta2 } from './defences-meta-2'
+import { italianGameTree } from './italian-game'
+import { ruyLopezTree } from './ruy-lopez'
+import { qgdTree } from './queens-gambit-declined'
+import { londonSystemTree } from './london-system'
 
 /**
  * The repertoire in Italian.
@@ -14,4 +18,8 @@ export const itContent: ContentDictionary = {
   ...openingMeta,
   ...defenceMeta,
   ...defenceMeta2,
+  ...italianGameTree,
+  ...ruyLopezTree,
+  ...qgdTree,
+  ...londonSystemTree,
 }
