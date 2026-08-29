@@ -181,34 +181,35 @@ export const vsLondon: Defence = {
                                                       idea: 'The knight takes the route to b5 and c7, hoping to make use of the hole your queenside pawns left.',
                                                       children: [
                                                         {
-                                                          san: 'e6',
-                                                          idea: 'Take b5 and d6 away from the knight before it gets there. With the queens off there is no hurry about the bishop.',
-                                                          hint: 'Cover the squares the knight on a3 is heading for.',
+                                                          san: 'Nc6',
+                                                          idea: 'Develop and let the knight come. If Nb5 arrives, ...Ra5 hits it along the fifth rank and keeps the rook on the open file - the knight on a3 has nowhere useful to be.',
+                                                          hint: 'Develop the queenside knight and let White show what the knight on a3 is actually for.',
                                                           mistakes: [
-                                                            { san: 'Bf5', why: 'Good in the other line, but here Nb5 comes at once and the knight on c7 would be a genuine nuisance. Stop it first.' },
-                                                            { san: 'Nc6', why: 'It develops, but it does nothing about Nb5 - and after Nb5 the a7 and c7 squares become real problems.' },
+                                                            { san: 'e6', why: 'It looks like it covers d6 and b5, but it wastes the tempo White needs to justify the knight tour, and the bishop on c8 stays shut in for nothing.' },
+                                                            { san: 'Bf5', why: 'Good in the other line, but here Nb5 comes at once, and with the rook still on a8 the fork on c7 is a real threat.' },
                                                           ],
                                                           children: [
                                                             {
-                                                              san: 'Be2',
-                                                              label: 'Main line',
-                                                              idea: 'White develops and castles, having achieved very little with the knight tour.',
+                                                              san: 'Nb5',
+                                                              label: 'Going for c7',
+                                                              idea: 'The point of the knight tour: from b5 it threatens Nc7+, forking the king and the rook in the corner.',
                                                               children: [
                                                                 {
-                                                                  san: 'Bd6',
-                                                                  idea: 'Offer the trade of the London bishop. Every trade helps you here, because White has no attack and you have the better structure.',
-                                                                  hint: 'Challenge the bishop the whole London system is built around.',
+                                                                  san: 'Ra5',
+                                                                  idea: 'One move solves everything: the rook steps off the fork, attacks the knight on b5, and stays on the half-open file it belongs on.',
+                                                                  hint: 'Nc7 would fork your king and your rook. Move the rook so that it dodges the fork and attacks the knight at the same time.',
                                                                   mistakes: [
-                                                                    { san: 'Be7', why: 'Passive. The bishop on d6 offers the trade of White\'s best piece; on e7 it does nothing at all.' },
-                                                                    { san: 'b5', why: 'It looks like it stops Nb5 but it walks into Nc2-b4 or a2-a4 and just loosens your own queenside.' },
+                                                                    { san: 'e6', why: 'Nc7+ comes with check, forks the king and the rook on a8, and wins the exchange on the spot.' },
+                                                                    { san: 'Bf5', why: 'The same fork: Nc7+ takes the king and the rook together, and developing does not answer a check.' },
                                                                   ],
                                                                   end: {
                                                                     name: 'Anti-London, 7.Na3',
                                                                     plans: [
-                                                                      'Trade on f4 if White allows it. Every piece that comes off makes your queenside majority more valuable.',
-                                                                      'Complete with ...Ne7 or ...Nbd7 and castle; then ...Ra4 or ...Na5 to press the queenside.',
-                                                                      'The knight on a3 is misplaced. Keep b5 covered and it will have to come back via c2.',
-                                                                      'Remember the pawn break b2-b3 is White\'s only counterplay. Meet it by keeping a rook on the a-file.',
+                                                                      'White has to spend another move on the knight - a2-a4 to hold it, or a retreat. Either way the knight tour has cost four moves and achieved nothing.',
+                                                                      'Follow with ...Bf5 and ...e6, getting the bishop outside the chain first as always, then ...Be7 and castle.',
+                                                                      'The rook on a5 is well placed, not awkward: it eyes b5, a2 and, after ...e6, the whole fifth rank.',
+                                                                      'Your pawn on c4 and the half-open a-file are the long-term assets. Trade pieces and the queenside majority decides the endgame.',
+                                                                      'Watch for b2-b3 - it is White\'s only break. Take on b3 and recapture with the a-pawn to keep the file open.',
                                                                     ],
                                                                   },
                                                                 },

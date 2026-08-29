@@ -91,29 +91,33 @@ export const vsLondonTrompTrees = nodes(
     },
   }),
   l('d4 Nf6 Bf4 d5 e3 c5 c3 Qb6 Qb3 c4 Qxb6 axb6 Na3', { label: 'Diretto a b5', idea: 'Il cavallo prende la strada per b5 e c7, sperando di sfruttare il buco lasciato dai tuoi pedoni.' }),
-  l('d4 Nf6 Bf4 d5 e3 c5 c3 Qb6 Qb3 c4 Qxb6 axb6 Na3 e6', {
-    idea: 'Togli b5 e d6 al cavallo prima che ci arrivi. Con le donne fuori non c\'è fretta per l\'alfiere.',
-    hint: 'Copri le case verso cui è diretto il cavallo in a3.',
+  l('d4 Nf6 Bf4 d5 e3 c5 c3 Qb6 Qb3 c4 Qxb6 axb6 Na3 Nc6', {
+    idea: 'Sviluppa e lascia che il cavallo arrivi. Se viene Cb5, ...Ta5 lo colpisce lungo la quinta traversa e tiene la torre sulla colonna aperta: il cavallo in a3 non ha nessun posto utile dove stare.',
+    hint: 'Sviluppa il cavallo di donna e lascia che sia il Bianco a mostrare a cosa serve davvero il cavallo in a3.',
     m: {
-      Bf5: 'Buona nell\'altra linea, ma qui Cb5 arriva subito e un cavallo in c7 sarebbe una vera seccatura. Fermalo prima.',
-      Nc6: 'Sviluppa, ma non fa niente contro Cb5, e dopo Cb5 le case a7 e c7 diventano problemi veri.',
+      e6: 'Sembra che copra d6 e b5, ma butta via il tempo di cui il Bianco ha bisogno per giustificare il giro di cavallo, e l\'alfiere di c8 resta chiuso dentro per niente.',
+      Bf5: 'Buona nell\'altra linea, ma qui Cb5 arriva subito e, con la torre ancora in a8, la forchetta in c7 è una minaccia vera.',
     },
   }),
-  l('d4 Nf6 Bf4 d5 e3 c5 c3 Qb6 Qb3 c4 Qxb6 axb6 Na3 e6 Be2', { label: 'Linea principale', idea: 'Il Bianco sviluppa e arrocca, avendo ottenuto pochissimo dal giro di cavallo.' }),
-  l('d4 Nf6 Bf4 d5 e3 c5 c3 Qb6 Qb3 c4 Qxb6 axb6 Na3 e6 Be2 Bd6', {
-    idea: 'Offri il cambio dell\'alfiere del Londra. Qui ogni cambio ti aiuta, perché il Bianco non ha attacco e tu hai la struttura migliore.',
-    hint: 'Contesta l\'alfiere attorno a cui è costruito tutto il Sistema Londra.',
+  l('d4 Nf6 Bf4 d5 e3 c5 c3 Qb6 Qb3 c4 Qxb6 axb6 Na3 Nc6 Nb5', {
+    label: 'A caccia di c7',
+    idea: 'Il senso del giro di cavallo: da b5 minaccia Cc7+, che forchetta il re e la torre nell\'angolo.',
+  }),
+  l('d4 Nf6 Bf4 d5 e3 c5 c3 Qb6 Qb3 c4 Qxb6 axb6 Na3 Nc6 Nb5 Ra5', {
+    idea: 'Una mossa risolve tutto: la torre esce dalla forchetta, attacca il cavallo in b5 e resta sulla colonna semiaperta a cui appartiene.',
+    hint: 'Cc7 forchetterebbe il tuo re e la tua torre. Sposta la torre in modo che schivi la forchetta e attacchi il cavallo allo stesso tempo.',
     m: {
-      Be7: 'Passiva. In d6 l\'alfiere offre il cambio del miglior pezzo bianco; in e7 non fa né l\'uno né l\'altro.',
-      b5: 'Sembra che fermi Cb5 ma va a sbattere contro Cc2-b4 o a2-a4 e allenta soltanto la tua ala di donna.',
+      e6: 'Cc7+ arriva con scacco, forchetta il re e la torre in a8 e vince la qualità sul posto.',
+      Bf5: 'La stessa forchetta: Cc7+ prende insieme re e torre, e sviluppare non è una risposta a uno scacco.',
     },
     end: {
       name: 'Anti-Londra, 7.Ca3',
       plans: [
-        'Cambia in f4 se il Bianco te lo permette. Ogni pezzo che esce rende più preziosa la tua maggioranza sull\'ala di donna.',
-        'Completa con ...Ce7 o ...Cbd7 e arrocca; poi ...Ta4 o ...Ca5 per premere sull\'ala di donna.',
-        'Il cavallo in a3 è fuori posizione. Tieni b5 coperta e dovrà tornare indietro passando per c2.',
-        'Ricorda che la rottura b2-b3 è l\'unico controgioco del Bianco. Affrontala tenendo una torre sulla colonna a.',
+        'Il Bianco deve spendere un\'altra mossa per il cavallo: a2-a4 per tenerlo, oppure una ritirata. In entrambi i casi il giro di cavallo è costato quattro mosse e non ha ottenuto niente.',
+        'Prosegui con ...Af5 ed ...e6, portando come sempre l\'alfiere fuori dalla catena per primo, poi ...Ae7 e arrocco.',
+        'La torre in a5 sta bene, non è scomoda: guarda b5, a2 e, dopo ...e6, tutta la quinta traversa.',
+        'Il tuo pedone in c4 e la colonna a semiaperta sono le risorse a lungo termine. Cambia pezzi e la maggioranza sull\'ala di donna decide il finale.',
+        'Attenzione a b2-b3: è l\'unica rottura del Bianco. Prendi in b3 e riprendi con il pedone a per tenere aperta la colonna.',
       ],
     },
   }),

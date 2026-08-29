@@ -69,7 +69,11 @@ export const vsKingsGambit: Defence = {
                   idea: 'The King\'s Gambit Declined, and the most practical answer there is. The bishop takes the diagonal White just opened and makes fxe5 impossible.',
                   hint: 'White has just opened a diagonal pointing at their own king. Put a bishop on it.',
                   mistakes: [
-                    { san: 'exf4', why: 'Accepting is fully playable but it leads to enormous, sharp theory where White is the one who has studied it. This repertoire declines and keeps the game on your terms.' },
+                    {
+                      san: 'exf4',
+                      why: 'Accepting is fully playable - the engine even prefers it - but it leads to enormous, sharp theory where White is the one who has studied it. This repertoire declines and keeps the game on your terms.',
+                      deliberate: true,
+                    },
                     { san: 'd5', why: 'The Falkbeer is a real option, but it is sharp and concrete, and one inaccuracy leaves you worse. The bishop move needs almost no theory.' },
                     { san: 'Nf6', why: 'Playable but it lets fxe5 come with tempo on the knight, which is exactly the free move White wants.' },
                   ],
@@ -381,57 +385,41 @@ export const vsKingsGambit: Defence = {
                     {
                       san: 'Nc3',
                       label: 'Developing first',
-                      idea: 'White develops the queenside knight instead, keeping fxe5 and Nf3 both in reserve.',
+                      idea: 'White develops the queenside knight, and that changes the position more than it looks: with e4 defended, fxe5 is a real threat again.',
                       children: [
                         {
-                          san: 'Nf6',
-                          idea: 'Develop and hit e4. White still cannot take on e5 because of the check on h4.',
-                          hint: 'Develop towards the centre and attack the pawn White has left loose.',
+                          san: 'd6',
+                          idea: 'Prop up e5 with a pawn. The tactic that made 2...Bc5 work needs the e4 pawn to be loose after ...Qh4+ - now that a knight guards it, the e5 pawn has to be defended properly instead.',
+                          hint: 'White is threatening to take on e5 for real this time. Defend it with a pawn.',
                           mistakes: [
+                            { san: 'Nf6', why: 'Now fxe5 simply wins a pawn: ...Nxe4 runs into Nxe4, because the knight on c3 was covering e4 all along.' },
                             { san: 'exf4', why: 'It gives up the centre for nothing while your development is unfinished, and Nf3 followed by d4 gives White everything.' },
-                            { san: 'Qh4+', why: 'The check only works when the pawn on e5 has been taken. Here g3 simply chases the queen and you have lost time.' },
+                            { san: 'Qh4+', why: 'The check only works once White has taken on e5. Here g3 chases the queen, the e-pawn is defended by the knight, and you have lost two moves.' },
                           ],
                           children: [
                             {
                               san: 'Nf3',
                               label: 'Main line',
-                              idea: 'White finally stops the check and develops.',
+                              idea: 'White stops the check for good. The position has transposed straight back into the main line.',
                               children: [
                                 {
-                                  san: 'Nc6',
-                                  idea: 'Develop and defend e5 a second time. The position is a normal Vienna-like game where White\'s f-pawn is misplaced.',
-                                  hint: 'Bring out the last knight and add a defender to the centre.',
+                                  san: 'Nf6',
+                                  idea: 'Now the knight is safe: e5 is defended, so fxe5 wins nothing, and the knight gets on with attacking e4.',
+                                  hint: 'Develop the knight that attacks e4 - it is safe now that the pawn behind it is defended.',
                                   mistakes: [
-                                    { san: 'Nxe4', why: 'Loses a piece: Nxe4 and the knight on e4 is simply taken, with your bishop on c5 also loose.' },
-                                    { san: 'exf4', why: 'It opens the file at your own king while you are behind in development.' },
+                                    { san: 'exf4', why: 'Still no reason to take: d4 comes with tempo on your bishop and White gets the centre and the open file the gambit was offered for.' },
+                                    { san: 'Qh4', why: 'The knight on f3 simply takes it. Once White covers h4 the queen has no business going there.' },
                                   ],
-                                  children: [
-                                    {
-                                      san: 'Bb5',
-                                      label: 'Main line',
-                                      idea: 'The pin, hoping to undermine the defender of e5.',
-                                      children: [
-                                        {
-                                          san: 'O-O',
-                                          idea: 'King to safety. The pin is not dangerous while e5 is defended twice and the f4 pawn is loose.',
-                                          hint: 'Your development is done. Get the king off the open file.',
-                                          mistakes: [
-                                            { san: 'exf4', why: 'It opens the f-file with your king still on e8 and White\'s bishop already pinning the defender.' },
-                                            { san: 'a6', why: 'Playable, but with a half-open f-file about to appear, the king is the priority. The bishop is not going anywhere.' },
-                                          ],
-                                          end: {
-                                            name: 'King\'s Gambit Declined, 3.Nc3',
-                                            plans: [
-                                              'Follow with ...d6 and ...Bg4, hitting the knight that holds the centre together.',
-                                              'If White takes on c6, recapture with the b-pawn - the bishop pair and the half-open b-file are worth the doubled pawn.',
-                                              'The f4 pawn is White\'s permanent problem. Do not release the tension until you get something concrete for it.',
-                                              'The e3 and d4 squares are the outposts to aim for. A knight on d4 or a bishop on b6 hitting g1 is the standard set-up.',
-                                            ],
-                                          },
-                                        },
-                                      ],
-                                    },
-                                  ],
+                                  end: {
+                                    name: 'King\'s Gambit Declined, 3.Nc3',
+                                    plans: [
+                                      'This is a transposition: 3.Nc3 d6 4.Nf3 Nf6 is the same position as the main line 3.Nf3 d6 4.Nc3 Nf6. Everything from here is the plan you already know.',
+                                      'Next come ...Nc6 and ...Bg4, pinning the knight that holds d4 and e5 together.',
+                                      'When White asks the question with h3, take on f3. Removing that knight leaves d4 permanently soft and White with a slightly loose kingside.',
+                                      'Keep the pawn on e5. While it stands, the f4 pawn is fixed and the e3, g3 and d4 squares belong to you.',
+                                      'The move order matters in exactly one way: because White played Nc3 before Nf3, ...d6 had to come first. Get that right and the rest is the main line.',
+                                    ],
+                                  },
                                 },
                               ],
                             },

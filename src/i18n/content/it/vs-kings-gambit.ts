@@ -18,7 +18,7 @@ export const vsKingsGambitTrees = nodes(
     idea: 'Il Gambetto di Re Rifiutato, e la risposta più pratica che esista. L\'alfiere prende la diagonale che il Bianco ha appena aperto e rende impossibile fxe5.',
     hint: 'Il Bianco ha appena aperto una diagonale puntata sul proprio re. Mettici un alfiere.',
     m: {
-      exf4: 'Accettare è del tutto giocabile, ma porta a una teoria enorme e tagliente in cui è il Bianco ad averla studiata. Questo repertorio rifiuta e tiene la partita alle tue condizioni.',
+      exf4: 'Accettare è del tutto giocabile - il motore lo preferisce persino - ma porta a una teoria enorme e tagliente in cui è il Bianco ad averla studiata. Questo repertorio rifiuta e tiene la partita alle tue condizioni.',
       d5: 'Il Controgambetto Falkbeer è un\'opzione vera, ma è tagliente e concreta, e una sola imprecisione ti lascia peggio. La mossa di alfiere non richiede quasi nessuna teoria.',
       Nf6: 'Giocabile, ma permette a fxe5 di arrivare con tempo sul cavallo, che è esattamente la mossa gratis che il Bianco vuole.',
     },
@@ -199,39 +199,38 @@ export const vsKingsGambitTrees = nodes(
       ],
     },
   }),
-  k('e4 e5 f4 Bc5 Nc3', { label: 'Sviluppare prima', idea: 'Il Bianco sviluppa invece il cavallo di donna, tenendo in riserva sia fxe5 sia Cf3.' }),
-  k('e4 e5 f4 Bc5 Nc3 Nf6', {
-    idea: 'Sviluppa e colpisci e4. Il Bianco non può ancora prendere in e5 per via dello scacco in h4.',
-    hint: 'Sviluppa verso il centro e attacca il pedone che il Bianco ha lasciato allentato.',
+  k('e4 e5 f4 Bc5 Nc3', {
+    label: 'Sviluppare prima',
+    idea: 'Il Bianco sviluppa il cavallo di donna, e la cosa cambia la posizione più di quanto sembri: con e4 difeso, fxe5 torna a essere una minaccia vera.',
+  }),
+  k('e4 e5 f4 Bc5 Nc3 d6', {
+    idea: 'Puntella e5 con un pedone. La tattica che faceva funzionare 2...Ac5 ha bisogno che il pedone e4 sia allentato dopo ...Dh4+; adesso che un cavallo lo custodisce, il pedone in e5 va difeso come si deve.',
+    hint: 'Stavolta il Bianco minaccia davvero di prendere in e5. Difendilo con un pedone.',
     m: {
+      Nf6: 'Adesso fxe5 vince semplicemente un pedone: ...Cxe4 va a sbattere contro Cxe4, perché il cavallo in c3 copriva e4 fin dall\'inizio.',
       exf4: 'Cede il centro per niente mentre il tuo sviluppo non è finito, e Cf3 seguito da d4 dà al Bianco tutto.',
-      Qh4: 'Lo scacco funziona soltanto quando il pedone in e5 è stato preso. Qui g3 caccia semplicemente la donna e hai perso tempo.',
+      'Qh4+': 'Lo scacco funziona solo dopo che il Bianco ha preso in e5. Qui g3 caccia la donna, il pedone e è difeso dal cavallo e tu hai perso due mosse.',
     },
   }),
-  k('e4 e5 f4 Bc5 Nc3 Nf6 Nf3', { label: 'Linea principale', idea: 'Il Bianco ferma finalmente lo scacco e sviluppa.' }),
-  k('e4 e5 f4 Bc5 Nc3 Nf6 Nf3 Nc6', {
-    idea: 'Sviluppa e difendi e5 una seconda volta. La posizione è una normale partita tipo Viennese in cui il pedone f del Bianco è fuori posto.',
-    hint: 'Porta fuori l\'ultimo cavallo e aggiungi un difensore al centro.',
-    m: {
-      Nxe4: 'Perde un pezzo: Cxe4 e il cavallo in e4 viene semplicemente preso, con anche il tuo alfiere di c5 allentato.',
-      exf4: 'Apre la colonna sul tuo stesso re mentre sei indietro di sviluppo.',
-    },
+  k('e4 e5 f4 Bc5 Nc3 d6 Nf3', {
+    label: 'Linea principale',
+    idea: 'Il Bianco ferma lo scacco una volta per tutte. La posizione è trasposta dritta nella linea principale.',
   }),
-  k('e4 e5 f4 Bc5 Nc3 Nf6 Nf3 Nc6 Bb5', { label: 'Linea principale', idea: 'L\'inchiodatura, con la speranza di minare il difensore di e5.' }),
-  k('e4 e5 f4 Bc5 Nc3 Nf6 Nf3 Nc6 Bb5 O-O', {
-    idea: 'Re al sicuro. L\'inchiodatura non è pericolosa finché e5 è difeso due volte e il pedone f4 è allentato.',
-    hint: 'Lo sviluppo è finito. Togli il re dalla colonna che si sta aprendo.',
+  k('e4 e5 f4 Bc5 Nc3 d6 Nf3 Nf6', {
+    idea: 'Adesso il cavallo è al sicuro: e5 è difeso, quindi fxe5 non vince niente, e il cavallo può occuparsi di attaccare e4.',
+    hint: 'Sviluppa il cavallo che attacca e4: adesso è al sicuro, perché il pedone dietro di lui è difeso.',
     m: {
-      exf4: 'Apre la colonna f con il tuo re ancora in e8 e l\'alfiere bianco che già inchioda il difensore.',
-      a6: 'Giocabile, ma con una colonna f semiaperta in arrivo la priorità è il re. L\'alfiere non va da nessuna parte.',
+      exf4: 'Ancora nessun motivo per prendere: d4 arriva con tempo sul tuo alfiere e il Bianco ottiene il centro e la colonna aperta per cui aveva offerto il gambetto.',
+      Qh4: 'Il cavallo in f3 la prende e basta. Una volta che il Bianco copre h4, la donna non ha niente da fare lì.',
     },
     end: {
       name: 'Gambetto di Re Rifiutato, 3.Cc3',
       plans: [
-        'Prosegui con ...d6 e ...Ag4, colpendo il cavallo che tiene insieme il centro.',
-        'Se il Bianco prende in c6, riprendi con il pedone b: la coppia degli alfieri e la colonna b semiaperta valgono il pedone doppiato.',
-        'Il pedone f4 è il problema permanente del Bianco. Non sciogliere la tensione finché non ottieni qualcosa di concreto in cambio.',
-        'Le case e3 e d4 sono gli avamposti da puntare. Un cavallo in d4 o un alfiere in b6 che guarda g1 è lo schema standard.',
+        'Questa è una trasposizione: 3.Cc3 d6 4.Cf3 Cf6 è la stessa posizione della linea principale 3.Cf3 d6 4.Cc3 Cf6. Da qui in poi è il piano che conosci già.',
+        'Adesso arrivano ...Cc6 e ...Ag4, che inchioda il cavallo che tiene insieme d4 ed e5.',
+        'Quando il Bianco pone la domanda con h3, prendi in f3. Togliere quel cavallo lascia d4 molle per sempre e il Bianco con l\'ala di re un po\' allentata.',
+        'Tieni il pedone in e5. Finché resta lì, il pedone f4 è fissato e le case e3, g3 e d4 sono tue.',
+        'L\'ordine di mosse conta in un punto solo: siccome il Bianco ha giocato Cc3 prima di Cf3, ...d6 doveva venire per prima. Azzecca quello e il resto è la linea principale.',
       ],
     },
   }),

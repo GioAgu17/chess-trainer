@@ -1,3 +1,4 @@
+import { normalizeSan } from '../../engine/tree'
 import type { ContentDictionary } from '../keys'
 
 /**
@@ -29,7 +30,9 @@ export function tree(entryId: string) {
     if (strings.label !== undefined) out[`${at}.label`] = strings.label
     if (strings.idea !== undefined) out[`${at}.idea`] = strings.idea
     if (strings.hint !== undefined) out[`${at}.hint`] = strings.hint
-    for (const [san, why] of Object.entries(strings.m ?? {})) out[`${at}.m.${san}`] = why
+    // Keys are built from the normalised SAN, so a translation may spell a
+    // mistake `Qh4+` or `Qh4` and still land on the key the data derives.
+    for (const [san, why] of Object.entries(strings.m ?? {})) out[`${at}.m.${normalizeSan(san)}`] = why
     if (strings.end) {
       out[`${at}.end.name`] = strings.end.name
       strings.end.plans.forEach((plan, i) => {
