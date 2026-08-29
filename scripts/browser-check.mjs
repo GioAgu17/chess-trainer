@@ -98,6 +98,11 @@ const move = async (from, to) => {
 }
 
 const problems = []
+
+// A translation key that reaches the page reads as "common.white to play".
+// Nothing throws, no test fails, and it looks like a bug to anyone who sees it.
+const KEY_LEAK = /(?:^|[\s(">])((?:common|nav|app|setup|home|browse|trainer|coach|summary|stats|puzzles|study|profiles)\.[a-zA-Z][\w.]*)/
+
 const check = async (label) => {
   const found = await page.evaluate(() => {
     const w = document.documentElement.clientWidth
@@ -121,11 +126,14 @@ const check = async (label) => {
     return {
       overflow: [...new Set(out)].slice(0, 6),
       bodyScroll: document.documentElement.scrollWidth - document.documentElement.clientWidth,
+      text: document.body.innerText,
     }
   })
   if (found.bodyScroll > 1 || found.overflow.length) {
     problems.push(`${label}: bodyScroll=${found.bodyScroll} ${found.overflow.join(' | ')}`)
   }
+  const leak = found.text.match(KEY_LEAK)
+  if (leak) problems.push(`${label}: untranslated key on the page: "${leak[1]}"`)
 }
 
 const label = PHONE ? 'phone' : 'desktop'

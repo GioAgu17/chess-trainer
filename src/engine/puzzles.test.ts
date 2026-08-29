@@ -13,6 +13,9 @@ import {
   trapCandidates,
 } from './puzzles'
 import { decisionPoints, normalizeSan } from './tree'
+import { STUDY_GUIDES } from '../data/study'
+import { allContentStrings } from '../i18n/keys'
+import { en } from '../i18n/ui/en'
 
 const italian = getEntry('italian-game')!
 const kingsGambit = getEntry('vs-kings-gambit')!
@@ -229,6 +232,23 @@ describe('trap candidates', () => {
       missing.length,
       `no drillable trap in ${missing.map((d) => d.id).join(', ')}`,
     ).toBeLessThan(DEFENCES.length / 2)
+  })
+})
+
+describe('prompt variables', () => {
+  // A prompt value that looks like a key has to be findable in one of the two
+  // dictionaries. When the side to move was looked up in the content dictionary
+  // alone, the puzzle read "common.white to play" on the page and nothing failed.
+  it('every key-shaped value resolves in the interface or the content catalogue', () => {
+    const puzzles = [...recallPuzzles(ENTRIES), ...trapCandidates(ENTRIES)]
+    const contentKeys = new Set(allContentStrings(ENTRIES, STUDY_GUIDES).map((item) => item.key))
+    for (const puzzle of puzzles) {
+      for (const [name, value] of Object.entries(puzzle.prompt.vars ?? {})) {
+        if (!value.includes('.')) continue
+        const known = value in en || contentKeys.has(value)
+        expect(known, `${puzzle.id}: prompt variable "${name}" is "${value}", which is in neither catalogue`).toBe(true)
+      }
+    }
   })
 })
 

@@ -130,12 +130,16 @@ export function Puzzles({ store, entries, onAnswer, onNavigate }: PuzzlesProps) 
   const card = store.cards[puzzle.moveKey ?? puzzle.id]
 
   // A prompt is a catalogue key plus values, and some of those values are keys
-  // themselves - the side to move, or a trap's name. Resolve them first.
+  // themselves - and they come from both catalogues: the side to move is a UI
+  // string, a trap's name is repertoire content. Try the interface first and
+  // fall back to the content dictionary, because `t` returns the key unchanged
+  // when it does not know it.
   const promptVars = Object.fromEntries(
-    Object.entries(puzzle.prompt.vars ?? {}).map(([name, value]) => [
-      name,
-      value.includes('.') ? content(value, value) : value,
-    ]),
+    Object.entries(puzzle.prompt.vars ?? {}).map(([name, value]) => {
+      if (!value.includes('.')) return [name, value]
+      const ui = t(value as UiKey)
+      return [name, ui === value ? content(value, value) : ui]
+    }),
   )
   const prompt = t(puzzle.prompt.key as UiKey, promptVars)
   const explanation = [
