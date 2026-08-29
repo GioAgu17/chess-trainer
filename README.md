@@ -457,3 +457,55 @@ What remains after the last full pass is six positions where the engine prefers 
 Vite, React, TypeScript, `chess.js` for rules and FEN, `react-chessboard` for the board, vitest for tests, oxlint for linting.
 The translations are hand-rolled typed catalogues rather than an i18n library.
 No backend, no chess engine, no network calls at runtime.
+
+## Contributing
+
+Contributions are welcome, and a report costs you nothing to file.
+The flow is short: **open an issue first, then open a pull request that references it.**
+
+### Start with an issue
+
+A bug, a line of theory you think is wrong, a translation that reads badly, an idea for something the trainer should do - all of it starts in [Issues](https://github.com/GioAgu17/chess-trainer/issues).
+There are four forms to pick from and they are all deliberately short.
+Filing an issue first gives everyone a place to agree on the problem before anyone writes code, which is the difference between a fix that lands and a pull request that sits.
+
+An issue on its own is a real contribution.
+A well-described wrong line is worth more than a patch nobody can check.
+
+### Then a pull request
+
+Open it from a branch, reference the issue in the description (`Fixes #123`), and keep it to one topic.
+Two unrelated fixes are two pull requests - they are easier to read, and one of them can go in while the other is still being discussed.
+
+Every pull request needs my review and approval before it can reach `main`; that is enforced on the branch rather than left to good manners, so a pull request that looks blocked is not broken.
+This is a one-person project rather than a committee, so expect a friendly reply rather than a process.
+
+### Running it locally
+
+See [Running it](#running-it) at the top of this file: `npm install`, then `npm run dev`.
+There is no backend and nothing to configure.
+
+### The quality bar
+
+Before you open the pull request:
+
+```sh
+npm run lint
+npm test
+npm run build
+```
+
+All three run again automatically on the pull request, so a red tick is not a mystery.
+
+If your change touches opening theory or puzzle data - anything in `src/data/openings/`, `src/data/defences/` or a trap - it also has to pass `npm run verify:theory`, which puts every position through Stockfish.
+See [Checking the theory with an engine](#checking-the-theory-with-an-engine) for how to run it and what it does.
+It is slow and it is not optional: the trainer teaches people, and a wrong line is worse than no line.
+If you cannot run it, say so in the pull request and it can be run for you.
+
+### Translations
+
+Translation work is genuinely useful and easy to get started on.
+Everything lives under `src/i18n/`, and the one rule is that `npx vitest run src/i18n` stays green: every string in one language must exist in the other, with the same `{placeholders}` and no key left pointing at data that has moved.
+
+A whole new language is one UI catalogue (`src/i18n/ui/<code>.ts`) plus one content directory (`src/i18n/content/<code>/`).
+[Adding a third language](#adding-a-third-language) walks through it step by step, and the parity test tells you exactly how many strings are left and which one is next.

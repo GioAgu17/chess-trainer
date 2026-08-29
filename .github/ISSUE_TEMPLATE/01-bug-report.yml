@@ -1,0 +1,44 @@
+name: Bug report
+description: Something in the app behaves in a way it clearly should not.
+title: "[Bug]: "
+labels: ["bug"]
+body:
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: What you did, and what the app did.
+      placeholder: I dragged Nf3 onto the board during the Italian Game drill and the piece snapped back with no message.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected instead
+    validations:
+      required: true
+  - type: input
+    id: where
+    attributes:
+      label: Where in the app
+      description: The page or screen - setup conversation, a drill, statistics, a puzzle, a study guide, browse.
+      placeholder: Drill, Caro-Kann Defence
+    validations:
+      required: true
+  - type: dropdown
+    id: language
+    attributes:
+      label: Language
+      options:
+        - English
+        - Italian
+    validations:
+      required: true
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and window width
+      description: Which browser, and roughly how wide the window was - phone width behaves differently from desktop.
+      placeholder: Safari 18, iPhone, ~390px
+    validations:
+      required: true
