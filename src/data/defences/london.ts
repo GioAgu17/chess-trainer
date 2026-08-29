@@ -36,6 +36,8 @@ export const vsLondon: Defence = {
     },
     {
       id: 'london-nh5',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: 'Winning the bishop pair with ...Nh5',
       owner: 'ours',
       moves: ['d4', 'Nf6', 'Bf4', 'd5', 'e3', 'c5', 'c3', 'Nc6', 'Nd2', 'Nh5', 'Bg3', 'Nxg3', 'hxg3', 'Qb6'],

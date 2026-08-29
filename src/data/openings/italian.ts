@@ -11,6 +11,8 @@ export const italianGame: Opening = {
   traps: [
     {
       id: 'italian-legal',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: "Legal's Mate",
       owner: 'ours',
       moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bc4', 'd6', 'Nc3', 'Bg4', 'Nxe5', 'Bxd1', 'Bxf7+', 'Ke7', 'Nd5#'],

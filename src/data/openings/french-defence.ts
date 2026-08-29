@@ -23,6 +23,8 @@ export const frenchDefence: Opening = {
     },
     {
       id: 'french-bd7-first',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: 'Taking on d4 the right way',
       owner: 'ours',
       moves: [

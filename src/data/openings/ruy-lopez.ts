@@ -11,6 +11,8 @@ export const ruyLopez: Opening = {
   traps: [
     {
       id: 'ruy-na5-bxf7',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: 'Punishing the early ...Na5',
       owner: 'ours',
       moves: ['e4', 'e5', 'Nf3', 'Nc6', 'Bb5', 'a6', 'Ba4', 'b5', 'Bb3', 'Na5', 'Bxf7+', 'Kxf7', 'Nxe5+'],

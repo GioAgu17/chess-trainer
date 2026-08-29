@@ -27,6 +27,8 @@ export const vsDanishGoring: Defence = {
   traps: [
     {
       id: 'danish-schlechter',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: 'The Schlechter Defence',
       owner: 'ours',
       moves: ['e4', 'e5', 'd4', 'exd4', 'c3', 'dxc3', 'Bc4', 'cxb2', 'Bxb2', 'd5'],

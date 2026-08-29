@@ -27,6 +27,8 @@ export const vsEnglish: Defence = {
   traps: [
     {
       id: 'english-e4-fork',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: 'The premature ...e4',
       owner: 'theirs',
       moves: ['c4', 'e5', 'Nc3', 'Nf6', 'Nf3', 'Nc6', 'g3', 'd5', 'cxd5', 'Nxd5', 'Bg2', 'Nxc3', 'bxc3', 'e4', 'Ng5', 'Qxg5', 'Bxe4'],

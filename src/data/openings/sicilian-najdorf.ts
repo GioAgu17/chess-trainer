@@ -11,6 +11,8 @@ export const sicilianNajdorf: Opening = {
   traps: [
     {
       id: 'najdorf-bxb5',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: 'The b5 sacrifice',
       owner: 'theirs',
       moves: [

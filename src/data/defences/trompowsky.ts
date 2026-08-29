@@ -26,6 +26,8 @@ export const vsTrompowsky: Defence = {
   traps: [
     {
       id: 'tromp-qa5-nxc3',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: 'The ...Qa5+ and ...Nxc3 shot',
       owner: 'ours',
       moves: ['d4', 'Nf6', 'Bg5', 'Ne4', 'Bf4', 'c5', 'f3', 'Qa5+', 'c3', 'Nxc3'],
@@ -35,6 +37,8 @@ export const vsTrompowsky: Defence = {
     },
     {
       id: 'tromp-bxf6',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: 'Doubling the pawns for free',
       owner: 'theirs',
       moves: ['d4', 'Nf6', 'Bg5', 'd5', 'Bxf6', 'exf6', 'e3', 'Bd6', 'c4'],

@@ -26,6 +26,8 @@ export const vsColleZukertort: Defence = {
   traps: [
     {
       id: 'colle-greek-gift',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: 'The Colle Greek gift',
       owner: 'theirs',
       moves: [

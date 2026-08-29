@@ -36,6 +36,8 @@ export const vsScotch: Defence = {
     },
     {
       id: 'scotch-qh4',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: 'The premature queen sortie',
       owner: 'theirs',
       moves: ['e4', 'e5', 'Nf3', 'Nc6', 'd4', 'exd4', 'Nxd4', 'Qh4', 'Nb5'],

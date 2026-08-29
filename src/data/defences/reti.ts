@@ -27,6 +27,8 @@ export const vsReti: Defence = {
   traps: [
     {
       id: 'reti-gambit-b5',
+      /** Study-only: the pattern is the point, and the engine has an equally good alternative. */
+      drillable: false,
       name: 'The Reti Gambit trap',
       owner: 'theirs',
       moves: ['Nf3', 'd5', 'c4', 'dxc4', 'e3', 'b5', 'a4', 'c6', 'axb5', 'cxb5', 'b3', 'cxb3', 'Bxb5+'],
