@@ -18,11 +18,15 @@
 import puppeteer from 'puppeteer'
 import { mkdir } from 'node:fs/promises'
 
-const OUT = process.argv[2] ?? 'docs/screenshots'
+const OUT = process.argv[2]?.startsWith('--') ? 'docs/screenshots' : (process.argv[2] ?? 'docs/screenshots')
 const PHONE = process.argv.includes('--phone')
 const W = PHONE ? 390 : 1440
 const H = PHONE ? 844 : 900
-const URL = 'http://localhost:5173/'
+// Defaults to the dev server; `--url https://...` points the same walk at a
+// deployed build, which is the only way to check the production bundle and the
+// SPA rewrites behave the way the dev server does.
+const urlFlag = process.argv.indexOf('--url')
+const URL = urlFlag === -1 ? 'http://localhost:5173/' : process.argv[urlFlag + 1]
 await mkdir(OUT, { recursive: true })
 
 const browser = await puppeteer.launch({ headless: 'new' })
