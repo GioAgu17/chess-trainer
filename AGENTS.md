@@ -44,6 +44,12 @@ A `Trap` marked `drillable: false` is study material rather than an exercise. Tw
 
 `chrome-devtools-axi` was unusable in the environment this was last built in (`take_snapshot` and `screenshot` both failed with `Required at pageId`). The fallback is `npm install --no-save puppeteer` plus a short script that walks the whole path - setup conversation, a drill, a defence drill, the statistics page, a puzzle, a study page - at 1440x900 and 390x844, asserting no console errors and that the document never scrolls horizontally. Try `chrome-devtools-axi` first; if it is still broken, that fallback is the quickest way back to a real browser.
 
+## Contributing and CI
+
+`.github/` holds the contributor-facing setup: `CODEOWNERS` (`* @GioAgu17`, which is what binds the code-owner review required on protected `main`), four issue forms, and `workflows/ci.yml` running install, lint, test and build on every pull request.
+`verify:theory` is deliberately not in CI - it needs Stockfish and takes hours, so it stays a local gate described in the README's Contributing section.
+Discussions is not enabled on the repository, so there is no `ISSUE_TEMPLATE/config.yml`; add one only if that changes.
+
 ## Maintaining this file
 
 Keep this file for knowledge useful to almost every future agent session in this project.
