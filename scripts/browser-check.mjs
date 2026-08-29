@@ -293,6 +293,13 @@ await clickText('.app__nav-item', 'Allenati')
 await wait(500)
 await check('italian/train')
 
+// The puzzle prompt is assembled from two catalogues at once, so it is the
+// page most likely to leak a key. Check it in the second language too.
+await clickText('.app__nav-item', 'Esercizi')
+await wait(600)
+await shot(`${label}-21-italian-puzzle`)
+await check('italian/puzzles')
+
 await clickText('.app__nav-item', 'Statistiche')
 await wait(400)
 await shot(`${label}-20-italian-stats`, true)
