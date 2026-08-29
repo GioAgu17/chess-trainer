@@ -165,7 +165,7 @@ export const vsLondonTrompTrees = nodes(
     idea: 'La risposta di principio. Il cavallo attacca l\'alfiere, rifiuta i pedoni doppiati e costringe il Bianco a muovere due volte lo stesso pezzo.',
     hint: 'L\'alfiere sta attaccando il tuo cavallo e non è difeso da niente. Attaccalo a tua volta.',
     m: {
-      d5: 'Giocabile, ma Axf6 exf6 regala al Bianco una struttura definitivamente migliore e lui non ha ceduto niente in cambio.',
+      d5: 'Sana, ed è una linea principale, ma Axf6 exf6 regala al Bianco una struttura di pedoni definitivamente migliore senza che lui abbia ceduto niente. Questo repertorio rifiuta invece il cambio.',
       e6: 'Solida, ma permette Axf6 Dxf6 e il Bianco sviluppa con e4 e Cc3 avendo guadagnato tempo. Il salto di cavallo tiene l\'iniziativa.',
       c5: 'Tagliente, ma dopo Axf6 la scelta fra pedoni doppiati e gxf6 è sgradevole, e d4-d5 lascia al Bianco un vantaggio di spazio.',
     },
@@ -242,7 +242,7 @@ export const vsLondonTrompTrees = nodes(
     idea: 'Adesso l\'uscita di donna morde: con il cavallo in d2 invece della donna in c1, b2 è davvero scomodo da tenere.',
     hint: 'Con i pezzi bianchi impegnati al centro, colpisci il pedone dietro di loro.',
     m: {
-      Nxd2: 'Cambiare il tuo pezzo migliore per un cavallo appena mosso aiuta il Bianco a completare lo sviluppo gratis.',
+      Nxd2: 'Oggettivamente va bene, ma cambia il tuo pezzo migliore per un cavallo appena mosso e lascia che il Bianco completi lo sviluppo gratis. Questo repertorio tiene il cavallo in e4.',
       e6: 'Chiude dentro l\'alfiere e dà al Bianco il tempo di giocare Cgf3 e Ad3 con una partita comoda.',
     },
     end: {
@@ -261,7 +261,7 @@ export const vsLondonTrompTrees = nodes(
     hint: 'L\'alfiere si è allontanato ancora di più dall\'ala di donna. Attacca il pedone centrale che ha abbandonato.',
     m: {
       d5: 'Solida, ma lascia il Bianco giocare f3 ed e4 in comodità con un grande centro e l\'alfiere che guarda d8.',
-      g5: 'Guadagna la coppia degli alfieri ma a un prezzo terribile: dopo Ag3 Cxg3 hxg3 la tua ala di re è in rovina e la colonna h è aperta sul tuo re.',
+      g5: 'La coppia degli alfieri la porta davvero a casa, e il motore ne è contento, ma dopo Ag3 Cxg3 hxg3 la tua ala di re resta allentata e la colonna h punta il tuo re. Questo repertorio rifiuta quel baratto.',
     },
   }),
   t('d4 Nf6 Bg5 Ne4 Bh4 c5 f3', { label: 'Linea principale', idea: 'Il Bianco caccia il cavallo e prepara e2-e4. È il tentativo critico, e indebolisce anche la diagonale a5-e1.' }),
@@ -269,8 +269,8 @@ export const vsLondonTrompTrees = nodes(
     idea: 'Lo scacco che cambia tutto. Arriva con tempo, e se il Bianco blocca con c2-c3 il cavallo in e4 si serve gratis.',
     hint: 'Il Bianco ha appena indebolito una diagonale puntata sul re. Portaci sopra la donna con scacco.',
     m: {
-      Nf6: 'Ritirarsi senza lo scacco butta via tutto il senso della linea. È lo scacco di donna a far funzionare la cosa.',
-      g5: 'Sembra che vinca un pezzo, ma dopo fxe4 il pedone in g5 è in presa e la tua posizione di re è in rovina.',
+      Nf6: 'Sana, ma restituisce il tempo. È lo scacco di donna a far funzionare questa linea; senza, il Bianco consolida e basta.',
+      g5: 'Sana, e più confusa di quanto sembri: dopo fxe4 la posizione si apre su entrambe le ali ed è la copertura del tuo re a farne le spese. Questo repertorio preferisce tenere tutto pulito.',
       cxd4: 'Scioglie la tensione per niente e dopo fxe4 il Bianco ha un centro enorme e una partita libera.',
     },
   }),

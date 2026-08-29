@@ -83,7 +83,7 @@ export const vsDanishGoring: Defence = {
                           idea: 'Decline by counter-attacking. Giving the pawn back immediately opens the position while White\'s pieces are still at home, which is the exact opposite of what a gambit wants.',
                           hint: 'Do not take the second pawn. Strike back in the centre with your own pawn instead.',
                           mistakes: [
-                            { san: 'dxc3', why: 'Accepting is playable but it is exactly the game White has prepared - two bishops raking your kingside while your king is still in the centre. This repertoire refuses.' },
+                            { san: 'dxc3', why: 'Accepting is sound, and the engine is content with it - but it is exactly the game White has prepared, two bishops raking your kingside while your king is still in the centre. This repertoire refuses.', deliberate: true },
                             { san: 'Nc6', why: 'Solid, but cxd4 gives White the centre and a comfortable game with no gambit left to refute. The counter-strike is much stronger.' },
                             { san: 'd3', why: 'It blocks the position but hands the pawn back for nothing, and after Bxd3 White is developed with an extra tempo and a big lead.' },
                           ],
@@ -157,9 +157,9 @@ export const vsDanishGoring: Defence = {
                                                                   idea: 'Take it. It answers the attack on your queen and leaves White with doubled c-pawns and a permanently weak d4.',
                                                                   hint: 'Your queen is attacked and so is the knight blocking the check. Solve both problems with one capture.',
                                                                   mistakes: [
-                                                                    { san: 'Qa5', why: 'It saves the queen but O-O and Bd2 leave White comfortably developed while your bishop on b4 becomes a target.' },
+                                                                    { san: 'Qa5', why: 'Sound, but passive by comparison: O-O and Bd2 leave White comfortably developed while your bishop on b4 becomes a target. Taking on c3 is the move that wins the concession.', deliberate: true },
                                                                     { san: 'Qd6', why: 'Retreating loses the initiative: White castles and the pawn on d4 is suddenly a strength rather than a weakness.' },
-                                                                    { san: 'Bxf3', why: 'Bxf3 hits your queen and after ...Qd6 Ne4 White has all the play. The knight on c3 is the piece to take.' },
+                                                                    { san: 'Bxf3', why: 'Perfectly sound - the engine even prefers it - but this repertoire takes the knight on c3 instead. Doubling White\'s pawns and fixing d4 as a target is the concrete gain the whole line was played for, and ...Bxf3 lets White recapture with tempo on your queen.', deliberate: true },
                                                                   ],
                                                                   end: {
                                                                     name: 'Danish Gambit declined, 3...d5',

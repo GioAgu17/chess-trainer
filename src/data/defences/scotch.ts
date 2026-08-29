@@ -326,7 +326,7 @@ export const vsScotch: Defence = {
                                   mistakes: [
                                     { san: 'Nf6', deliberate: true, why: 'The Two Knights approach is sound but it invites the sharp e4-e5 lines. The bishop move keeps things simpler.' },
                                     { san: 'd6', why: 'Passive: it gives back the initiative and White gets O-O and Nxd4 with a comfortable game and an extra tempo.' },
-                                    { san: 'Bb4+', why: 'The check achieves nothing: c2-c3 blocks with tempo and White builds the centre while your bishop retreats.' },
+                                    { san: 'Bb4+', why: 'Sound, but c2-c3 blocks with tempo and White builds the centre while your bishop retreats. This repertoire puts the bishop on the diagonal it can stay on.', deliberate: true },
                                   ],
                                   children: [
                                     {

@@ -74,7 +74,7 @@ export const vsKingsGambit: Defence = {
                       why: 'Accepting is fully playable - the engine even prefers it - but it leads to enormous, sharp theory where White is the one who has studied it. This repertoire declines and keeps the game on your terms.',
                       deliberate: true,
                     },
-                    { san: 'd5', why: 'The Falkbeer is a real option, but it is sharp and concrete, and one inaccuracy leaves you worse. The bishop move needs almost no theory.' },
+                    { san: 'd5', why: 'The Falkbeer is a real and sound option - but it is sharp and concrete, and one inaccuracy leaves you worse. The bishop move needs almost no theory.', deliberate: true },
                     { san: 'Nf6', why: 'Playable but it lets fxe5 come with tempo on the knight, which is exactly the free move White wants.' },
                   ],
                   children: [
@@ -134,8 +134,8 @@ export const vsKingsGambit: Defence = {
                                                   hint: 'Pin the piece that is holding White\'s centre together.',
                                                   mistakes: [
                                                     { san: 'O-O', why: 'Safe, but the pin is the move that creates a real threat and forces White to weaken the kingside with h3.' },
-                                                    { san: 'exf4', why: 'Now Bxf4 gives White a beautiful bishop and the open file, and you have nothing.' },
-                                                    { san: 'Na5', why: 'The knight on a5 is offside and after Bb5+ or Bb3 you have simply lost time.' },
+                                                    { san: 'exf4', why: 'Objectively fine, but Bxf4 gives White a good bishop and the open file. The whole point of 2...Bc5 was to keep that pawn fixed, so this repertoire leaves it there.', deliberate: true },
+                                                    { san: 'Na5', why: 'Sound, but the knight is offside on a5 and Bb5+ or Bb3 costs you time. The pin is the move that creates a real threat.', deliberate: true },
                                                   ],
                                                   children: [
                                                     {
@@ -233,7 +233,7 @@ export const vsKingsGambit: Defence = {
                                                   idea: 'The check comes with tempo and forces White to block on an awkward square before you decide where the bishop finally lives.',
                                                   hint: 'Give a check that costs White a tempo and disrupts development.',
                                                   mistakes: [
-                                                    { san: 'Bb6', why: 'The quiet retreat gives White time for Nc3 and a comfortable game with a big centre. Take the free check first.' },
+                                                    { san: 'Bb6', why: 'Sound, but the quiet retreat gives White time for Nc3 and a comfortable game with a big centre. This repertoire takes the free check first.', deliberate: true },
                                                     { san: 'Nxe4', why: 'Still loses to dxc5 - the bishop on c5 is hanging with tempo.' },
                                                   ],
                                                   end: {

@@ -86,7 +86,7 @@ export const vsReti: Defence = {
                           idea: 'Develop and defend d5 a second time. Nothing clever is needed here.',
                           hint: 'Develop a knight to its natural square, adding another defender to your centre pawn.',
                           mistakes: [
-                            { san: 'dxc4', why: 'Still the wrong idea: Qa4+ or Na3 recovers the pawn and White gets a free tempo on top of the fianchetto.' },
+                            { san: 'dxc4', why: 'Sound and playable - but Qa4+ or Na3 recovers the pawn and White gets a free tempo on top of the fianchetto. This repertoire keeps the centre instead.', deliberate: true },
                             { san: 'c5', why: 'The break is right but the order is wrong - develop and castle first, or cxd5 exd5 leaves your pawn on d5 loose.' },
                           ],
                           children: [
@@ -145,7 +145,7 @@ export const vsReti: Defence = {
                                                           hint: 'Develop the knight that supports your new pawn on c5.',
                                                           mistakes: [
                                                             { san: 'Nbd7', why: 'Playable, but with a pawn already on c5 the knight belongs on c6 where it fights for d4.' },
-                                                            { san: 'd4', why: 'Pushing past shuts the position but leaves the pawn on d4 as a target for e3 and a piece to blockade it.' },
+                                                            { san: 'd4', why: 'Sound, but pushing past shuts the position and leaves the pawn on d4 as a target for e3 and a blockading piece. This repertoire pushes only once White cannot blockade.', deliberate: true },
                                                           ],
                                                           children: [
                                                             {
@@ -158,7 +158,7 @@ export const vsReti: Defence = {
                                                                   idea: 'The last piece gets a diagonal. With bishops facing each other on the long diagonal and a solid pawn wall, Black is completely equal.',
                                                                   hint: 'Open a diagonal for your last undeveloped piece.',
                                                                   mistakes: [
-                                                                    { san: 'd4', why: 'Pushing past releases the tension and after exd4 cxd4 the pawn on d4 needs constant defending.' },
+                                                                    { san: 'd4', why: 'Sound, but it releases the tension: after exd4 cxd4 the pawn on d4 needs constant defending. This repertoire keeps the tension one move longer.', deliberate: true },
                                                                     { san: 'dxc4', why: 'bxc4 and White has a strong centre with pawns on c4 and d4 to come, plus the open b-file.' },
                                                                   ],
                                                                   end: {

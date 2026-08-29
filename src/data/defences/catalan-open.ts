@@ -228,7 +228,7 @@ export const catalanOpen: Defence = {
                                                           hint: 'Prepare the pawn advance that gains time on the queen and space on the wing.',
                                                           mistakes: [
                                                             { san: 'b5', why: 'The queen on c4 is attacked, but after Qb3 or Qc2 you have left a hole on c6 and White\'s bishop is already pointing at it.' },
-                                                            { san: 'c5', why: 'Reasonable but rushed - with your king still on e8 in this move order, opening the centre favours the better developed side.' },
+                                                            { san: 'c5', why: 'Sound, and it becomes the plan a move later. This repertoire plays ...a6 and ...b5 first, so that the break arrives with the king already off e8.', deliberate: true },
                                                           ],
                                                           end: {
                                                             name: 'Open Catalan, 6.Qa4+ with ...Be7',

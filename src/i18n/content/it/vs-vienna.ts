@@ -88,7 +88,7 @@ export const vsViennaTrees = nodes(
     idea: 'Spingi oltre. Il pedone in e4 toglie f3 e d3 ai pezzi bianchi, e il cavallo in d5 si può sempre scacciare più avanti.',
     hint: 'Non riprendere: spingi avanti il pedone centrale e togli case al cavallo bianco.',
     m: {
-      Nxd5: 'Riprende, ma Cxd5 Dxd5 fxe5 lascia il Bianco con un sano pedone in più e una partita facile.',
+      Nxd5: 'Sana, e il motore la preferisce leggermente. Questo repertorio spinge invece oltre: il pedone in e4 toglie f3 e d3 ai pezzi bianchi e ti consegna un piano che puoi giocare senza calcolare.',
       exf4: 'Adesso il Bianco è semplicemente un pedone in più con un centro forte e tu hai aperto linee sul tuo stesso re.',
       Qxd5: 'Cxd5 vince la donna: il cavallo in c3 difende d5.',
     },

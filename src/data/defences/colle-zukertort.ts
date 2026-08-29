@@ -86,8 +86,8 @@ export const vsColleZukertort: Defence = {
                           idea: 'The key move of the whole defence. The bishop escapes before ...e6 shuts it in, and it takes aim at the d3 square White\'s attacking bishop wants.',
                           hint: 'White has just locked in a bishop. Make sure the same thing does not happen to yours.',
                           mistakes: [
-                            { san: 'e6', why: 'The single most common way to get a bad position against the Colle. It buries the c8-bishop, and White gets the free Bd3, Nbd2, O-O and e4 attacking set-up.' },
-                            { san: 'c5', why: 'Nothing wrong with the move itself, but the light-squared bishop only gets one chance to get outside the pawn chain and this is it.' },
+                            { san: 'e6', why: 'Objectively fine, and the most common move played here - but it buries the c8-bishop and hands White the free Bd3, Nbd2, O-O and e4 attacking set-up. This repertoire gets that bishop out first.', deliberate: true },
+                            { san: 'c5', why: 'Nothing wrong with the move itself, and the break keeps. But the light-squared bishop gets exactly one chance to leave the pawn chain, and this is it.', deliberate: true },
                             { san: 'Bg4', why: 'Playable, but h2-h3 asks the bishop an awkward question and White is happy to trade it on f3, which does not help you at all. f5 is the square that faces down the d3 bishop.' },
                           ],
                           children: [
@@ -116,7 +116,7 @@ export const vsColleZukertort: Defence = {
                                           idea: 'Now it is safe. The problem bishop is already off the board, so shutting the diagonal costs nothing.',
                                           hint: 'The piece this pawn move would have trapped is gone. Play it.',
                                           mistakes: [
-                                            { san: 'Nc6', why: 'Reasonable, but the knight blocks the c-pawn and you want ...c5 later. Complete the structure first.' },
+                                            { san: 'Nc6', why: 'Sound, but the knight blocks the c-pawn and this repertoire wants ...c5 later. Complete the structure first.', deliberate: true },
                                             { san: 'c5', why: 'Slightly early - after dxc5 you have to spend a move recovering the pawn while your king is still in the centre.' },
                                           ],
                                           children: [
@@ -131,7 +131,7 @@ export const vsColleZukertort: Defence = {
                                                   hint: 'Take the outpost square away from White\'s knight, and point a bishop at White\'s king while you are at it.',
                                                   mistakes: [
                                                     { san: 'Be7', why: 'Passive. On d6 the bishop stops Ne5 and does something in return; on e7 it does neither.' },
-                                                    { san: 'c5', why: 'Right idea, wrong moment - your king is still in the centre and after dxc5 Bxc5 White gets e3-e4 with tempo.' },
+                                                    { san: 'c5', why: 'Right idea, and sound - but this repertoire castles first. With the king still in the centre, dxc5 Bxc5 lets White play e3-e4 with tempo.', deliberate: true },
                                                   ],
                                                   children: [
                                                     {
@@ -193,7 +193,7 @@ export const vsColleZukertort: Defence = {
                                                   hint: 'A knight is heading for a strong central square. Take it away before it arrives.',
                                                   mistakes: [
                                                     { san: 'Be7', why: 'It develops, but it does nothing about Ne5, and a knight on e5 supported by pawns is the one thing that gives White a game here.' },
-                                                    { san: 'c5', why: 'Right plan, wrong order - Ne5 comes first and the knight on e5 is much harder to remove once it has landed.' },
+                                                    { san: 'c5', why: 'Right plan, and objectively fine - but this repertoire covers e5 first, because a white knight there is much harder to remove once it has landed.', deliberate: true },
                                                   ],
                                                   children: [
                                                     {

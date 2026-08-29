@@ -68,7 +68,7 @@ export const vsTrompowsky: Defence = {
                   idea: 'The principled answer. The knight attacks the bishop, refuses the doubled pawns, and makes White move the same piece twice.',
                   hint: 'The bishop is attacking your knight and is defended by nothing. Attack it back.',
                   mistakes: [
-                    { san: 'd5', why: 'Playable, but Bxf6 exf6 hands White a permanently better pawn structure for free and White has given up nothing in return.' },
+                    { san: 'd5', why: 'Sound, and a main line - but Bxf6 exf6 hands White a permanently better pawn structure and White has given up nothing in return. This repertoire refuses the trade instead.', deliberate: true },
                     { san: 'e6', why: 'Solid, but it allows Bxf6 Qxf6 and White develops with e4 and Nc3 having gained time. The knight jump keeps the initiative.' },
                     { san: 'c5', why: 'Sharp, but after Bxf6 the choice between doubled pawns and gxf6 is unpleasant, and d4-d5 leaves White with a space edge.' },
                   ],
@@ -190,7 +190,7 @@ export const vsTrompowsky: Defence = {
                                                   idea: 'Now the queen sortie bites: with the knight on d2 rather than the queen on c1, b2 is genuinely awkward to hold.',
                                                   hint: 'With White\'s pieces committed to the centre, hit the pawn behind them.',
                                                   mistakes: [
-                                                    { san: 'Nxd2', why: 'Trading your best piece for a knight that has only just moved helps White finish development for free.' },
+                                                    { san: 'Nxd2', why: 'Objectively fine, but it trades your best piece for a knight that has only just moved and lets White finish development for free. This repertoire keeps the knight on e4.', deliberate: true },
                                                     { san: 'e6', why: 'It shuts in the bishop and gives White time to play Ngf3 and Bd3 with a comfortable game.' },
                                                   ],
                                                   end: {
@@ -228,7 +228,7 @@ export const vsTrompowsky: Defence = {
                           hint: 'The bishop has gone even further from the queenside. Attack the centre pawn it has abandoned.',
                           mistakes: [
                             { san: 'd5', why: 'Solid, but it lets White play f3 and e4 in comfort with a big centre and the bishop eyeing d8.' },
-                            { san: 'g5', why: 'It wins the bishop pair but at a terrible cost: after Bg3 Nxg3 hxg3 your kingside is in ruins and the h-file is open at your king.' },
+                            { san: 'g5', why: 'It really does pick up the bishop pair, and the engine is content with it - but after Bg3 Nxg3 hxg3 your kingside is loose and the h-file points at your king. This repertoire declines that bargain.', deliberate: true },
                           ],
                           children: [
                             {
@@ -241,8 +241,8 @@ export const vsTrompowsky: Defence = {
                                   idea: 'The check that changes everything. It comes with tempo, and if White blocks with c2-c3 the knight on e4 gets a free meal.',
                                   hint: 'White has just weakened a diagonal running at the king. Get your queen onto it with check.',
                                   mistakes: [
-                                    { san: 'Nf6', why: 'Retreating without the check throws away the whole point. The queen check first is what makes the line work.' },
-                                    { san: 'g5', why: 'It looks like it wins a piece, but after fxe4 the pawn on g5 hangs and your king position is in ruins.' },
+                                    { san: 'Nf6', why: 'Sound, but it gives back the tempo. The queen check first is what makes this line work; without it White simply consolidates.', deliberate: true },
+                                    { san: 'g5', why: 'Sound, and messier than it looks - after fxe4 the position opens on both wings and it is your king cover that suffers. This repertoire keeps things clean instead.', deliberate: true },
                                     { san: 'cxd4', why: 'It releases the tension for nothing and after fxe4 White has a huge centre and a free game.' },
                                   ],
                                   children: [

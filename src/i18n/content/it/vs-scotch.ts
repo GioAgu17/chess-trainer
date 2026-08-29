@@ -172,7 +172,7 @@ export const vsScotchTrees = nodes(
     m: {
       Nf6: 'L\'impostazione tipo Due Cavalli è sana ma invita le taglienti linee con e4-e5. La mossa di alfiere tiene tutto più semplice.',
       d6: 'Passiva: restituisce l\'iniziativa e il Bianco ottiene O-O e Cxd4 con una partita comoda e un tempo in più.',
-      Bb4: 'Lo scacco non ottiene niente: c2-c3 copre con tempo e il Bianco costruisce il centro mentre il tuo alfiere si ritira.',
+      Bb4: 'Sana, ma c2-c3 copre con tempo e il Bianco costruisce il centro mentre il tuo alfiere si ritira. Questo repertorio mette l\'alfiere sulla diagonale dove può restare.',
     },
   }),
   s('e4 e5 Nf3 Nc6 d4 exd4 Bc4 Bc5 c3', { label: 'Linea principale', idea: 'Il Bianco offre un secondo pedone per aprire linee: è il Gambetto Göring dentro la Scozzese.' }),

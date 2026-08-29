@@ -19,7 +19,7 @@ export const vsKingsGambitTrees = nodes(
     hint: 'Il Bianco ha appena aperto una diagonale puntata sul proprio re. Mettici un alfiere.',
     m: {
       exf4: 'Accettare è del tutto giocabile - il motore lo preferisce persino - ma porta a una teoria enorme e tagliente in cui è il Bianco ad averla studiata. Questo repertorio rifiuta e tiene la partita alle tue condizioni.',
-      d5: 'Il Controgambetto Falkbeer è un\'opzione vera, ma è tagliente e concreta, e una sola imprecisione ti lascia peggio. La mossa di alfiere non richiede quasi nessuna teoria.',
+      d5: 'Il Controgambetto Falkbeer è un\'opzione vera e sana, ma è tagliente e concreta, e una sola imprecisione ti lascia peggio. La mossa di alfiere non richiede quasi nessuna teoria.',
       Nf6: 'Giocabile, ma permette a fxe5 di arrivare con tempo sul cavallo, che è esattamente la mossa gratis che il Bianco vuole.',
     },
   }),
@@ -59,8 +59,8 @@ export const vsKingsGambitTrees = nodes(
     hint: 'Inchioda il pezzo che tiene insieme il centro del Bianco.',
     m: {
       'O-O': 'Sicura, ma l\'inchiodatura è la mossa che crea una minaccia vera e costringe il Bianco a indebolire l\'ala di re con h3.',
-      exf4: 'Adesso Axf4 dà al Bianco un alfiere splendido e la colonna aperta, e tu non hai niente.',
-      Na5: 'Il cavallo in a5 è fuori gioco e dopo Ab5+ o Ab3 hai semplicemente perso tempo.',
+      exf4: 'Oggettivamente va bene, ma Axf4 dà al Bianco un buon alfiere e la colonna aperta. Tutto il senso di 2...Ac5 era tenere quel pedone fissato, quindi questo repertorio lo lascia lì.',
+      Na5: 'Sana, ma il cavallo in a5 è fuori gioco e Ab5+ o Ab3 ti costano tempo. È l\'inchiodatura la mossa che crea una minaccia vera.',
     },
   }),
   k('e4 e5 f4 Bc5 Nf3 d6 Nc3 Nf6 Bc4 Nc6 d3 Bg4 h3', { label: 'Linea principale', idea: 'Il Bianco pone la domanda, al prezzo di una piccola debolezza sull\'ala di re.' }),
@@ -115,7 +115,7 @@ export const vsKingsGambitTrees = nodes(
     idea: 'Lo scacco arriva con tempo e costringe il Bianco a coprirsi su una casa scomoda prima che tu decida dove l\'alfiere andrà a vivere davvero.',
     hint: 'Dai uno scacco che costa un tempo al Bianco e gli scompiglia lo sviluppo.',
     m: {
-      Bb6: 'La ritirata tranquilla dà al Bianco il tempo per Cc3 e una partita comoda con un grande centro. Prendi prima lo scacco gratis.',
+      Bb6: 'Sana, ma la ritirata tranquilla dà al Bianco il tempo per Cc3 e una partita comoda con un grande centro. Questo repertorio prende prima lo scacco gratis.',
       Nxe4: 'Perde ancora per dxc5: l\'alfiere in c5 è in presa con tempo.',
     },
     end: {

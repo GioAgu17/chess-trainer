@@ -27,7 +27,7 @@ export const vsDanishGoringTrees = nodes(
     idea: 'Rifiuta contrattaccando. Restituire subito il pedone apre la posizione mentre i pezzi bianchi sono ancora a casa, cioè l\'esatto contrario di quello che un gambetto vuole.',
     hint: 'Non prendere il secondo pedone. Colpisci invece al centro con il tuo pedone.',
     m: {
-      dxc3: 'Accettare è giocabile ma è esattamente la partita che il Bianco ha preparato: due alfieri che spazzano la tua ala di re con il re ancora al centro. Questo repertorio rifiuta.',
+      dxc3: 'Accettare è sano, e il motore ne è contento, ma è esattamente la partita che il Bianco ha preparato: due alfieri che spazzano la tua ala di re con il re ancora al centro. Questo repertorio rifiuta.',
       Nc6: 'Solida, ma cxd4 dà al Bianco il centro e una partita comoda senza più nessun gambetto da confutare. Il contrattacco è molto più forte.',
       d3: 'Chiude la posizione ma restituisce il pedone per niente, e dopo Axd3 il Bianco è sviluppato con un tempo in più e un grosso vantaggio.',
     },
@@ -76,9 +76,9 @@ export const vsDanishGoringTrees = nodes(
     idea: 'Prendilo. Risolve l\'attacco alla tua donna e lascia al Bianco i pedoni c doppiati e un d4 debole per sempre.',
     hint: 'La tua donna è attaccata e lo è anche il cavallo che para lo scacco. Risolvi entrambi i problemi con una sola cattura.',
     m: {
-      Qa5: 'Salva la donna, ma O-O e Ad2 lasciano il Bianco comodamente sviluppato mentre il tuo alfiere in b4 diventa un bersaglio.',
+      Qa5: 'Sana, ma passiva al confronto: O-O e Ad2 lasciano il Bianco comodamente sviluppato mentre il tuo alfiere in b4 diventa un bersaglio. È il cambio in c3 a strappare la concessione.',
       Qd6: 'Ritirarsi perde l\'iniziativa: il Bianco arrocca e il pedone in d4 diventa di colpo una forza invece che una debolezza.',
-      Bxf3: 'Axf3 colpisce la tua donna e dopo ...Dd6 Ce4 il Bianco ha tutto il gioco. Il pezzo da prendere è il cavallo in c3.',
+      Bxf3: 'Perfettamente sana, il motore la preferisce persino, ma questo repertorio prende invece il cavallo in c3. Doppiare i pedoni bianchi e fissare d4 come bersaglio è il guadagno concreto per cui è stata giocata tutta la linea, e ...Axf3 permette al Bianco di riprendere con tempo sulla tua donna.',
     },
     end: {
       name: 'Gambetto Danese rifiutato, 3...d5',

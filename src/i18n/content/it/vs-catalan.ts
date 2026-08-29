@@ -127,7 +127,7 @@ export const vsCatalanTrees = nodes(
     hint: 'Prepara l\'avanzata di pedone che guadagna tempo sulla donna e spazio sull\'ala.',
     m: {
       b5: 'La donna in c4 è attaccata, ma dopo Db3 o Dc2 hai lasciato un buco in c6 con l\'alfiere bianco già puntato lì.',
-      c5: 'Ragionevole ma affrettata: con il re ancora in e8 in questo ordine di mosse, aprire il centro favorisce chi è più sviluppato.',
+      c5: 'Sana, e diventa il piano una mossa più tardi. Questo repertorio gioca prima ...a6 e ...b5, così che la rottura arrivi con il re già fuori da e8.',
     },
     end: {
       name: 'Catalana Aperta, 6.Da4+ con ...Ae7',

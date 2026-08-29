@@ -29,8 +29,8 @@ export const vsColleBdgTrees = nodes(
     idea: 'La mossa chiave di tutta la difesa. L\'alfiere scappa prima che ...e6 lo chiuda dentro, e punta la casa d3 che l\'alfiere d\'attacco bianco vuole.',
     hint: 'Il Bianco ha appena chiuso dentro un alfiere. Assicurati che al tuo non succeda lo stesso.',
     m: {
-      e6: 'Il modo più comune in assoluto di ottenere una brutta posizione contro il Colle. Seppellisce l\'alfiere di c8, e il Bianco ottiene gratis lo schema d\'attacco con Ad3, Cbd2, O-O ed e4.',
-      c5: 'Non c\'è niente di sbagliato nella mossa in sé, ma l\'alfiere campochiaro ha una sola occasione per uscire dalla catena, ed è questa.',
+      e6: 'Oggettivamente va bene, ed è la mossa più giocata qui, ma seppellisce l\'alfiere di c8 e regala al Bianco lo schema d\'attacco con Ad3, Cbd2, O-O ed e4. Questo repertorio porta prima fuori quell\'alfiere.',
+      c5: 'Non c\'è niente di sbagliato nella mossa in sé, e la rottura non scappa. Ma l\'alfiere campochiaro ha esattamente una occasione per uscire dalla catena di pedoni, ed è questa.',
       Bg4: 'Giocabile, ma h2-h3 pone all\'alfiere una domanda scomoda e il Bianco è felice di cambiarlo in f3, cosa che non ti aiuta per niente. La casa che guarda in faccia l\'alfiere di d3 è f5.',
     },
   }),
@@ -49,7 +49,7 @@ export const vsColleBdgTrees = nodes(
     idea: 'Adesso è sicuro. L\'alfiere problematico è già fuori dalla scacchiera, quindi chiudere la diagonale non costa niente.',
     hint: 'Il pezzo che questa mossa di pedone avrebbe intrappolato non c\'è più. Giocala.',
     m: {
-      Nc6: 'Ragionevole, ma il cavallo blocca il pedone di c e più avanti vuoi ...c5. Completa prima la struttura.',
+      Nc6: 'Sana, ma il cavallo blocca il pedone c e questo repertorio vuole ...c5 più avanti. Completa prima la struttura.',
       c5: 'Leggermente prematura: dopo dxc5 devi spendere una mossa per recuperare il pedone con il re ancora al centro.',
     },
   }),
@@ -59,7 +59,7 @@ export const vsColleBdgTrees = nodes(
     hint: 'Togli l\'avamposto al cavallo bianco, e già che ci sei punta un alfiere sul suo re.',
     m: {
       Be7: 'Passiva. In d6 l\'alfiere ferma Ce5 e fa qualcosa in cambio; in e7 non fa né l\'uno né l\'altro.',
-      c5: 'Idea giusta, momento sbagliato: il tuo re è ancora al centro e dopo dxc5 Axc5 il Bianco ottiene e3-e4 con tempo.',
+      c5: 'Idea giusta, e sana, ma questo repertorio arrocca prima. Con il re ancora al centro, dxc5 Axc5 permette al Bianco e3-e4 con tempo.',
     },
   }),
   c('d4 d5 Nf3 Nf6 e3 Bf5 Bd3 Bxd3 Qxd3 e6 O-O Bd6 c4', { label: 'Linea principale', idea: 'Il Bianco passa a uno schema di Gambetto di Donna adesso che il piano tranquillo è stato disinnescato.' }),
@@ -96,7 +96,7 @@ export const vsColleBdgTrees = nodes(
     hint: 'Un cavallo è diretto su una casa centrale forte. Toglila prima che ci arrivi.',
     m: {
       Be7: 'Sviluppa, ma non fa niente contro Ce5, e un cavallo in e5 sostenuto dai pedoni è l\'unica cosa che qui dà una partita al Bianco.',
-      c5: 'Piano giusto, ordine sbagliato: Ce5 arriva per primo e il cavallo in e5 è molto più difficile da rimuovere una volta atterrato.',
+      c5: 'Piano giusto, e oggettivamente valido, ma questo repertorio copre prima e5, perché un cavallo bianco lì è molto più difficile da rimuovere una volta atterrato.',
     },
   }),
   c('d4 d5 Nf3 Nf6 e3 Bf5 Bd3 Bxd3 Qxd3 e6 Nbd2 Bd6 O-O', { label: 'Linea principale', idea: 'Il Bianco arrocca e spera in e3-e4 o Ce5 più avanti.' }),
@@ -245,7 +245,7 @@ export const vsColleBdgTrees = nodes(
     idea: 'La Difesa Euwe, ed è la risposta più solida che esista. Un pedone in e6 copre d5 e f5, apre l\'alfiere e prepara l\'arrocco fuori dalla zona di pericolo.',
     hint: 'Niente di sofisticato. Apri una linea al tuo alfiere, copri le case bianche e preparati ad arroccare.',
     m: {
-      g6: 'Giocabile, ma il fianchetto invita Ah6 e h2-h4-h5, che è esattamente l\'attacco che il gambetto è fatto per produrre.',
+      g6: 'Sana, ed è un\'alternativa vera, ma il fianchetto invita Ah6 e h2-h4-h5, che è esattamente l\'attacco che il gambetto è fatto per produrre. Questo repertorio preferisce il tranquillo schema con ...e6.',
       Bg4: 'Inchioda il cavallo ma dopo h3 l\'alfiere viene deviato, e Ce5 e Ac4 colpiscono f7 con il tuo re ancora al centro.',
       Qxd4: 'La mossa ingorda, e quella su cui è costruita la trappola Halosar. Un secondo pedone non vale una donna inseguita per tutta la scacchiera.',
     },
@@ -296,7 +296,7 @@ export const vsColleBdgTrees = nodes(
     hint: 'La solita risposta: prendi, e lascia che sia il Bianco a spendere la mossa per riprendere.',
     m: {
       e6: 'Rifiutare lascia il Bianco con fxe4 e un grande centro, e il tuo alfiere in f5 improvvisamente non ha più niente davanti.',
-      Bg6: 'Una ritirata prima ancora di essere attaccato. Prendi il pedone e costringi il Bianco a dimostrare il compenso.',
+      Bg6: 'Abbastanza sana, ma questo repertorio prende il pedone invece di ritirarsi. Costringere il Bianco a dimostrare il compenso è tutto il senso dell\'accettare un gambetto.',
     },
   }),
   b('d4 d5 e4 dxe4 Nc3 Nf6 Bg5 Bf5 f3 exf3 Nxf3', { label: 'Linea principale', idea: 'La ripresa. Il Bianco è un pedone sotto con le stesse idee d\'attacco, ma tu sei una mossa più avanti.' }),

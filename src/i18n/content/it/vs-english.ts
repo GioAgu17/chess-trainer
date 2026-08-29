@@ -96,7 +96,7 @@ export const vsEnglishTrees = nodes(
     idea: 'Rompi per primo. Con il Bianco diretto a d2-d4, il momento di aprire il centro è prima che accada.',
     hint: 'Il Bianco si prepara a prendere il centro con i pedoni. Arrivaci prima.',
     m: {
-      Bb4: 'Giocabile, ma Dc2 o Cd5 danno al Bianco una partita comoda. La rottura centrale è la risposta coerente.',
+      Bb4: 'Sana, ed è una linea principale a pieno titolo. Questo repertorio preferisce la rottura centrale, che risolve i problemi dell\'apertura una volta per tutte invece di porre una domanda.',
       d6: 'Concede d4 per niente e il Bianco ottiene esattamente la posizione per cui aveva giocato e3.',
     },
   }),

@@ -201,7 +201,7 @@ export const vsEnglish: Defence = {
                                   idea: 'Break first. With White heading for d2-d4, the moment to open the centre is before it happens.',
                                   hint: 'White is preparing to take the centre with pawns. Get there first.',
                                   mistakes: [
-                                    { san: 'Bb4', why: 'Playable, but Qc2 or Nd5 give White a comfortable game. The central break is the principled reply.' },
+                                    { san: 'Bb4', why: 'Sound, and a main line in its own right. This repertoire prefers the central break, which settles the opening\'s problems permanently instead of posing a question.', deliberate: true },
                                     { san: 'd6', why: 'It concedes d4 for nothing and White gets exactly the position the move e3 was played for.' },
                                   ],
                                   children: [

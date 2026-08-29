@@ -37,7 +37,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 371,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -66,7 +66,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 267,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -97,7 +97,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 159,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -126,7 +126,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 426,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -153,7 +153,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 278,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -188,7 +188,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 519,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -223,7 +223,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 311,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -250,7 +250,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 521,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -280,7 +280,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 193,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -308,7 +308,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 113,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -338,7 +338,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 427,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -372,7 +372,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 100,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -406,7 +406,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 124,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -436,7 +436,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 190,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -468,7 +468,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 95,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -504,7 +504,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 208,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -540,23 +540,23 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 91,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
-    "id": "punish:vs-london:d4-Nf6-Bf4-d5-e3-c5-c3-Qb6-Qb3-c4-Qxb6-axb6-Na3-e6-Be2-b5",
+    "id": "punish:vs-london:d4-Nf6-Bf4-d5-e3-c5-c3-Qb6-Qb3-c4-Qxb6-axb6-Na3-Nc6-Nb5-e6",
     "kind": "punish",
     "entryId": "vs-london",
-    "fen": "rnb1kb1r/1p3ppp/4pn2/1p1p4/2pP1B2/N1P1P3/PP2BPPP/R3K1NR w KQkq - 0 9",
+    "fen": "r1b1kb1r/1p3ppp/1pn1pn2/1N1p4/2pP1B2/2P1P3/PP3PPP/R3KBNR w KQkq - 0 9",
     "solver": "white",
-    "solution": "Nxb5",
+    "solution": "Nc7",
     "prompt": {
       "key": "puzzles.promptPunish",
       "vars": {
-        "move": "8...b5"
+        "move": "8...e6"
       }
     },
-    "explanation": "It looks like it stops Nb5 but it walks into Nc2-b4 or a2-a4 and just loosens your own queenside. The move that shows it is Nxb5.",
+    "explanation": "Nc7+ comes with check, forks the king and the rook on a8, and wins the exchange on the spot. The move that shows it is Nc7.",
     "line": [
       "d4",
       "Nf6",
@@ -571,14 +571,52 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
       "Qxb6",
       "axb6",
       "Na3",
-      "e6",
-      "Be2",
-      "b5"
+      "Nc6",
+      "Nb5",
+      "e6"
     ],
     "verified": {
       "depth": 24,
-      "marginCp": 155,
-      "at": "2026-08-28"
+      "marginCp": 250,
+      "at": "2026-08-29"
+    }
+  },
+  {
+    "id": "punish:vs-london:d4-Nf6-Bf4-d5-e3-c5-c3-Qb6-Qb3-c4-Qxb6-axb6-Na3-Nc6-Nb5-Bf5",
+    "kind": "punish",
+    "entryId": "vs-london",
+    "fen": "r3kb1r/1p2pppp/1pn2n2/1N1p1b2/2pP1B2/2P1P3/PP3PPP/R3KBNR w KQkq - 4 9",
+    "solver": "white",
+    "solution": "Nc7",
+    "prompt": {
+      "key": "puzzles.promptPunish",
+      "vars": {
+        "move": "8...Bf5"
+      }
+    },
+    "explanation": "The same fork: Nc7+ takes the king and the rook together, and developing does not answer a check. The move that shows it is Nc7.",
+    "line": [
+      "d4",
+      "Nf6",
+      "Bf4",
+      "d5",
+      "e3",
+      "c5",
+      "c3",
+      "Qb6",
+      "Qb3",
+      "c4",
+      "Qxb6",
+      "axb6",
+      "Na3",
+      "Nc6",
+      "Nb5",
+      "Bf5"
+    ],
+    "verified": {
+      "depth": 24,
+      "marginCp": 117,
+      "at": "2026-08-29"
     }
   },
   {
@@ -610,7 +648,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 802,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -646,7 +684,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 801,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -676,7 +714,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 271,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -708,7 +746,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 341,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -738,7 +776,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 162,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -770,7 +808,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 310,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -804,7 +842,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 357,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -832,7 +870,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 111,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -864,7 +902,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 246,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -900,7 +938,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 120,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -932,7 +970,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 95,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -966,7 +1004,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 367,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -996,7 +1034,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 137,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1030,7 +1068,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 114,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1060,7 +1098,35 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 331,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
+    }
+  },
+  {
+    "id": "punish:vs-kings-gambit:e4-e5-f4-Bc5-Nc3-Nf6",
+    "kind": "punish",
+    "entryId": "vs-kings-gambit",
+    "fen": "rnbqk2r/pppp1ppp/5n2/2b1p3/4PP2/2N5/PPPP2PP/R1BQKBNR w KQkq - 3 4",
+    "solver": "white",
+    "solution": "fxe5",
+    "prompt": {
+      "key": "puzzles.promptPunish",
+      "vars": {
+        "move": "3...Nf6"
+      }
+    },
+    "explanation": "Now fxe5 simply wins a pawn: ...Nxe4 runs into Nxe4, because the knight on c3 was covering e4 all along. The move that shows it is fxe5.",
+    "line": [
+      "e4",
+      "e5",
+      "f4",
+      "Bc5",
+      "Nc3",
+      "Nf6"
+    ],
+    "verified": {
+      "depth": 24,
+      "marginCp": 336,
+      "at": "2026-08-29"
     }
   },
   {
@@ -1076,7 +1142,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
         "move": "3...Qh4"
       }
     },
-    "explanation": "The check only works when the pawn on e5 has been taken. Here g3 simply chases the queen and you have lost time. The move that shows it is g3.",
+    "explanation": "The check only works once White has taken on e5. Here g3 chases the queen, the e-pawn is defended by the knight, and you have lost two moves. The move that shows it is g3.",
     "line": [
       "e4",
       "e5",
@@ -1088,101 +1154,37 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 615,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
-    "id": "punish:vs-kings-gambit:e4-e5-f4-Bc5-Nc3-Nf6-Nf3-Nxe4",
+    "id": "punish:vs-kings-gambit:e4-e5-f4-Bc5-Nc3-d6-Nf3-Qh4",
     "kind": "punish",
     "entryId": "vs-kings-gambit",
-    "fen": "rnbqk2r/pppp1ppp/8/2b1p3/4nP2/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 0 5",
+    "fen": "rnb1k1nr/ppp2ppp/3p4/2b1p3/4PP1q/2N2N2/PPPP2PP/R1BQKB1R w KQkq - 2 5",
     "solver": "white",
-    "solution": "Nxe4",
+    "solution": "Nxh4",
     "prompt": {
       "key": "puzzles.promptPunish",
       "vars": {
-        "move": "4...Nxe4"
+        "move": "4...Qh4"
       }
     },
-    "explanation": "Loses a piece: Nxe4 and the knight on e4 is simply taken, with your bishop on c5 also loose. The move that shows it is Nxe4.",
+    "explanation": "The knight on f3 simply takes it. Once White covers h4 the queen has no business going there. The move that shows it is Nxh4.",
     "line": [
       "e4",
       "e5",
       "f4",
       "Bc5",
       "Nc3",
-      "Nf6",
+      "d6",
       "Nf3",
-      "Nxe4"
+      "Qh4"
     ],
     "verified": {
       "depth": 24,
-      "marginCp": 362,
-      "at": "2026-08-28"
-    }
-  },
-  {
-    "id": "punish:vs-kings-gambit:e4-e5-f4-Bc5-Nc3-Nf6-Nf3-Nc6-Bb5-exf4",
-    "kind": "punish",
-    "entryId": "vs-kings-gambit",
-    "fen": "r1bqk2r/pppp1ppp/2n2n2/1Bb5/4Pp2/2N2N2/PPPP2PP/R1BQK2R w KQkq - 0 6",
-    "solver": "white",
-    "solution": "d4",
-    "prompt": {
-      "key": "puzzles.promptPunish",
-      "vars": {
-        "move": "5...exf4"
-      }
-    },
-    "explanation": "It opens the f-file with your king still on e8 and White's bishop already pinning the defender. The move that shows it is d4.",
-    "line": [
-      "e4",
-      "e5",
-      "f4",
-      "Bc5",
-      "Nc3",
-      "Nf6",
-      "Nf3",
-      "Nc6",
-      "Bb5",
-      "exf4"
-    ],
-    "verified": {
-      "depth": 24,
-      "marginCp": 110,
-      "at": "2026-08-28"
-    }
-  },
-  {
-    "id": "punish:vs-kings-gambit:e4-e5-f4-Bc5-Nc3-Nf6-Nf3-Nc6-Bb5-a6",
-    "kind": "punish",
-    "entryId": "vs-kings-gambit",
-    "fen": "r1bqk2r/1ppp1ppp/p1n2n2/1Bb1p3/4PP2/2N2N2/PPPP2PP/R1BQK2R w KQkq - 0 6",
-    "solver": "white",
-    "solution": "Bxc6",
-    "prompt": {
-      "key": "puzzles.promptPunish",
-      "vars": {
-        "move": "5...a6"
-      }
-    },
-    "explanation": "Playable, but with a half-open f-file about to appear, the king is the priority. The bishop is not going anywhere. The move that shows it is Bxc6.",
-    "line": [
-      "e4",
-      "e5",
-      "f4",
-      "Bc5",
-      "Nc3",
-      "Nf6",
-      "Nf3",
-      "Nc6",
-      "Bb5",
-      "a6"
-    ],
-    "verified": {
-      "depth": 24,
-      "marginCp": 172,
-      "at": "2026-08-28"
+      "marginCp": 577,
+      "at": "2026-08-29"
     }
   },
   {
@@ -1214,7 +1216,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 406,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1246,7 +1248,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 150,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1280,7 +1282,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 190,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1318,7 +1320,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 111,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1350,7 +1352,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 180,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1384,7 +1386,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 591,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1420,7 +1422,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 1024,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1452,7 +1454,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 670,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1488,7 +1490,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 92,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1522,7 +1524,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 115,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1550,7 +1552,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 97,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1578,7 +1580,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 135,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1608,7 +1610,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 164,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1638,7 +1640,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 111,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1674,7 +1676,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 109,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1704,7 +1706,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 306,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1734,7 +1736,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 95,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1766,7 +1768,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 134,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1800,7 +1802,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 232,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1830,7 +1832,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 219,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1860,7 +1862,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 409,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1892,7 +1894,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 135,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1924,7 +1926,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 403,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1956,7 +1958,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 142,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -1990,7 +1992,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 232,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2018,7 +2020,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 102,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2050,7 +2052,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 459,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2082,7 +2084,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 481,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2116,7 +2118,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 238,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2146,7 +2148,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 135,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2172,7 +2174,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 151,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2202,7 +2204,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 116,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2240,7 +2242,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 283,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2274,7 +2276,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 474,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2313,7 +2315,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 723,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2346,7 +2348,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 99855,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2374,7 +2376,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 371,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   },
   {
@@ -2403,7 +2405,7 @@ export const VERIFIED_PUZZLES: VerifiedPuzzle[] = [
     "verified": {
       "depth": 24,
       "marginCp": 129,
-      "at": "2026-08-28"
+      "at": "2026-08-29"
     }
   }
 ]

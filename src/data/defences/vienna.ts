@@ -183,7 +183,7 @@ export const vsVienna: Defence = {
                                   idea: 'Push past. The pawn on e4 takes f3 and d3 away from White\'s pieces and the knight on d5 can always be chased later.',
                                   hint: 'Do not recapture - push the centre pawn forward and take squares away from White\'s knight.',
                                   mistakes: [
-                                    { san: 'Nxd5', why: 'It recaptures but Nxd5 Qxd5 fxe5 leaves White with a healthy extra pawn and an easy game.' },
+                                    { san: 'Nxd5', why: 'Sound, and the engine slightly prefers it. This repertoire pushes past instead: the pawn on e4 takes f3 and d3 away from White\'s pieces and hands you a plan you can play without calculation.', deliberate: true },
                                     { san: 'exf4', why: 'Now White is simply a pawn up with a strong centre and you have opened lines at your own king.' },
                                     { san: 'Qxd5', why: 'Nxd5 wins the queen - the knight on c3 defends d5.' },
                                   ],

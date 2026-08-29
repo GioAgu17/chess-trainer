@@ -114,7 +114,7 @@ export const vsBlackmarDiemer: Defence = {
                                           idea: 'The Euwe Defence, and the soundest answer there is. A pawn on e6 covers d5 and f5, opens the bishop, and prepares to castle out of the danger zone.',
                                           hint: 'Nothing fancy. Open a line for your bishop, cover the light squares, and prepare to castle.',
                                           mistakes: [
-                                            { san: 'g6', why: 'Playable, but the fianchetto invites Bh6 and h2-h4-h5, which is exactly the attack the gambit is designed to produce.' },
+                                            { san: 'g6', why: 'Sound, and a real alternative - but the fianchetto invites Bh6 and h2-h4-h5, which is exactly the attack the gambit is designed to produce. This repertoire prefers the quiet ...e6 set-up.', deliberate: true },
                                             { san: 'Bg4', why: 'It pins the knight but after h3 the bishop is deflected, and Ne5 and Bc4 hit f7 while your king is still in the centre.' },
                                             { san: 'Qxd4', why: 'The greedy move, and the one the Halosar trap is built on. A second pawn is not worth the queen being chased across the board.' },
                                           ],
@@ -199,7 +199,7 @@ export const vsBlackmarDiemer: Defence = {
                                           hint: 'Same answer as always: take, and let White spend the move recapturing.',
                                           mistakes: [
                                             { san: 'e6', why: 'Declining leaves White with fxe4 and a big centre, and your bishop on f5 suddenly has nothing in front of it.' },
-                                            { san: 'Bg6', why: 'A retreat before you are even attacked. Take the pawn and make White prove the compensation.' },
+                                            { san: 'Bg6', why: 'Sound enough, but this repertoire takes the pawn rather than retreating. Making White prove the compensation is the whole point of accepting a gambit.', deliberate: true },
                                           ],
                                           children: [
                                             {

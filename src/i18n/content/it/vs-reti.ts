@@ -29,7 +29,7 @@ export const vsRetiTrees = nodes(
     idea: 'Sviluppa e difendi d5 una seconda volta. Qui non serve niente di sofisticato.',
     hint: 'Sviluppa un cavallo sulla sua casa naturale, aggiungendo un altro difensore al tuo pedone centrale.',
     m: {
-      dxc4: 'Sempre l\'idea sbagliata: Da4+ o Ca3 recuperano il pedone e il Bianco si ritrova un tempo gratis oltre al fianchetto.',
+      dxc4: 'Sana e giocabile, ma Da4+ o Ca3 recuperano il pedone e il Bianco si ritrova un tempo gratis oltre al fianchetto. Questo repertorio tiene invece il centro.',
       c5: 'La rottura è giusta ma l\'ordine è sbagliato: sviluppa e arrocca prima, altrimenti cxd5 exd5 lascia allentato il tuo pedone in d5.',
     },
   }),
@@ -68,7 +68,7 @@ export const vsRetiTrees = nodes(
     hint: 'Sviluppa il cavallo che sostiene il tuo nuovo pedone in c5.',
     m: {
       Nbd7: 'Giocabile, ma con un pedone già in c5 il cavallo appartiene a c6, dove lotta per d4.',
-      d4: 'Spingere oltre chiude la posizione ma lascia il pedone in d4 come bersaglio per e3 e per un pezzo che lo blocchi.',
+      d4: 'Sana, ma spingere oltre chiude la posizione e lascia il pedone in d4 come bersaglio per e3 e per un pezzo che lo blocchi. Questo repertorio spinge solo quando il Bianco non può più bloccare.',
     },
   }),
   r('Nf3 d5 c4 e6 g3 Nf6 Bg2 Be7 O-O O-O b3 c5 Bb2 Nc6 e3', { label: 'Linea principale', idea: 'Il Bianco sostiene un futuro d4 e completa uno schema solidissimo.' }),
@@ -76,7 +76,7 @@ export const vsRetiTrees = nodes(
     idea: 'L\'ultimo pezzo ottiene una diagonale. Con gli alfieri che si guardano sulla grande diagonale e un solido muro di pedoni, il Nero è in perfetta parità.',
     hint: 'Apri una diagonale al tuo ultimo pezzo non sviluppato.',
     m: {
-      d4: 'Spingere oltre scioglie la tensione e dopo exd4 cxd4 il pedone in d4 va difeso in continuazione.',
+      d4: 'Sana, ma scioglie la tensione: dopo exd4 cxd4 il pedone in d4 va difeso in continuazione. Questo repertorio tiene la tensione una mossa in più.',
       dxc4: 'bxc4 e il Bianco ha un centro forte con pedoni in c4 e d4 in arrivo, più la colonna b aperta.',
     },
     end: {
