@@ -4,7 +4,7 @@ This file is the project's committed home for project-intrinsic agent knowledge:
 
 ## What this is
 
-A Vite + React + TypeScript single-page app for building and drilling a personal chess opening repertoire, in English and Italian. No backend, no chess engine at runtime, no network calls. Deployed as a static build on Vercel (`vercel.json`); live at https://chess-trainer-lac.vercel.app. See `README.md` for how to run it, what is in the repertoire, the recipes for adding an opening or a defence, and how the translations are put together.
+A Vite + React + TypeScript single-page app for building and drilling a personal chess opening repertoire, in English and Italian. No backend, no chess engine at runtime, no network calls. Deployed as a static build on Vercel (`vercel.json`); live at https://chess-trainer-lac.vercel.app. See `README.md` for what it is and how to run it, `docs/development.md` for the code layout, the tests, the engine verification, the browser checks and deployment, and `docs/adding-content.md` for the recipes for adding an opening, a defence or a language.
 
 ## The rule that matters most
 
@@ -47,7 +47,7 @@ A `Trap` marked `drillable: false` is study material rather than an exercise. Tw
 ## Contributing and CI
 
 `.github/` holds the contributor-facing setup: `CODEOWNERS` (`* @GioAgu17`, which is what binds the code-owner review required on protected `main`), four issue forms, and `workflows/ci.yml` running install, lint, test and build on every pull request.
-`verify:theory` is deliberately not in CI - it needs Stockfish and takes hours, so it stays a local gate described in the README's Contributing section.
+`verify:theory` is deliberately not in CI - it needs Stockfish and takes hours, so it stays a local gate, named in the README's Contributing section and documented in `docs/development.md`.
 Discussions is not enabled on the repository, so there is no `ISSUE_TEMPLATE/config.yml`; add one only if that changes.
 
 ## Maintaining this file

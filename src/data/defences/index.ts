@@ -16,7 +16,7 @@ import { vsReti } from './reti'
  * The defence repertoire, indexed by what the *opponent* plays.
  *
  * Adding one is a matter of writing a file in this directory and listing it
- * here - see README.md. Two entries may share a `system` when there is more
+ * here - see docs/adding-content.md. Two entries may share a `system` when there is more
  * than one reasonable answer to it (the Catalan has an open and a closed one).
  */
 export const DEFENCES: Defence[] = [
