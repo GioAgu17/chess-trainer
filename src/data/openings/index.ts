@@ -10,7 +10,7 @@ import { kingsIndianDefence } from './kings-indian'
 
 /**
  * The repertoire. Adding an opening is a matter of writing one more file in
- * this directory and listing it here - see README.md for the full recipe.
+ * this directory and listing it here - see docs/adding-content.md for the full recipe.
  */
 export const OPENINGS: Opening[] = [
   italianGame,
