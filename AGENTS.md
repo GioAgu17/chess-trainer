@@ -12,7 +12,9 @@ A Vite + React + TypeScript single-page app for building and drilling a personal
 
 `npm run verify:theory` is the second half of that guard: it puts every position through Stockfish, reports any move we teach that the engine disputes and any move we call a mistake that is not actually worse, **and** regenerates `src/data/puzzles.generated.ts` with only the puzzles whose answer the engine agrees is uniquely best. It needs `npm install --no-save stockfish` (~240 MB, deliberately not a dependency) and takes over an hour at depth 24. Run it after changing any line or any trap; `--only-puzzles` re-does just the puzzle half, which is much faster.
 
-A `Mistake` marked `deliberate` means the move is objectively sound and declined on repertoire grounds. It changes what the user is told *and* how the statistics count it, so never set it on a move that loses material - there is a test guarding exactly that.
+A `Mistake` marked `deliberate` means the move is objectively sound and declined on repertoire grounds. It changes what the user is told *and* how the statistics count it, so never set it on a move that loses material - there is a test guarding exactly that. **If `verify:theory` says a named mistake is not worse, that is the answer: it is an off-repertoire choice, not an error.** Mark it `deliberate` and reword the reason so it stops asserting the move is bad - in both languages.
+
+A `Trap` marked `drillable: false` is study material rather than an exercise. Twelve of the thirty-four are: a named pattern can be worth reading about and still have an equally good engine alternative, which means it cannot be posed as a one-answer puzzle. `npm run verify:theory` lists any trap whose claimed answer the engine disputes; the list should stay empty.
 
 ## Where the logic lives
 

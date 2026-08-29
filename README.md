@@ -445,7 +445,12 @@ The lines are standard main lines and named deviations, with the explanations wr
 Where a sharp tactical claim could not be stated with confidence, the repertoire gives a sound, well-established move and explains the plan instead of asserting an evaluation it cannot back.
 
 The same rule applies to puzzles, more strictly: a trap that is genuinely instructive to *read* about does not necessarily have a single engine-best answer, and those become study material rather than exercises.
+Twelve of the thirty-four traps are in that category - Legal's mate, the Greek gift, the Schlechter defence and the rest are all worth knowing and none of them is the move Stockfish would play, so they are marked `drillable: false` and never posed as a puzzle.
 A puzzle with an ambiguous or wrong answer is worse than no puzzle.
+
+The engine also decides what counts as a mistake.
+Where it says a move we had named as an error is in fact no worse than the move we teach, that move is reclassified as a deliberate off-repertoire choice and the wording changed to match: twenty-six of them were, so the coach no longer calls a sound move an error and the statistics no longer count it as one.
+What remains after the last full pass is six positions where the engine prefers a sharper move than the one taught, by 61 to 98 centipawns, every one of them a sound and well-established move; the largest is the Danish Gambit's 8...Bxc3+, which is main-line theory, and the line says so.
 
 ## Stack
 
