@@ -1,0 +1,20 @@
+name: Feature idea
+description: Something the trainer does not do yet.
+title: "[Idea]: "
+labels: ["enhancement"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What is awkward or missing today, from the point of view of someone using the app. Describe this before the solution - it is the part that decides whether the idea is worth building.
+      placeholder: I keep failing the same move and have no way to drill just that one position.
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: What you have in mind
+      description: Optional - a rough shape is fine.
+    validations:
+      required: false

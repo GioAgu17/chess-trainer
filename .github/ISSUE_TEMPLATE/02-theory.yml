@@ -1,0 +1,46 @@
+name: Wrong or disputed chess theory
+description: A line, a mistake, a trap or a puzzle that you believe is wrong.
+title: "[Theory]: "
+labels: ["theory"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        This is the most valuable report you can file, so it is worth being precise.
+        The more exactly you can point at the position, the faster it can be checked against the engine.
+  - type: input
+    id: entry
+    attributes:
+      label: Which opening or defence
+      placeholder: Sicilian Defence (Najdorf), or "Against the London System"
+    validations:
+      required: true
+  - type: textarea
+    id: line
+    attributes:
+      label: The line, in move notation
+      description: From the first move, so the position is unambiguous.
+      placeholder: 1.e4 c5 2.Nf3 d6 3.d4 cxd4 4.Nxd4 Nf6 5.Nc3 a6 6.Be3 e5
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: What the trainer says
+      description: The move it teaches, or the move it calls a mistake, and the wording it uses.
+    validations:
+      required: true
+  - type: textarea
+    id: proposed
+    attributes:
+      label: What you believe is right, and why
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Engine or reference evidence
+      description: Optional but persuasive - an engine evaluation with its depth, a database line, or a book reference.
+      placeholder: Stockfish 17, depth 30 - 6...e5 -0.15, 6...e6 -0.10
+    validations:
+      required: false
